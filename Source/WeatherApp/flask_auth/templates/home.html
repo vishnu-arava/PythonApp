@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="home-container">
+    <h2>Welcome to Flask Auth App</h2>
+    <p>This is the home page. You can <a href="{{ url_for('register') }}">register</a> or <a href="{{ url_for('login') }}">login</a>.</p>
+</div>
+{% endblock %}

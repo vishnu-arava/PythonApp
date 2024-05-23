@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        {% if 'username' in session %}
+            <a href="{{ url_for('dashboard') }}">Home</a>
+            <a href="{{ url_for('weather') }}">Weather Search</a>
+            <a href=#>Page 2</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Home</a>
+        {% endif %}
+
+        {% if 'username' in session %}
+            <!--<p class="right-aligned" align="right" >{{session['username']}}</p> -->
+            <a href="{{ url_for('logout') }}"class="right">Logout</a>
+            <a class="right">{{session['username']}}</a>
+
+        {% else %}
+            <a href="{{ url_for('login') }}" class="right">Login</a>
+            <a href="{{ url_for('register') }}" class="right">Register</a>
+        {% endif %}
+    </div>
+    <br>
+        <div class="dashboard-container-wrapper">
+            <div class="dashboard-container" onclick="window.location.href='{{ url_for('weather') }}';">
+               <p>Weather Search</p>
+             </div>
+            <div class="dashboard-container" onclick="window.location.href='{{ url_for('page2') }}';">
+               <p>Click here to go to Page 2</p>
+             </div>
+        </div>
+</body>
+</html>
