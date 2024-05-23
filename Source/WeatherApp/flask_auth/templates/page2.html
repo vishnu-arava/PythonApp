@@ -1,7 +1,35 @@
-{% extends 'base.html' %}
+{% extends 'layout.html' %}
 
 {% block title %}Page 2{% endblock %}
 
 {% block content %}
-<h1>Welcome to Page 2</h1>
+<nav class="row" style="background: #337ab7; color: white;">
+  </nav>
+  <br />
+  <br />
+  <center class="row">
+    <form method="post" class="col-md-6 col-md-offset-3">
+      <div class="input-group">
+        <input type="text" class="form-control" name="city" placeholder="Search">
+        <div class="input-group-btn">
+          <button class="btn btn-primary" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </center>
+  <div class="row">
+    {% if data.country_code and data.coordinate and data.temp and data.pressure and data.humidity %}
+    <div class="col-md-6 col-md-offset-3">
+      <h1>country code : {{data.country_code}}</h1>
+        <h5>City name : {{data.cityname}}</h5>
+        <h5>coordinate : {{data.coordinate}}</h5>
+        <h5>temp (in kelvin) : {{data.temp}}</h5>
+        <h5>temp (in celcius) : {{data.temp_cel}}</h5>
+        <h5>pressure : {{data.pressure}} </h5>
+        <h5>humidity : {{data.humidity}}</h5>
+    </div>
+    {% endif %}
+  </div>
 {% endblock %}

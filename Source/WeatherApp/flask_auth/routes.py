@@ -1,9 +1,23 @@
-from flask import render_template, redirect, url_for, flash, session
+from flask import render_template, redirect, url_for, flash, session,request
+import requests
 from flask_auth import app, mysql, bcrypt
 from flask_auth.forms import RegistrationForm, LoginForm
 import urllib.request
 from flask import (request)
 import json
+
+
+GEODB_API_KEY = '03b7c4734dmsha8ae33637250f48p11c63fjsn48372cbe71f6'
+def get_cities():
+    url = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities"
+    headers = {
+        "X-RapidAPI-Key": GEODB_API_KEY,
+        "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
+    }
+    response = requests.get(url, headers=headers, params={"limit": 10})
+    data = response.json()
+    cities = [city['name'] for city in data['data']]
+    return cities
 
 def tocelcius(temp):
     return str(round(float(temp) - 273.16,2))
@@ -100,6 +114,35 @@ def weather():
         "cityname":str(city),
     }
     return render_template('page1.html',data=data)
-@app.route('/page2')
-def page2():
-    return render_template('page2.html')
+#@app.route('/page2')
+#def page2():
+#    return render_template('page2.html')
+@app.route('/page2',methods=['POST','GET'])
+def weather1():
+    api_key = '48a90ac42caa09f90dcaeee4096b9e53'
+    if request.method == 'POST':
+        city = request.form['city']
+    else:
+        #for default name mathura
+        city = 'mathura'
+
+    # source contain json data from api
+    try:
+        source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid='+api_key).read()
+    except:
+        return abort(404)
+    # converting json data to dictionary
+
+    list_of_data = json.loads(source)
+
+    # data for variable list_of_data
+    data = {
+        "country_code": str(list_of_data['sys']['country']),
+        "coordinate": str(list_of_data['coord']['lon']) + ' ' + str(list_of_data['coord']['lat']),
+        "temp": str(list_of_data['main']['temp']) + 'k',
+        "temp_cel": tocelcius(list_of_data['main']['temp']) + 'C',
+        "pressure": str(list_of_data['main']['pressure']),
+        "humidity": str(list_of_data['main']['humidity']),
+        "cityname":str(city),
+    }
+    return render_template('page2.html',data=data)

@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #A9A9A9;
+    background-color: #ebedeb;
 }
 
 .container {
@@ -138,4 +138,45 @@ p.right-aligned {
 
 .dashboard-container p {
     font-size: 16px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin-top: 20px;
+    margin-left:30px;
+}
+
+.grid-item {
+    width: 300px;
+    height: 250px;
+    text-align: center;
+    color: white;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.grid-item p {
+    margin: 0;
+    line-height: 1;
+    font-size: 18px;
+}
+
+.grid-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.grid-item.item1 {
+    background-color: #3498db;
+}
+
+.grid-item.item2 {
+    background-color: #2ecc71;
 }
