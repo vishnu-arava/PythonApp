@@ -155,7 +155,7 @@ def weather1():
 @app.route('/predict',methods=['POST','GET'])
 def predict():
     if not os.path.isfile('model.pkl'):
-        filename = 'Forest_fire.csv'
+        filename = 'https://github.com/nachi-hebbar/Forest-Fire-Prediction-Website/blob/master/Forest_fire.csv'
         filepath = os.path.abspath(filename)
         data = pd.read_csv(filepath)
         data = np.array(data)
