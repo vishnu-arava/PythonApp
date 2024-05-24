@@ -68,6 +68,6 @@ if __name__ == '__main__':
         # Upgrade setuptools
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade setuptools'], shell=True)
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
-    HOST = environ.get('SERVER_HOST', 'localhost')
+    HOST = environ.get('SERVER_HOST', '20.161.30.152')
     from flask_auth import app
     app.run(use_reloader=False)
