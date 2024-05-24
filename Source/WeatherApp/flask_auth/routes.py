@@ -5,7 +5,13 @@ from flask_auth.forms import RegistrationForm, LoginForm
 import urllib.request
 from flask import (request)
 import json
-
+import pickle
+import numpy as np
+import pandas as pd
+import os
+import warnings
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 
 GEODB_API_KEY = '03b7c4734dmsha8ae33637250f48p11c63fjsn48372cbe71f6'
 def get_cities():
@@ -146,3 +152,40 @@ def weather1():
         "cityname":str(city),
     }
     return render_template('page2.html',data=data)
+@app.route('/predict',methods=['POST','GET'])
+def predict():
+    if not os.path.isfile('model.pkl'):
+        filename = 'Forest_fire.csv'
+        filepath = os.path.abspath(filename)
+        data = pd.read_csv(filepath)
+        data = np.array(data)
+
+        X = data[1:, 1:-1]
+        y = data[1:, -1]
+        y = y.astype('int')
+        X = X.astype('int')
+        # print(X,y)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+        log_reg = LogisticRegression()
+
+        log_reg.fit(X_train, y_train)
+
+        inputt = [int(x) for x in "45 32 60".split(' ')]
+        final = [np.array(inputt)]
+
+        b = log_reg.predict_proba(final)
+
+        pickle.dump(log_reg, open('model.pkl', 'wb'))
+
+    model = pickle.load(open('model.pkl', 'rb'))
+    int_features=[int(x) for x in request.form.values()]
+    final=[np.array(int_features)]
+    print(int_features)
+    print(final)
+    prediction=model.predict_proba(final)
+    output='{0:.{1}f}'.format(prediction[0][1], 2)
+
+    if output>str(0.5):
+        return render_template('forest_fire.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output),bhai="kuch karna hain iska ab?")
+    else:
+        return render_template('forest_fire.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output),bhai="Your Forest is Safe for now")
