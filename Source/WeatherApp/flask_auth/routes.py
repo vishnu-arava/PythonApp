@@ -16,7 +16,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-file_handler = RotatingFileHandler('app.log', maxBytes=1024 * 1024 * 10, backupCount=5)
+file_handler = RotatingFileHandler('Logfiles/app.log', maxBytes=1024 * 1024 * 10, backupCount=5)
 file_handler.setFormatter(formatter)
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.DEBUG)
