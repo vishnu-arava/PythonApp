@@ -119,12 +119,21 @@ def weather():
     try:
         source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid='+api_key).read()
     except:
-        return abort(404)
+        return render_template('page1.html',data = {
+            "country_code": '',
+            "coordinate": '' + ' ' + '',
+            "temp": '' + 'k',
+            "temp_cel": '' + 'C',
+            "pressure": '',
+            "humidity": '',
+            "cityname": str(city),
+        })
     # converting json data to dictionary
 
     list_of_data = json.loads(source)
 
     # data for variable list_of_data
+    print(list_of_data)
     data = {
         "country_code": str(list_of_data['sys']['country']),
         "coordinate": str(list_of_data['coord']['lon']) + ' ' + str(list_of_data['coord']['lat']),
@@ -139,7 +148,7 @@ def weather():
 @app.route('/predict',methods=['POST','GET'])
 def predict():
     if not os.path.isfile('model.pkl'):
-        filename = 'https://github.com/nachi-hebbar/Forest-Fire-Prediction-Website/blob/master/Forest_fire.csv'
+        filename = 'flask_auth\Forest_fire.csv'
         filepath = os.path.abspath(filename)
         data = pd.read_csv(filepath)
         data = np.array(data)
