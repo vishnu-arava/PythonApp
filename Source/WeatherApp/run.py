@@ -70,4 +70,4 @@ if __name__ == '__main__':
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
     HOST = environ.get('SERVER_HOST', 'localhost')
     from flask_auth import app
-    app.run(debug=True)
+    app.run(debug=False,use_reloader=False)
