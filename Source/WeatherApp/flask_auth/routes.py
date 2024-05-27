@@ -108,6 +108,7 @@ def logout():
 def weather():
     app.logger.info('Loading the weather search page')
     api_key = '48a90ac42caa09f90dcaeee4096b9e53'
+
     if request.method == 'POST':
         city = request.form['city']
     else:
@@ -117,6 +118,8 @@ def weather():
     else:
         app.logger.info(f'The city : {city} was given for the search')
     try:
+
+
         source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid='+api_key).read()
     except:
         return render_template('page1.html',data = {
@@ -133,6 +136,7 @@ def weather():
     list_of_data = json.loads(source)
 
     # data for variable list_of_data
+
     print(list_of_data)
     data = {
         "country_code": str(list_of_data['sys']['country']),

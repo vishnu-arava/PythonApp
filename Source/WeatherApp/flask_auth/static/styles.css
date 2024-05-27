@@ -180,3 +180,15 @@ p.right-aligned {
 .grid-item.item2 {
     background-color: #2ecc71;
 }
+
+.weather_data_print {
+    width: 60%;
+    height: 300px; /* Adjust the height as needed */
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}

@@ -57,7 +57,7 @@ if __name__ == '__main__':
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pipreqs'])
         subprocess.run(['pipreqs', os.path.abspath(os.getcwd())])
 
-        subprocess.check_call(['apt-get', 'install', '-y', 'libmysqlclient-dev'])
+        subprocess.check_call(['pip', 'install', 'mysqlclient'])
 
         # Upgrade pip
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade pip'], shell=True)
