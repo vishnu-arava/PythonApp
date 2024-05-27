@@ -7,7 +7,6 @@ import os
 #    try:
 #        subprocess.check_call(['sudo', 'apt-get', 'update'])
 #        subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'python3*-venv'])
-#
 #        print("python3.10-venv installed successfully.")
 #    except subprocess.CalledProcessError as e:
 #        print(f"An error occurred while installing python3.10-venv: {e}")
