@@ -34,7 +34,6 @@ def install_packages(venv_path, requirements_file):
 
         #subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'pkg-config'])
         #subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'libmysqlclient-dev'])
-
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'])
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'setuptools'])
 
