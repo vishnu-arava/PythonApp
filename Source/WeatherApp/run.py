@@ -54,17 +54,17 @@ if __name__ == '__main__':
         venv_path = "venv"
         subprocess.run([sys.executable, "-m", "venv", venv_path])
         activation_script = os.path.join(venv_path, "bin", "activate")
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pipreqs'])
-        subprocess.run(['pipreqs', os.path.abspath(os.getcwd())])
+        #subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pipreqs'])
+        #subprocess.run(['pipreqs', os.path.abspath(os.getcwd())])
 
         #subprocess.check_call(['apt-get', 'install', '-y', 'libmysqlclient-dev'])
 
         # Upgrade pip
-        subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade pip'], shell=True)
+        #subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade pip'], shell=True)
 
         # Upgrade setuptools
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade setuptools'], shell=True)
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+        #subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
     #HOST = environ.get('SERVER_HOST', 'localhost')
     from flask_auth import app
     app.run(host='0.0.0.0',port=5000,debug=True,use_reloader=False)
