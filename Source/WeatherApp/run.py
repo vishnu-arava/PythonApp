@@ -30,14 +30,14 @@ def install_packages(venv_path, requirements_file):
         subprocess.check_call([pip_executable, 'install', 'pipreqs'])
         print("pipreqs installed successfully.")
 
-        subprocess.run([os.path.join(venv_path, 'bin', 'pipreqs'), os.path.abspath(os.getcwd())])
+        #subprocess.run([os.path.join(venv_path, 'bin', 'pipreqs'), os.path.abspath(os.getcwd())])
 
         #subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'pkg-config'])
         #subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'libmysqlclient-dev'])
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'])
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'setuptools'])
+        #subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'])
+        #subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'setuptools'])
 
-        subprocess.check_call([sys.executable, '-m','pip','install','-r',requirements_file])
+        #subprocess.check_call([sys.executable, '-m','pip','install','-r',requirements_file])
         print("Required packages installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while installing packages: {e}")
@@ -54,17 +54,17 @@ if __name__ == '__main__':
         venv_path = "venv"
         subprocess.run([sys.executable, "-m", "venv", venv_path])
         activation_script = os.path.join(venv_path, "bin", "activate")
-        #subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pipreqs'])
-        #subprocess.run(['pipreqs', os.path.abspath(os.getcwd())])
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pipreqs'])
+        subprocess.run(['pipreqs', os.path.abspath(os.getcwd())])
 
-        #subprocess.check_call(['apt-get', 'install', '-y', 'libmysqlclient-dev'])
+        subprocess.check_call(['apt-get', 'install', '-y', 'libmysqlclient-dev'])
 
         # Upgrade pip
-        #subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade pip'], shell=True)
+        subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade pip'], shell=True)
 
         # Upgrade setuptools
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade setuptools'], shell=True)
-        #subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
     #HOST = environ.get('SERVER_HOST', 'localhost')
     from flask_auth import app
     app.run(host='0.0.0.0',port=5000,debug=True,use_reloader=False)
