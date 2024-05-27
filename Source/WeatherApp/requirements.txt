@@ -1,0 +1,9 @@
+Flask==3.0.3
+flask_bcrypt==1.0.1
+flask_mysqldb==2.0.0
+flask_wtf==1.2.1
+numpy==1.26.4
+pandas==2.2.2
+Requests==2.32.2
+scikit_learn==1.5.0
+WTForms==3.1.2
