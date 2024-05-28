@@ -14,6 +14,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 import logging
 from logging.handlers import RotatingFileHandler
+from datetime import datetime
 
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 file_handler = RotatingFileHandler('Logfiles/app.log', maxBytes=1024 * 1024 * 10, backupCount=5)
@@ -21,7 +22,36 @@ file_handler.setFormatter(formatter)
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.DEBUG)
 
-
+weather_description_code = {
+        '0': "Clear sky",
+        '1': "Mainly clear",
+        '2': "Partly cloudy",
+        '3': "Overcast",
+        '45': "Fog",
+        '48': "Depositing rime fog",
+        '51': "Light drizzle",
+        '53': "Moderate drizzle",
+        '55': "Dense drizzle",
+        '56': "Light freezing drizzle",
+        '57': "Dense freezing drizzle",
+        '61': "Slight rain",
+        '63': "Moderate rain",
+        '65': "Heavy rain",
+        '66': "Light freezing rain",
+        '67': "Heavy freezing rain",
+        '71': "Slight snow fall",
+        '73': "Moderate snow fall",
+        '75': "Heavy snow fall",
+        '77': "Snow grains",
+        '80': "Slight rain showers",
+        '81': "Moderate rain showers",
+        '82': "Violent rain showers",
+        '85': "Slight snow showers",
+        '86': "Heavy snow showers",
+        '95': "Thunderstorm",
+        '96': "Thunderstorm with slight hail",
+        '99': "Thunderstorm with heavy hail"
+    }
 GEODB_API_KEY = '03b7c4734dmsha8ae33637250f48p11c63fjsn48372cbe71f6'
 def get_cities():
 
@@ -37,6 +67,31 @@ def get_cities():
 
 def tocelcius(temp):
     return str(round(float(temp) - 273.16,2))
+
+def get_coordinates(city_name):
+    api_key = '48a90ac42caa09f90dcaeee4096b9e53'
+    source = urllib.request.urlopen(
+        'http://api.openweathermap.org/data/2.5/weather?q=' + city_name + '&appid=' + api_key).read()
+    list_of_data = json.loads(source)
+    return float(list_of_data['coord']['lat']), float(list_of_data['coord']['lon'])
+
+def get_weather(latitude, longitude):
+    url = f'https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,relative_humidity_2m_max,wind_speed_10m_max,windspeed_10m_min,winddirection_10m_dominant,relative_humidity_2m_min,weathercode&timezone=GMT'
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error: Unable to fetch data (status code {response.status_code})")
+        return None
+
+def get_city_weather(city_name):
+    latitude, longitude = get_coordinates(city_name)
+    if latitude and longitude:
+        weather_data = get_weather(latitude, longitude)
+        return weather_data
+    else:
+        return None
+
 @app.route('/')
 def home():
     app.logger.info('Loading the home page')
@@ -88,7 +143,6 @@ def login():
 
     return render_template('login.html', form=form)
 
-
 @app.route('/dashboard')
 def dashboard():
     app.logger.info('Loading the dashboard')
@@ -107,7 +161,8 @@ def logout():
 @app.route('/page1',methods=['POST','GET'])
 def weather():
     app.logger.info('Loading the weather search page')
-    api_key = '48a90ac42caa09f90dcaeee4096b9e53'
+    emptdict = {}
+    weekly_weather_list = []
 
     if request.method == 'POST':
         city = request.form['city']
@@ -118,71 +173,57 @@ def weather():
     else:
         app.logger.info(f'The city : {city} was given for the search')
     try:
-
-
-        source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid='+api_key).read()
+        city_name = city
+        weather_data = get_city_weather(city_name)
+        dict = weather_data['daily']
+        for i in range(0, len(dict['time'])):
+            emptdict['cityname'] = city_name
+            emptdict['date'] = dict['time'][i]
+            date_object = datetime.strptime(emptdict['date'], '%Y-%m-%d')
+            emptdict['day'] = str(date_object.strftime('%A'))
+            emptdict['temperature_min'] = str(dict['temperature_2m_min'][i])
+            emptdict['temperature_max'] = str(dict['temperature_2m_max'][i])
+            emptdict['precipitation'] = str(dict['precipitation_sum'][i])
+            emptdict['humidity_min'] = str(dict['relative_humidity_2m_min'][i])
+            emptdict['humidity_max'] = str(dict['relative_humidity_2m_max'][i])
+            emptdict['windspeed_min'] = str(dict['windspeed_10m_min'][i])
+            emptdict['windspeed_max'] = str(dict['wind_speed_10m_max'][i])
+            emptdict['windirection'] = str(dict['winddirection_10m_dominant'][i])
+            emptdict['weather_code'] = str(weather_description_code[str(dict['weathercode'][i])])
+            weekly_weather_list.append(emptdict)
+            emptdict = {}
+            print(weekly_weather_list[0])
     except:
-        return render_template('page1.html',data = {
-            "country_code": '',
-            "coordinate": '' + ' ' + '',
-            "temp": '' + 'k',
-            "temp_cel": '' + 'C',
-            "pressure": '',
-            "humidity": '',
-            "cityname": str(city),
-        })
-    # converting json data to dictionary
-
-    list_of_data = json.loads(source)
-
-    # data for variable list_of_data
-
-    print(list_of_data)
-    data = {
-        "country_code": str(list_of_data['sys']['country']),
-        "coordinate": str(list_of_data['coord']['lon']) + ' ' + str(list_of_data['coord']['lat']),
-        "temp": str(list_of_data['main']['temp']) + 'k',
-        "temp_cel": tocelcius(list_of_data['main']['temp']) + 'C',
-        "pressure": str(list_of_data['main']['pressure']),
-        "humidity": str(list_of_data['main']['humidity']),
-        "cityname":str(city),
-    }
-    return render_template('page1.html',data=data)
+        return render_template('page1.html')
+    return render_template('page1.html',data=weekly_weather_list[0])
 
 @app.route('/predict',methods=['POST','GET'])
 def predict():
-    if not os.path.isfile('model.pkl'):
-        filename = 'flask_auth\Forest_fire.csv'
-        filepath = os.path.abspath(filename)
-        data = pd.read_csv(filepath)
-        data = np.array(data)
-
-        X = data[1:, 1:-1]
-        y = data[1:, -1]
-        y = y.astype('int')
-        X = X.astype('int')
-        # print(X,y)
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
-        log_reg = LogisticRegression()
-
-        log_reg.fit(X_train, y_train)
-
-        inputt = [int(x) for x in "45 32 60".split(' ')]
-        final = [np.array(inputt)]
-
-        b = log_reg.predict_proba(final)
-
-        pickle.dump(log_reg, open('model.pkl', 'wb'))
-
-    model = pickle.load(open('model.pkl', 'rb'))
-    int_features=[int(x) for x in request.form.values()]
-    final=[np.array(int_features)]
-    print(int_features)
-    print(final)
-    prediction=model.predict_proba(final)
-    output='{0:.{1}f}'.format(prediction[0][1], 2)
-
-    if output>str(0.5):
-        return render_template('forest_fire.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output),bhai="kuch karna hain iska ab?")
-    else:
-        return render_template('forest_fire.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output),bhai="Your Forest is Safe for now")
+   if not os.path.isfile('model.pkl'):
+       filename = 'flask_auth\Forest_fire.csv'
+       filepath = os.path.abspath(filename)
+       data = pd.read_csv(filepath)
+       data = np.array(data)
+       X = data[1:, 1:-1]
+       y = data[1:, -1]
+       y = y.astype('int')
+       X = X.astype('int')
+       # print(X,y)
+       X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+       log_reg = LogisticRegression()
+       log_reg.fit(X_train, y_train)
+       inputt = [int(x) for x in "45 32 60".split(' ')]
+       final = [np.array(inputt)]
+       b = log_reg.predict_proba(final)
+       pickle.dump(log_reg, open('model.pkl', 'wb'))
+   model = pickle.load(open('model.pkl', 'rb'))
+   int_features=[int(x) for x in request.form.values()]
+   final=[np.array(int_features)]
+   print(int_features)
+   print(final)
+   prediction=model.predict_proba(final)
+   output='{0:.{1}f}'.format(prediction[0][1], 2)
+   if output>str(0.5):
+       return render_template('forest_fire.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output),bhai="kuch karna hain iska ab?")
+   else:
+       return render_template('forest_fire.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output),bhai="Your Forest is Safe for now")

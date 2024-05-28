@@ -44,9 +44,29 @@
     </form>
 
   </center>
+
      <div class="weather_data_print">
+         {% if data %}
+        <div class="weather-icon">
+            <img src="weather-icon.png" alt="Weather Icon">
+        </div>
+        <div class="temperature">
+            {{data['temperature_max']}}<span>°C </span>
+        </div>
+        <div class="weather-info">
+            <div>Precipitation: {{data['precipitation']}}%</div>
+            <div>Humidity: {{data['humidity_max']}}%</div>
+            <div>Wind: {{data['windspeed_max']}} km/h</div>
+        </div>
+        <div class="weather-details">
+            <div class="weather-title">{{data['cityname']}}</div>
+            <div class="weather-day">{{data['day']}}</div>
+            <div class="weather-description">{{data['weather_code']}}</div>
+        </div>
+         {% endif %}
      </div>
-  <div class="row">
+
+  <!--<div class="row">
     {% if data.country_code and data.coordinate and data.temp and data.pressure and data.humidity %}
     <div class="col-md-6 col-md-offset-3">
       <h1>country code : {{data.country_code}}</h1>
@@ -58,6 +78,6 @@
         <h5>humidity : {{data.humidity}}</h5>
     </div>
     {% endif %}
-  </div>
+  </div>-->
 </body>
 </html>

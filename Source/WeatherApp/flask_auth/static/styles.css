@@ -183,12 +183,64 @@ p.right-aligned {
 
 .weather_data_print {
     width: 60%;
-    height: 300px; /* Adjust the height as needed */
+    height: 330px; /* Adjust the height as needed */
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
-    background-color: #f9f9f9;
     box-sizing: border-box;
+    background-color: #333; /* Background color similar to the image */
+    color: #fff; /* Text color to ensure readability on dark background */
+    font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column;
+}
+.weather-container {
+    display: flex;
+    align-items: center;
+    background-color: #333; /* Match the background to blend with body */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.weather-icon {
+    width:14%;
+    margin-right: 20px;
+}
+.weather-icon img {
+    width: 50px; /* Adjust the size of the image as needed */
+    height: 50px;
+}
+.temperature {
+    width: 12%;
+    display: flex;
+    align-items: top;
+    font-size: 3em;
+    margin-right: 20px;
+}
+.temperature span {
+    font-size: 0.5em;
+    margin-left: 5px;
+}
+.weather-info {
+    width:50%;
+    margin-right: 40px;
+    font-size: 11px;
+}
+.weather-info div {
+    margin-bottom: 5px; /* Spacing between the rows */
+}
+.weather-details {
+    width: 16%;
+    text-align: right;
+}
+.weather-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+.weather-day {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+.weather-description {
+    font-size: 1em;
+    margin-bottom: 15px;
 }
