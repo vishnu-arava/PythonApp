@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, session,request
+from flask import render_template, redirect, url_for, flash, session,jsonify
 import requests
 from flask_auth import app, mysql, bcrypt
 from flask_auth.forms import RegistrationForm, LoginForm
@@ -92,6 +92,16 @@ def get_city_weather(city_name):
     else:
         return None
 
+def get_matching_cities(query):
+    # List of cities (you might want to fetch this from a database or external API)
+    cities = ["Hyderabad", "London", "New York", "Los Angeles", "Paris", "Tokyo", "Sydney"]
+
+    # Filter cities based on the query
+    matching_cities = [city for city in cities if query.lower() in city.lower()]
+
+    return matching_cities
+
+
 @app.route('/')
 def home():
     app.logger.info('Loading the home page')
@@ -166,8 +176,9 @@ def weather():
 
     if request.method == 'POST':
         city = request.form['city']
+        print(city)
     else:
-        city = 'mathura'
+        city = 'hyderabad'
     if not city:
         app.logger.warning('No city has been provided for the search')
     else:
@@ -192,11 +203,41 @@ def weather():
             emptdict['weather_code'] = str(weather_description_code[str(dict['weathercode'][i])])
             weekly_weather_list.append(emptdict)
             emptdict = {}
-            print(weekly_weather_list[0])
+        print(weekly_weather_list)
     except:
-        return render_template('page1.html')
-    return render_template('page1.html',data=weekly_weather_list[0])
-
+        return render_template('page1.html', maindata=[{
+            'cityname': '',
+            'date': '',
+            'day':'',
+            'temperature_min':'',
+            'temperature_max':'',
+            'humidity_min':'',
+            'humidity_max':'',
+            'windspeed_min':'',
+            'windspeed_max':'',
+            'windirection':'',
+            'weather_code':''
+        },{
+            'cityname': '',
+            'date': '',
+            'day':'',
+            'temperature_min':'',
+            'temperature_max':'',
+            'humidity_min':'',
+            'humidity_max':'',
+            'windspeed_min':'',
+            'windspeed_max':'',
+            'windirection':'',
+            'weather_code':''
+        }])
+    return render_template('page1.html', maindata=weekly_weather_list)
+@app.route('/search', methods=['POST'])
+def search():
+    query = request.form['query']
+    # Assuming you have a function get_matching_cities(query) that returns a list of matching cities
+    matching_cities = get_matching_cities(query)
+    # Return the list of matching cities as JSON
+    return jsonify(matching_cities)
 @app.route('/predict',methods=['POST','GET'])
 def predict():
    if not os.path.isfile('model.pkl'):

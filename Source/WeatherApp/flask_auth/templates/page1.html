@@ -44,40 +44,36 @@
     </form>
 
   </center>
-
+    {% if maindata %}
      <div class="weather_data_print">
-         {% if data %}
         <div class="weather-icon">
             <img src="weather-icon.png" alt="Weather Icon">
         </div>
         <div class="temperature">
-            {{data['temperature_max']}}<span>°C </span>
+            {{maindata[0]['temperature_max']}}<span>°C </span>
         </div>
         <div class="weather-info">
-            <div>Precipitation: {{data['precipitation']}}%</div>
-            <div>Humidity: {{data['humidity_max']}}%</div>
-            <div>Wind: {{data['windspeed_max']}} km/h</div>
+            <div>Precipitation: {{maindata[0]['precipitation']}}%</div>
+            <div>Humidity: {{maindata[0]['humidity_max']}}%</div>
+            <div>Wind: {{maindata[0]['windspeed_max']}} km/h</div>
         </div>
         <div class="weather-details">
-            <div class="weather-title">{{data['cityname']}}</div>
-            <div class="weather-day">{{data['day']}}</div>
-            <div class="weather-description">{{data['weather_code']}}</div>
+            <div class="weather-title">{{maindata[0]['cityname']}}</div>
+            <div class="weather-day">{{maindata[0]['day']}}</div>
+            <div class="weather-description">{{maindata[0]['weather_code']}}</div>
         </div>
-         {% endif %}
      </div>
-
-  <!--<div class="row">
-    {% if data.country_code and data.coordinate and data.temp and data.pressure and data.humidity %}
-    <div class="col-md-6 col-md-offset-3">
-      <h1>country code : {{data.country_code}}</h1>
-        <h5>City name : {{data.cityname}}</h5>
-        <h5>coordinate : {{data.coordinate}}</h5>
-        <h5>temp (in kelvin) : {{data.temp}}</h5>
-        <h5>temp (in celcius) : {{data.temp_cel}}</h5>
-        <h5>pressure : {{data.pressure}} </h5>
-        <h5>humidity : {{data.humidity}}</h5>
+    <div class="forcast_data_print">
+     <div class="forecast">
+         {% for data in maindata %}
+        <button class="day highlight" onclick="alert('Monday forecast: 37°C/28°C, Partly Cloudy')">
+            <p>{{ data['day'] }}</p>
+            <img src="partly_cloudy.png" alt="IMG">
+            <p class="paragraph_secondrow">{{ data['temperature_max'] }}° {{ data['temperature_min'] }}°</p>
+        </button>
+         {% endfor %}
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-  </div>-->
 </body>
 </html>
