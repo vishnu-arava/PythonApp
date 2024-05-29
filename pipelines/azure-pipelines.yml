@@ -1,1 +1,33 @@
-UserInterface related scripts
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- checkout: self
+
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.10'  # Specify the Python version you need
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    # Add commands to create a ZIP archive of your Python application
+    cd Source/WeatherApp
+    zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip .
+  displayName: 'Build'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'AppServiceConnection-va'
+    appName: 'webappservicepython.azurewebsites.net'
+    package: '$(Build.ArtifactStagingDirectory)/weatherapp.zip'
+    startUpCommand: 'python run.py'  # Specify the startup command for your Python application
+  displayName: 'Deploy to Azure Web App'
