@@ -20,7 +20,7 @@ steps:
     zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip .
   displayName: 'Build'
 
-  - script: |
+- script: |
     python -m pip install --upgrade pip
     pip install -r requirements.txt
   displayName: 'Install dependencies'
