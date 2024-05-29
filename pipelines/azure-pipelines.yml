@@ -20,15 +20,21 @@ steps:
     zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip .
   displayName: 'Build'
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+#- script: |
+#    apt-get update -y
+#    apt-get install python3.11 -y
+#    python -m pip install --upgrade pip
+#    pip install -r requirements.txt
+#    apt-get install zip -y
+#    apt-get install python3-venv -y
+#    apt-get install pkg-config -y
+#    apt-get install libmysqlclient-dev -y
+#  displayName: 'Install dependencies'
 
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'AppServiceConnection-va'
     appName: 'webappservicepython.azurewebsites.net'
-    package: '$(Build.ArtifactStagingDirectory)/weatherapp.zip'
-    startUpCommand: 'python run.py'  # Specify the startup command for your Python application
+#   package: '$(Build.ArtifactStagingDirectory)/weatherapp.zip'
+#   startUpCommand: 'python run.py'  # Specify the startup command for your Python application
   displayName: 'Deploy to Azure Web App'
