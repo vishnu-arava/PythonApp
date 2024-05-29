@@ -13,16 +13,17 @@ steps:
   inputs:
     versionSpec: '3.10'  # Specify the Python version you need
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
 
 - script: |
     # Add commands to create a ZIP archive of your Python application
     cd Source/WeatherApp
     zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip .
   displayName: 'Build'
+
+  - script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
 
 - task: AzureWebApp@1
   inputs:
