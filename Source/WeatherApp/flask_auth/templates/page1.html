@@ -26,15 +26,14 @@
             <a href="{{ url_for('register') }}" class="right">Register</a>
         {% endif %}
     </div>
-    <br>
-<nav class="row" style="background: #337ab7; color: white;">
-  </nav>
-  <br />
-  <br />
+     <br>
+     <br>
+     <br>
   <center class="row">
     <form method="post" class="col-md-6 col-md-offset-3">
       <div class="input-group">
-        <input type="text" class="form-control" name="city" placeholder="Search">
+        <input type="text" class="form-control" name="city" placeholder="Search" id="city-input">
+          <input type="hidden" name="selected_city" id="selected-city">
         <div class="input-group-btn">
           <button class="btn btn-primary" type="submit">
             <i class="glyphicon glyphicon-search"></i>
@@ -42,10 +41,9 @@
         </div>
       </div>
     </form>
-
   </center>
     {% if maindata %}
-     <div class="weather_data_print">
+     <div class="weather_data_print" id="weather_data_print">
         <div class="weather-icon">
             <img src="weather-icon.png" alt="Weather Icon">
         </div>
@@ -66,7 +64,7 @@
     <div class="forcast_data_print">
      <div class="forecast">
          {% for data in maindata %}
-        <button class="day highlight" onclick="alert('Monday forecast: 37°C/28°C, Partly Cloudy')">
+        <button class="day highlight" onclick="fetchWeatherData('{{ data['day']}}')">
             <p>{{ data['day'] }}</p>
             <img src="partly_cloudy.png" alt="IMG">
             <p class="paragraph_secondrow">{{ data['temperature_max'] }}° {{ data['temperature_min'] }}°</p>
@@ -75,5 +73,42 @@
         </div>
         {% endif %}
     </div>
+    <script>
+    // Update hidden input with the searched city before form submission
+    document.querySelector('form').onsubmit = function(event) {
+        event.preventDefault();
+       document.getElementById('selected-city').value = document.getElementById('city-input').value;
+       console.log(`The hidden file has been updated : ${document.getElementById('selected-city').value}`);
+       this.submit();
+    }
+
+    function fetchWeatherData(day) {
+        console.log(`The hidden file has been updated : ${document.getElementById('selected-city').value}`);
+        const selectedCity = document.getElementById('selected-city').value || 'hyderabad';
+        console.log(`Fetching weather data for: ${day} in ${selectedCity}`);  // Debugging information
+
+        fetch(`/weather?day=${day}&city=${selectedCity}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);  // Debugging information
+                document.querySelector('#weather_data_print .temperature').innerHTML = data.temperature_max + '<span>°C </span>';
+                document.querySelector('#weather_data_print .weather-info').innerHTML = `
+                    <div>Precipitation: ${data.precipitation}%</div>
+                    <div>Humidity: ${data.humidity_max}%</div>
+                    <div>Wind: ${data.windspeed_max} km/h</div>
+                `;
+                document.querySelector('#weather_data_print .weather-title').textContent = data.cityname;
+                document.querySelector('#weather_data_print .weather-day').textContent = data.day;
+                document.querySelector('#weather_data_print .weather-description').textContent = data.weather_code;
+            })
+            .catch(error => console.error('Error fetching weather data:', error));
+    }
+</script>
+
 </body>
 </html>
