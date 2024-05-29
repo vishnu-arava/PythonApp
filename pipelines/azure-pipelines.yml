@@ -25,8 +25,7 @@ steps:
 #    apt-get install python3.11 -y
 #    python -m pip install --upgrade pip
 #    pip install -r requirements.txt
-     apt-get install zip -y
-     apt-get install unzip -y
+    apt-get install zip -y
 #    apt-get install python3-venv -y
 #    apt-get install pkg-config -y
 #    apt-get install libmysqlclient-dev -y
