@@ -1,32 +1,38 @@
 trigger:
   branches:
     include:
-      - main
+      - main  # Run pipeline on commits to the main branch
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'  # Use an Ubuntu-based build agent
 
 steps:
-- checkout: self
+- checkout: self  # Check out the repository containing the pipeline definition
 
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.10'  # Specify the Python version you need
+    versionSpec: '3.10'  # Specify the Python version to be set up on the build agent
 
 - script: |
-    # Add commands to create a ZIP archive of your Python application
-    cd Source/WeatherApp
-    zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip .
-  displayName: 'Build'
-
-- script: |
-    apt-get install zip -y
+    python -m pip install --upgrade pip  # Upgrade pip
+    python -m venv venv  # Create a virtual environment
+    source venv/bin/activate  # Activate the virtual environment
+    pip install -r Source/WeatherApp/requirements.txt  # Install dependencies in the virtual environment
   displayName: 'Install dependencies'
+
+- script: |
+    apt-get update -y
+    apt-get install zip -y  # Ensure zip utility is installed on the build agent
+    cd Source/WeatherApp
+    zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip . -x "venv/*"  # Create a ZIP archive of the application excluding the virtual environment
+    cd ../..
+    zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip Source/WeatherApp/venv  # Add the virtual environment to the ZIP file
+  displayName: 'Create ZIP Archive'
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: 'AppServiceConnection-va'
-    appName: 'webappservicepython.azurewebsites.net'
-    package: '$(Build.ArtifactStagingDirectory)/weatherapp.zip'
-    startUpCommand: 'python run.py'  # Specify the startup command for your Python application
+    azureSubscription: 'AppServiceConnection-va'  # Name of your Azure service connection
+    appName: 'webappservicepython'  # Name of your Azure Web App (without .azurewebsites.net)
+    package: '$(Build.ArtifactStagingDirectory)/weatherapp.zip'  # Path to the ZIP file to deploy
+    startUpCommand: 'source venv/bin/activate && python run.py'  # Specify the startup command for your Python application
   displayName: 'Deploy to Azure Web App'
