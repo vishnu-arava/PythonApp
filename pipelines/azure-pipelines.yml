@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main  # Run pipeline on commits to the main branch
+      - vishnu  # Run pipeline on commits to the vishnu branch
 
 pool:
   vmImage: 'ubuntu-latest'  # Use an Ubuntu-based build agent
@@ -15,17 +15,19 @@ steps:
 
 - script: |
     python -m pip install --upgrade pip  # Upgrade pip
-    python -m venv venv  # Create a virtual environment
-    source venv/bin/activate  # Activate the virtual environment
-    pip install -r Source/WeatherApp/requirements.txt  # Install dependencies in the virtual environment
+    python -m venv $(Build.SourcesDirectory)/Source/WeatherApp/venv  # Create a virtual environment
+    source $(Build.SourcesDirectory)/Source/WeatherApp/venv/bin/activate  # Activate the virtual environment
+    pip install -r $(Build.SourcesDirectory)/Source/WeatherApp/requirements.txt  # Install dependencies in the virtual environment
   displayName: 'Install dependencies'
 
 - script: |
     apt-get update -y
     apt-get install zip -y  # Ensure zip utility is installed on the build agent
-    cd Source/WeatherApp
+    cd $(Build.SourcesDirectory)/Source/WeatherApp
+    pwd  # Print current working directory (should be Source/WeatherApp)
     zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip . -x "venv/*"  # Create a ZIP archive of the application excluding the virtual environment
-    cd ../..
+    cd $(Build.SourcesDirectory)
+    pwd  # Print current working directory (should be the root of the repository)
     zip -r $(Build.ArtifactStagingDirectory)/weatherapp.zip Source/WeatherApp/venv  # Add the virtual environment to the ZIP file
   displayName: 'Create ZIP Archive'
 
