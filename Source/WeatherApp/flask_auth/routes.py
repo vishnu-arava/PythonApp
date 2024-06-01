@@ -231,6 +231,39 @@ def weather():
             'weather_code':''
         }])
     return render_template('page1.html', maindata=weekly_weather_list)
+@app.route('/weather', methods=['GET'])
+def weather_data():
+    day = request.args.get('day')
+    city = request.args.get('city', 'hyderabad')  # Default to 'hyderabad' if no city is provided
+
+    if not day:
+        return jsonify({'error': 'No day provided'}), 400
+
+    app.logger.info(f'Received request for weather data for day: {day} in city: {city}')  # Debugging information
+
+    weather_data = get_city_weather(city)
+    dict = weather_data['daily']
+    for i in range(0, len(dict['time'])):
+        date_object = datetime.strptime(dict['time'][i], '%Y-%m-%d')
+        if str(date_object.strftime('%A')) == day:
+            result = {
+                'cityname': city,
+                'date': dict['time'][i],
+                'day': day,
+                'temperature_min': str(dict['temperature_2m_min'][i]),
+                'temperature_max': str(dict['temperature_2m_max'][i]),
+                'precipitation': str(dict['precipitation_sum'][i]),
+                'humidity_min': str(dict['relative_humidity_2m_min'][i]),
+                'humidity_max': str(dict['relative_humidity_2m_max'][i]),
+                'windspeed_min': str(dict['windspeed_10m_min'][i]),
+                'windspeed_max': str(dict['wind_speed_10m_max'][i]),
+                'windirection': str(dict['winddirection_10m_dominant'][i]),
+                'weather_code': str(weather_description_code[str(dict['weathercode'][i])])
+            }
+            app.logger.info(f'Returning data: {result}')  # Debugging information
+            return jsonify(result)
+    return jsonify({'error': 'Weather data for the requested day not found'}), 404
+
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form['query']
