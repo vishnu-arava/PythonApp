@@ -16,11 +16,25 @@ import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-file_handler = RotatingFileHandler('Logfiles/app.log', maxBytes=1024 * 1024 * 10, backupCount=5)
-file_handler.setFormatter(formatter)
-app.logger.addHandler(file_handler)
-app.logger.setLevel(logging.DEBUG)
+# Create a logger for the app
+app_logger = logging.getLogger('app_logger')
+app_logger.setLevel(logging.DEBUG)
+
+# Handler for logging info and above messages
+info_handler = RotatingFileHandler('Logs/info.log', maxBytes=1024 * 1024 * 10, backupCount=5)
+info_handler.setLevel(logging.INFO)
+info_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+# Handler for logging error and above messages
+error_handler = RotatingFileHandler('Logs/error.log', maxBytes=1024 * 1024 * 10, backupCount=5)
+error_handler.setLevel(logging.ERROR)
+error_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+# Add handlers to the logger
+app_logger.addHandler(info_handler)
+app_logger.addHandler(error_handler)
+
+app.logger = app_logger
 
 weather_description_code = {
         '0': "Clear sky",
@@ -168,7 +182,7 @@ def logout():
 
 
 
-@app.route('/page1',methods=['POST','GET'])
+@app.route('/weather_search',methods=['POST','GET'])
 def weather():
     app.logger.info('Loading the weather search page')
     emptdict = {}
@@ -205,7 +219,7 @@ def weather():
             emptdict = {}
         print(weekly_weather_list)
     except:
-        return render_template('page1.html', maindata=[{
+        return render_template('weather_search.html', maindata=[{
             'cityname': '',
             'date': '',
             'day':'',
@@ -230,7 +244,7 @@ def weather():
             'windirection':'',
             'weather_code':''
         }])
-    return render_template('page1.html', maindata=weekly_weather_list)
+    return render_template('weather_search.html', maindata=weekly_weather_list)
 @app.route('/weather', methods=['GET'])
 def weather_data():
     day = request.args.get('day')
@@ -271,10 +285,14 @@ def search():
     matching_cities = get_matching_cities(query)
     # Return the list of matching cities as JSON
     return jsonify(matching_cities)
+
+@app.route('/weather_predict')
+def predic_page():
+    return render_template("weather_predict.html")
 @app.route('/predict',methods=['POST','GET'])
 def predict():
    if not os.path.isfile('model.pkl'):
-       filename = 'flask_auth\Forest_fire.csv'
+       filename = '\Forest_fire.csv'
        filepath = os.path.abspath(filename)
        data = pd.read_csv(filepath)
        data = np.array(data)
@@ -282,22 +300,22 @@ def predict():
        y = data[1:, -1]
        y = y.astype('int')
        X = X.astype('int')
-       # print(X,y)
        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
        log_reg = LogisticRegression()
        log_reg.fit(X_train, y_train)
-       inputt = [int(x) for x in "45 32 60".split(' ')]
-       final = [np.array(inputt)]
-       b = log_reg.predict_proba(final)
        pickle.dump(log_reg, open('model.pkl', 'wb'))
    model = pickle.load(open('model.pkl', 'rb'))
-   int_features=[int(x) for x in request.form.values()]
-   final=[np.array(int_features)]
-   print(int_features)
-   print(final)
-   prediction=model.predict_proba(final)
-   output='{0:.{1}f}'.format(prediction[0][1], 2)
-   if output>str(0.5):
-       return render_template('forest_fire.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output),bhai="kuch karna hain iska ab?")
-   else:
-       return render_template('forest_fire.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output),bhai="Your Forest is Safe for now")
+   if request.method == 'POST':
+       if request.form.values():
+           print(request.form.values())
+           int_features=[int(x) for x in request.form.values() if x.strip()]
+           if not int_features:
+               return render_template('weather_predict.html', pred='Enter Valid Details')
+           final=[np.array(int_features)]
+           prediction=model.predict_proba(final)
+           positive_probability = prediction[0][1] * 100
+           output = '{:.2f}%'.format(positive_probability)
+           if output>str(70):
+               return render_template('weather_predict.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output))
+           else:
+               return render_template('weather_predict.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output))

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherSearch</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+<body style="background-color:lightgrey;">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="margin-top:8px;margin-left:10px;margin-right:10px; background-color:#333333">
+        {% if 'username' in session %}
+            <a href="{{ url_for('dashboard') }}">Home</a>
+            <a href="{{ url_for('weather') }}">Weather Search</a>
+            <a href="{{ url_for('predic_page') }}">Forest Fire Prediction</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Home</a>
+        {% endif %}
+
+        {% if 'username' in session %}
+            <a href="{{ url_for('logout') }}"class="right">Logout</a>
+            <a class="right">{{session['username']}}</a>
+
+        {% else %}
+            <a href="{{ url_for('login') }}" class="right">Login</a>
+            <a href="{{ url_for('register') }}" class="right">Register</a>
+        {% endif %}
+    </div>
+     <br>
+     <br>
+     <br>
+ <div class="form-container">
+    <form action='/predict' method="post">
+      <div class="input-row">
+        <div class="input-group">
+            <label for="first_name"><b>Temperature</b></label>
+            <br>
+          <input name="Temperature" id="first_name" type="text" >
+        </div>
+        <div class="input-group">
+          <label for="last_name"><b>Oxygen </b></label>
+            <br>
+          <input id="last_name" name="Oxygen" type="text" >
+        </div>
+        <div class="input-group">
+            <label for="_name"><b>Humidity</b></label>
+            <br>
+          <input id="_name" name="Humidity"  type="text">
+        </div>
+      </div>
+      <div class="button-container">
+          <button class="button_predict" type="submit" >Predict Probability</button>
+      </div>
+    </form>
+     {% if pred %}
+      <div class="message-container">
+        <br><p>{{pred}}</p><br>
+      </div>
+     {% endif %}
+ </div>
+  </body>
+</html>
+
