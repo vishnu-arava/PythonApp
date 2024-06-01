@@ -27,11 +27,11 @@
         {% endif %}
     </div>
     <br>
-        <div class="dashboard-container-wrapper">
-            <div class="dashboard-container" onclick="window.location.href='{{ url_for('weather') }}';">
+        <div class="grid-container">
+            <div class="grid-item item1" style="background-color: #8d9bba;" onclick="window.location.href='{{ url_for('weather') }}';">
                <p>Weather Search</p>
              </div>
-            <div class="dashboard-container" onclick="window.location.href='{{ url_for('page2') }}';">
+            <div class="grid-item item2" style="background-color: #2ecc71;" onclick="window.location.href='#';">
                <p>Click here to go to Page 2</p>
              </div>
         </div>
