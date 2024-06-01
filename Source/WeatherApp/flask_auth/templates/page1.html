@@ -33,7 +33,7 @@
     <form method="post" class="col-md-6 col-md-offset-3">
       <div class="input-group">
         <input type="text" class="form-control" name="city" placeholder="Search" id="city-input">
-          <input type="hidden" name="selected_city" id="selected-city">
+          <input type="hidden" name="selected_city" id="selected-city" value="{{maindata[0]['cityname']}}">
         <div class="input-group-btn">
           <button class="btn btn-primary" type="submit">
             <i class="glyphicon glyphicon-search"></i>
@@ -74,10 +74,8 @@
         {% endif %}
     </div>
     <script>
-    // Update hidden input with the searched city before form submission
     document.querySelector('form').onsubmit = function(event) {
         event.preventDefault();
-       document.getElementById('selected-city').value = document.getElementById('city-input').value;
        console.log(`The hidden file has been updated : ${document.getElementById('selected-city').value}`);
        this.submit();
     }
