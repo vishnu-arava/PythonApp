@@ -45,7 +45,7 @@
     {% if maindata %}
      <div class="weather_data_print" id="weather_data_print">
         <div class="weather-icon">
-            <img src="weather-icon.png" alt="Weather Icon">
+            <!--<img src="weather-icon.png" alt=" ">-->
         </div>
         <div class="temperature">
             {{maindata[0]['temperature_max']}}<span>°C </span>
@@ -66,8 +66,8 @@
          {% for data in maindata %}
         <button class="day highlight" onclick="fetchWeatherData('{{ data['day']}}')">
             <p>{{ data['day'] }}</p>
-            <img src="partly_cloudy.png" alt="IMG">
-            <p class="paragraph_secondrow">{{ data['temperature_max'] }}° {{ data['temperature_min'] }}°</p>
+            <!---<img src="partly_cloudy.png" alt=" ">-->
+            <p class="paragraph_secondrow">{{ data['temperature_max'] }}°   {{ data['temperature_min'] }}°</p>
         </button>
          {% endfor %}
         </div>
