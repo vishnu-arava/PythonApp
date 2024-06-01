@@ -45,11 +45,11 @@ def install_packages(venv_path, requirements_file):
 
 if __name__ == '__main__':
     if (os.name=='posix'):
-        venv_path = "./venv"
-        requirements_file = 'requirements.txt'
+        #venv_path = "./venv"
+        #requirements_file = 'requirements.txt'
         #install_python3_venv()
-        create_virtualenv(venv_path)
-        install_packages(venv_path, requirements_file)
+        #create_virtualenv(venv_path)
+        #install_packages(venv_path, requirements_file)
     if (os.name=='nt'):
         venv_path = "venv"
         subprocess.run([sys.executable, "-m", "venv", venv_path])
