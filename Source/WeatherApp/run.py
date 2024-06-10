@@ -44,7 +44,7 @@ def install_packages(venv_path, requirements_file):
         raise
 
 if __name__ == '__main__':
-    if (os.name=='posix'):
+    #if (os.name=='posix'):
         #venv_path = "./venv"
         #requirements_file = 'requirements.txt'
         #install_python3_venv()
