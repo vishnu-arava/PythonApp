@@ -106,8 +106,8 @@ button:hover {
     background-color: #eeeeee;
   }
 p.right-aligned {
-  text-align: right; /* Align text to the right */
-  color: white; /* Set text color to white */
+  text-align: right;
+  color: white;
 }
 
 .dashboard-container-wrapper {
@@ -123,8 +123,8 @@ p.right-aligned {
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s;
-    width: 250px; /* Size reduced to make square smaller */
-    height: 250px; /* Size reduced to make square smaller */
+    width: 250px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -181,22 +181,23 @@ p.right-aligned {
     background-color: #2ecc71;
 }
 
+/* CSS for weather search */
 .weather_data_print {
     width: 60%;
-    height: 130px; /* Adjust the height as needed */
+    height: 130px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    background-color: #333; /* Background color similar to the image */
-    color: #fff; /* Text color to ensure readability on dark background */
+    background-color: #333;
+    color: #fff;
     font-family: Arial, sans-serif;
     display: flex;
 }
 .weather-container {
     display: flex;
     align-items: center;
-    background-color: #333; /* Match the background to blend with body */
+    background-color: #333;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -206,7 +207,7 @@ p.right-aligned {
     margin-right: 20px;
 }
 .weather-icon img {
-    width: 50px; /* Adjust the size of the image as needed */
+    width: 50px;
     height: 50px;
 }
 .temperature {
@@ -226,7 +227,7 @@ p.right-aligned {
     font-size: 11px;
 }
 .weather-info div {
-    margin-bottom: 5px; /* Spacing between the rows */
+    margin-bottom: 5px;
 }
 .weather-details {
     width: 16%;
@@ -244,18 +245,15 @@ p.right-aligned {
     font-size: 1em;
     margin-bottom: 15px;
 }
-
-
-
 .forcast_data_print {
     width: 60%;
-    height: 200px; /* Adjust the height as needed */
+    height: 200px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    background-color: #333; /* Background color similar to the image */
-    color: #fff; /* Text color to ensure readability on dark background */
+    background-color: #333;
+    color: #fff;
     font-family: Arial, sans-serif;
     display: flex;
 }
@@ -263,8 +261,8 @@ p.right-aligned {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 150px; /* Adjust the height as needed */
-    background-color: #333; /* Match the background to blend with body */
+    height: 150px;
+    background-color: #333;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -297,4 +295,75 @@ p.right-aligned {
     display: flex;
     font-size: 15px;
     align:center;
+}
+/* CSS for forest fire prediction */
+.form-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    background-color: lightgrey;
+}
+.input-group {
+    position: relative;
+    margin: 0 10px;
+    width: 150px;
+    background-color: lightgrey;
+}
+.input-group label {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    font-size: 12px;
+    background-color: lightgrey;
+    padding: 0 5px;
+}
+.input-group input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #333;
+    outline: none;
+    font-size: 16px;
+    padding: 5px 0;
+    background-color: lightgrey;
+}
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+.button_predict {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #333333;
+    color: white;
+    border-radius: 5px;
+
+}
+button:hover {
+    background-color: #707070;
+}
+.message-container {
+    text-align: center;
+    margin-top: 20px;
+    background: #EBEDEB;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 600px;
+    width: 100%;
+}
+.message-container:hover {
+    background: #B0B0B0;
+    color: white;
+    cursor: pointer;
 }

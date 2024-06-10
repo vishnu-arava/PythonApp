@@ -12,8 +12,7 @@
         {% if 'username' in session %}
             <a href="{{ url_for('dashboard') }}">Home</a>
             <a href="{{ url_for('weather') }}">Weather Search</a>
-            <a href="{{ url_for('weather') }}">Weather Search</a>
-            <a href=#>Page 2</a>
+            <a href="{{ url_for('predic_page') }}">Forest Fire Prediction</a>
         {% else %}
             <a href="{{ url_for('login') }}">Home</a>
         {% endif %}
