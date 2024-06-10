@@ -15,6 +15,7 @@ from sklearn.model_selection import train_test_split
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
+from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 
 # Create a logger for the app
 app_logger = logging.getLogger('app_logger')
@@ -35,6 +36,16 @@ app_logger.addHandler(info_handler)
 app_logger.addHandler(error_handler)
 
 app.logger = app_logger
+
+class User(mysql.Model, UserMixin):
+    __tablename__ = 'users'  # Ensure the model matches the existing table name
+    id = mysql.Column(mysql.Integer, primary_key=True)
+    username = mysql.Column(mysql.String(20), unique=True, nullable=False)
+    email = mysql.Column(mysql.String(120), unique=True, nullable=False)
+    password = mysql.Column(mysql.String(60), nullable=False)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}')"
 
 weather_description_code = {
         '0': "Clear sky",
@@ -131,10 +142,9 @@ def register():
         email = form.email.data
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
-        cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO users (username, email, password) VALUES (%s, %s, %s)', (username, email, password))
-        mysql.connection.commit()
-        cursor.close()
+        user = User(username=form.username.data, email=form.email.data, password=password)
+        mysql.session.add(user)
+        mysql.session.commit()
 
         flash('You have successfully registered!', 'success')
         app.logger.info(f'user:{username} account has been created')
@@ -151,13 +161,10 @@ def login():
         username = form.username.data
         password = form.password.data
 
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM users WHERE username = %s', [username])
-        user = cursor.fetchone()
-        cursor.close()
-
-        if user and bcrypt.check_password_hash(user[3], password):  # user[3] is the password field
-            session['username'] = user[1]  # user[1] is the username field
+        user = User.query.filter_by(username=form.username.data).first()
+     
+        if user and bcrypt.check_password_hash(user.password, password):
+            session['username'] = user.username
             flash('Login successful!', 'success')
             app.logger.info(f'user:{username} has logged in successfully')
             return redirect(url_for('dashboard'))

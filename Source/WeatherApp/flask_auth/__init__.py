@@ -1,69 +1,18 @@
 from flask import Flask
-from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import logging
 import os
 from azure.identity import ClientSecretCredential
 from azure.keyvault.secrets import SecretClient
 from dotenv import load_dotenv
+import urllib
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a random secret key
 
-# Configure MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'chaitanya_root'
-app.config['MYSQL_DB'] = 'flask'
-
-mysql = MySQL(app)
-bcrypt = Bcrypt(app)
 
 
-# log_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'Logs')
-# if not os.path.exists(log_dir):
-#     os.makedirs(log_dir)
-
-# # Create a custom logger
-# logger = logging.getLogger('my_logger')
-# logger.setLevel(logging.DEBUG)  # Set the lowest level to capture all messages
-
-# # Create handlers for different log levels
-# debug_handler = logging.FileHandler(os.path.join(log_dir, 'debug.log'))
-# info_handler = logging.FileHandler(os.path.join(log_dir, 'info.log'))
-# warning_handler = logging.FileHandler(os.path.join(log_dir, 'warning.log'))
-# error_handler = logging.FileHandler(os.path.join(log_dir, 'error.log'))
-# critical_handler = logging.FileHandler(os.path.join(log_dir, 'critical.log'))
-
-# # Set levels for handlers
-# debug_handler.setLevel(logging.DEBUG)
-# info_handler.setLevel(logging.INFO)
-# warning_handler.setLevel(logging.WARNING)
-# error_handler.setLevel(logging.ERROR)
-# critical_handler.setLevel(logging.CRITICAL)
-
-# # Create formatters and add them to handlers
-# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-# debug_handler.setFormatter(formatter)
-# info_handler.setFormatter(formatter)
-# warning_handler.setFormatter(formatter)
-# error_handler.setFormatter(formatter)
-# critical_handler.setFormatter(formatter)
-
-# # Add handlers to the logger
-# logger.addHandler(debug_handler)
-# logger.addHandler(info_handler)
-# logger.addHandler(warning_handler)
-# logger.addHandler(error_handler)
-# logger.addHandler(critical_handler)
-
-# # Add logger to the Flask app
-# app.logger.addHandler(debug_handler)
-# app.logger.addHandler(info_handler)
-# app.logger.addHandler(warning_handler)
-# app.logger.addHandler(error_handler)
-# app.logger.addHandler(critical_handler)
 
 
 def retrieve_secret(secret_name):
@@ -103,3 +52,28 @@ secret_name = "OpenWeatherApiKey"
 OpenWeatherApiKey = retrieve_secret(secret_name)
 secret_name = "GEODBApiKey"
 GEODBApiKey = retrieve_secret(secret_name)
+
+
+app.config['SECRET_KEY'] = 'mysecret'
+
+server = str(DataBaseServerLink)
+database = str(DataBaseName)
+username = str(DataBaseUserName)
+password = str(DataBasePassword)
+driver = 'ODBC Driver 17 for SQL Server'
+
+# Construct the connection string
+params = urllib.parse.quote_plus(
+    f'DRIVER={{{driver}}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+)
+connection_string = f'mssql+pyodbc:///?odbc_connect={params}'
+
+# Configure the SQLAlchemy part of the app instance
+app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Create the SQLAlchemy db instance
+mysql = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+
+from flask_auth import routes
