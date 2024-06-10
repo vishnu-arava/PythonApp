@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, flash, session,jsonify
 import requests
-from flask_auth import app, mysql, bcrypt
+from flask_auth import mysql, bcrypt, app 
+from flask_auth import GEODBApiKey as GEODB_API_KEY, OpenWeatherApiKey as api_key_OW
 from flask_auth.forms import RegistrationForm, LoginForm
 import urllib.request
 from flask import (request)
@@ -9,7 +10,6 @@ import pickle
 import numpy as np
 import pandas as pd
 import os
-import warnings
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 import logging
@@ -66,7 +66,7 @@ weather_description_code = {
         '96': "Thunderstorm with slight hail",
         '99': "Thunderstorm with heavy hail"
     }
-GEODB_API_KEY = '03b7c4734dmsha8ae33637250f48p11c63fjsn48372cbe71f6'
+
 def get_cities():
 
     url = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities"
@@ -83,9 +83,8 @@ def tocelcius(temp):
     return str(round(float(temp) - 273.16,2))
 
 def get_coordinates(city_name):
-    api_key = '48a90ac42caa09f90dcaeee4096b9e53'
     source = urllib.request.urlopen(
-        'http://api.openweathermap.org/data/2.5/weather?q=' + city_name + '&appid=' + api_key).read()
+        'http://api.openweathermap.org/data/2.5/weather?q=' + city_name + '&appid=' + api_key_OW).read()
     list_of_data = json.loads(source)
     return float(list_of_data['coord']['lat']), float(list_of_data['coord']['lon'])
 
@@ -118,6 +117,7 @@ def get_matching_cities(query):
 
 @app.route('/')
 def home():
+    print('This is the home page')
     app.logger.info('Loading the home page')
     return render_template('home.html')
 
@@ -292,7 +292,7 @@ def predic_page():
 @app.route('/predict',methods=['POST','GET'])
 def predict():
    if not os.path.isfile('model.pkl'):
-       filename = '\Forest_fire.csv'
+       filename = r'\Forest_fire.csv'
        filepath = os.path.abspath(filename)
        data = pd.read_csv(filepath)
        data = np.array(data)
