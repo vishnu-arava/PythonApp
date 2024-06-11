@@ -9,7 +9,6 @@ import urllib
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Change this to a random secret key
 
 
 
@@ -54,7 +53,7 @@ secret_name = "GEODBApiKey"
 GEODBApiKey = retrieve_secret(secret_name)
 
 
-app.config['SECRET_KEY'] = 'mysecret'
+app.config['SECRET_KEY'] = str(os.getenv("SECRET_KEY"))
 
 server = str(DataBaseServerLink)
 database = str(DataBaseName)
