@@ -7,9 +7,11 @@ from azure.keyvault.secrets import SecretClient
 from dotenv import load_dotenv
 import urllib
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import CSRFProtect
 
 app = Flask(__name__)
-
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 
 
