@@ -242,7 +242,6 @@ p.right-aligned {
 .dashboard{
     margin-left: 100px;
     margin-top: 100px;
-    /* background-color: #333; */
     width: 470px; /*Add more if you want to implement more features*/
     height: 200px;
 }
@@ -385,9 +384,7 @@ p.right-aligned {
     height: 130px;
     margin-top: 50px;
     margin-left: 307px;
-    /* margin: 0 auto; */
     padding: 20px;
-    /* border: 1px solid wheat; */
     box-sizing: border-box;
     background-color: #2e2e2e;
     color: whitesmoke;
@@ -450,7 +447,6 @@ p.right-aligned {
     height: 200px;
     margin: 0 auto;
     padding: 20px;
-    /* border: 1px solid wheat; */
     box-sizing: border-box;
     background-color: #2e2e2e;
     color: whitesmoke;

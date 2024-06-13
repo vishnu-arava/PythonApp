@@ -95,7 +95,7 @@ def tocelcius(temp):
 
 def get_coordinates(city_name):
     source = urllib.request.urlopen(
-        'http://api.openweathermap.org/data/2.5/weather?q=' + city_name + '&appid=' + api_key_OW).read()
+        'https://api.openweathermap.org/data/2.5/weather?q=' + city_name + '&appid=' + api_key_OW).read()
     list_of_data = json.loads(source)
     return float(list_of_data['coord']['lat']), float(list_of_data['coord']['lon'])
 
