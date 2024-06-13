@@ -1,39 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
-</head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        {% if 'username' in session %}
-            <a href="{{ url_for('dashboard') }}">Home</a>
-            <a href="{{ url_for('weather') }}">Weather Search</a>
-            <a href="{{ url_for('predic_page') }}">Forest Fire Prediction</a>
-        {% else %}
-            <a href="{{ url_for('login') }}">Home</a>
-        {% endif %}
+{% extends "layout.html" %}
 
-        {% if 'username' in session %}
-            <!--<p class="right-aligned" align="right" >{{session['username']}}</p> -->
-            <a href="{{ url_for('logout') }}"class="right">Logout</a>
-            <a class="right">{{session['username']}}</a>
+{% block title %}Dashboard{% endblock %}
 
-        {% else %}
-            <a href="{{ url_for('login') }}" class="right">Login</a>
-            <a href="{{ url_for('register') }}" class="right">Register</a>
-        {% endif %}
-    </div>
+{% block main_content %}
+<!-- No container here -->
+{% endblock %}
+
+{% block additional_content %}
     <br>
-        <div class="grid-container">
-            <div class="grid-item item1" style="background-color: #8d9bba;" onclick="window.location.href='{{ url_for('weather') }}';">
-               <p>Weather Search</p>
-             </div>
-            <div class="grid-item item2" style="background-color: #2ecc71;" onclick="window.location.href='{{ url_for('predic_page') }}';">
-               <p>Forest Fire Prediction</p>
-             </div>
+    <div class="dashboard">
+        <div class="cards">
+            <div class="card red" style="background-color: #e7c34f;" role="button" aria-label="Weather Search" onclick="window.location.href='{{ url_for('weather') }}';">
+                <p class="tip">Weather Search</p>
+                <p class="second-text">If you want to save your HTML, CSS and JavaScript code, and create your own website</p>
+            </div>
+            <div class="card blue" style="background-color: #e7c34f;" role="button" aria-label="Forest Fire Prediction" onclick="window.location.href='{{ url_for('predic_page') }}';">
+                <p class="tip">Forest Fire Prediction</p>
+                <p class="second-text">You can change the website's look and how it works by editing the code right in your web browser.</p>
+            </div>
         </div>
-</body>
-</html>
+      </div>
+{% endblock %}
