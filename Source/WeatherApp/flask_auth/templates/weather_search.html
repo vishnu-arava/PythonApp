@@ -1,30 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeatherSearch</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-</head>
-<body style="background-color:lightgrey;">
-    <div class="navbar navbar-inverse navbar-fixed-top" style="margin-top:8px;margin-left:10px;margin-right:10px; background-color:#333333">
-        {% if 'username' in session %}
-            <a href="{{ url_for('dashboard') }}">Home</a>
-            <a href="{{ url_for('weather') }}">Weather Search</a>
-            <a href="{{ url_for('predic_page') }}">Forest Fire Prediction</a>
-        {% else %}
-            <a href="{{ url_for('login') }}">Home</a>
-        {% endif %}
+{% extends "layout.html" %}
 
-        {% if 'username' in session %}
-            <a href="{{ url_for('logout') }}"class="right">Logout</a>
-            <a class="right">{{session['username']}}</a>
+{% block title %}WeatherSearch{% endblock %}
 
-        {% else %}
-            <a href="{{ url_for('login') }}" class="right">Login</a>
-            <a href="{{ url_for('register') }}" class="right">Register</a>
-        {% endif %}
+{% block main_content %}
+<!-- No container here -->
+{% endblock %}
+
+{% block additional_content %}
     </div>
      <br>
      <br>
@@ -107,5 +89,4 @@
             .catch(error => console.error('Error fetching weather data:', error));
     }
 </script>
-</body>
-</html>
+{% endblock %}

@@ -314,11 +314,10 @@ def predict():
    model = pickle.load(open('model.pkl', 'rb'))
    if request.method == 'POST':
        if request.form.values():
-           print(request.form.values())
            int_features=[int(x) for x in request.form.values() if x.strip()]
-           if not int_features:
-               return render_template('weather_predict.html', pred='Enter Valid Details')
            final=[np.array(int_features)]
+           if not int_features or (len(int_features)<2):
+               return render_template('weather_predict.html', pred='Enter Valid Details')
            prediction=model.predict_proba(final)
            positive_probability = prediction[0][1] * 100
            output = '{:.2f}%'.format(positive_probability)
