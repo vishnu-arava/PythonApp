@@ -1,0 +1,369 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ebedeb;
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+}
+.navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+.navbar .right {
+    float: right;
+}
+button:hover {
+    background-color: #0056b3;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes li {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.flashes .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flashes .danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.flashes .warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.flashes .info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.loginform {
+    margin-top: 200px;
+    margin-right: 100px;
+    float: right;
+    padding: 30px;
+    margin-bottom: 30px;
+    font-size: 21px;
+    font-weight: 200;
+    line-height: 2.1428571435;
+    color: inherit;
+    background-color: #eeeeee;
+  }
+p.right-aligned {
+  text-align: right;
+  color: white;
+}
+
+.dashboard-container-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    padding: 20px;
+}
+
+.dashboard-container {
+    border: 1px solid #ccc;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.dashboard-container h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.dashboard-container p {
+    font-size: 16px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin-top: 20px;
+    margin-left:30px;
+}
+
+.grid-item {
+    width: 300px;
+    height: 250px;
+    text-align: center;
+    color: white;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.grid-item p {
+    margin: 0;
+    line-height: 1;
+    font-size: 18px;
+}
+
+.grid-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.grid-item.item1 {
+    background-color: #3498db;
+}
+
+.grid-item.item2 {
+    background-color: #2ecc71;
+}
+
+/* CSS for weather search */
+.weather_data_print {
+    width: 60%;
+    height: 130px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: #333;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+}
+.weather-container {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.weather-icon {
+    width:14%;
+    margin-right: 20px;
+}
+.weather-icon img {
+    width: 50px;
+    height: 50px;
+}
+.temperature {
+    width: 12%;
+    display: flex;
+    align-items: top;
+    font-size: 3em;
+    margin-right: 20px;
+}
+.temperature span {
+    font-size: 0.5em;
+    margin-left: 5px;
+}
+.weather-info {
+    width:50%;
+    margin-right: 40px;
+    font-size: 11px;
+}
+.weather-info div {
+    margin-bottom: 5px;
+}
+.weather-details {
+    width: 16%;
+    text-align: right;
+}
+.weather-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+.weather-day {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+.weather-description {
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+.forcast_data_print {
+    width: 60%;
+    height: 200px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: #333;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+}
+.forecast {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 150px;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.day {
+    background-color: #444;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 80px;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin:10px;
+}
+.day img {
+    width: 50px;
+    height: 50px;
+}
+.highlight {
+    width: 16%;
+    background-color: #555;
+}
+.day:focus {
+    outline: none;
+    box-shadow: 0 0 10px #fff;
+}
+.paragraph_secondrow{
+    display: flex;
+    font-size: 15px;
+    align:center;
+}
+/* CSS for forest fire prediction */
+.form-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    background-color: lightgrey;
+}
+.input-group {
+    position: relative;
+    margin: 0 10px;
+    width: 150px;
+    background-color: lightgrey;
+}
+.input-group label {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    font-size: 12px;
+    background-color: lightgrey;
+    padding: 0 5px;
+}
+.input-group input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #333;
+    outline: none;
+    font-size: 16px;
+    padding: 5px 0;
+    background-color: lightgrey;
+}
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+.button_predict {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #333333;
+    color: white;
+    border-radius: 5px;
+
+}
+button:hover {
+    background-color: #707070;
+}
+.message-container {
+    text-align: center;
+    margin-top: 20px;
+    background: #EBEDEB;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 600px;
+    width: 100%;
+}
+.message-container:hover {
+    background: #B0B0B0;
+    color: white;
+    cursor: pointer;
+}
