@@ -4,41 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        {% if 'username' in session %}
-            <a href="{{ url_for('dashboard') }}">Home</a>
-            <a href="{{ url_for('weather') }}">Weather Search</a>
-            <a href="{{ url_for('predic_page') }}">Forest Fire Prediction</a>
-        {% else %}
-            <a href="{{ url_for('login') }}">Home</a>
-        {% endif %}
-
-        {% if 'username' in session %}
-            <!--<p class="right-aligned" align="right" >{{session['username']}}</p> -->
-            <a href="{{ url_for('logout') }}"class="right">Logout</a>
-            <a class="right">{{session['username']}}</a>
-
-        {% else %}
-            <a href="{{ url_for('login') }}" class="right">Login</a>
-            <a href="{{ url_for('register') }}" class="right">Register</a>
-        {% endif %}
-    </div>
-    <br>
-    <div class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <ul class="flashes">
-            {% for category, message in messages %}
-              <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
+<body style="background-color: #1f1f1f;">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #e7c34f;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WeatherApp</a>
+            </div>
+            <ul class="nav navbar-nav">
+                {% if 'username' in session %}
+                    <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+                    <li><a href="{{ url_for('weather') }}">Weather Search</a></li>
+                    <li><a href="{{ url_for('predic_page') }}">Forest Fire Prediction</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Home</a></li>
+                {% endif %}
             </ul>
-          {% endif %}
-        {% endwith %}
+            <ul class="nav navbar-nav navbar-right">
+                {% if 'username' in session %}
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="logoutbutton">
+                            <div class="logoutbutton-sign">
+                                <svg viewBox="0 0 512 512">
+                                    <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                                </svg>
+                            </div>
+                            <div class="logoutbutton-text">Logout</div>
+                        </a>
+                    </li>
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ session['username'] }}</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <br>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flashes">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block main_content %}
+    <div class="container" style="margin-top: 70px;">
         {% block content %}{% endblock %}
     </div>
+    {% endblock %}
+    
+    {% block additional_content %}{% endblock %}
+    <footer>
+        &copy; 2024 WeatherApp. All rights reserved.
+    </footer>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Flash message removal after 5 seconds
+            setTimeout(function() {
+                $(".flashes .alert").fadeOut("slow", function() {
+                    $(this).remove();
+                });
+            }, 5000); // 5 seconds
+        });
+    </script>
 </body>
+
 </html>

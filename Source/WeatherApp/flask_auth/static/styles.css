@@ -1,13 +1,52 @@
-body {
+body{
     font-family: Arial, sans-serif;
-    background-color: #ebedeb;
+    background-color: #1f1f1f;
+    margin-bottom: 60px; /* Margin to ensure footer doesn't overlap content */
 }
 
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px; /* Height of the footer */
+    background-color: #e7c34f;
+    color: black;
+    text-align: center;
+    padding-top: 5px; /* Vertical padding inside the footer */
+
+}
+.login-container .btn.btn-primary{
+    background-color: #e7c34f;
+    color: black;
+}
+.login-container .btn.btn-primary:focus,
+.login-container .btn.btn-primary:active{
+    background-color: #b2973c;
+}
+.login-container{
+    color: wheat;
+}
+.register-container{
+    color: wheat;
+}
+.form-control-registerform{
+    border-radius: 5px;
+    height: 38px;
+    background-color:whitesmoke;
+}
+.register-container .btn.btn-primary{
+    background-color: #e7c34f;
+    color: black;
+}
+.register-container .btn.btn-primary:focus,
+.register-container .btn.btn-primary:active{
+    background-color: #b2973c;
+}
 .container {
     max-width: 500px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #2e2e2e;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -34,19 +73,20 @@ h2 {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #007BFF;
-    color: white;
+    background-color: #143601;
+    color: #143601;
     border: none;
     cursor: pointer;
 }
 .navbar {
-    background-color: #333;
+    background-color: #e7c34f;
     overflow: hidden;
 }
 .navbar a {
     float: left;
     display: block;
     color: #f2f2f2;
+    text-emphasis-color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -54,7 +94,13 @@ button {
 
 .navbar a:hover {
     background-color: #ddd;
-    color: black;
+    color: 143601;
+}
+.navbar-nav > li > a, .navbar-brand, .logoutbutton-text, .glyphicon {
+    color: black !important;
+}
+.navbar-nav > li > a:hover, .navbar-brand:hover, .logoutbutton:hover .logoutbutton-text, .logoutbutton:hover .logoutbutton-sign svg, .navbar-nav > li > a:hover .glyphicon {
+    color: white !important;
 }
 .navbar .right {
     float: right;
@@ -63,11 +109,92 @@ button:hover {
     background-color: #0056b3;
 }
 
-.flashes {
-    list-style-type: none;
-    padding: 0;
+.home-container{
+    color: white;
 }
 
+/* Logout button css */
+
+
+.logoutbutton {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    background-color: #e7c34f;
+}
+
+.logoutbutton-sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logoutbutton-sign svg {
+    width: 17px;
+}
+
+.logoutbutton-sign svg path {
+    fill: black;
+}
+
+.logoutbutton-text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: black;
+    font-size: 1.2em;
+    font-weight: 600;
+    transition-duration: .3s;
+    top: 10px;
+}
+
+.logoutbutton:hover {
+    width: 125px;
+    border-radius: 40px;
+    transition-duration: .3s;
+    background-color: whitesmoke;
+}
+
+.logoutbutton:hover .logoutbutton-sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+}
+
+.logoutbutton:hover .logoutbutton-text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 10px;
+}
+
+.logoutbutton:active {
+    transform: translate(2px, 2px);
+}
+
+/* End of logout button css */
+
+
+.flashes {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 1000;
+}
+.flashes .alert {
+    margin-bottom: 10px;
+}
 .flashes li {
     padding: 10px;
     margin-bottom: 10px;
@@ -110,35 +237,91 @@ p.right-aligned {
   color: white;
 }
 
-.dashboard-container-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
-    padding: 20px;
+/* Dashboard CSS */
+
+.dashboard{
+    margin-left: 100px;
+    margin-top: 100px;
+    /* background-color: #333; */
+    width: 470px; /*Add more if you want to implement more features*/
+    height: 200px;
 }
 
-.dashboard-container {
-    border: 1px solid #ccc;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s;
-    width: 250px;
-    height: 250px;
+.dashboard .cards {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    gap: 50px; /* Added gap to separate cards */
+  }
+  
+  .dashboard .cards .red {
+    padding: 0.5rem;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    overflow: hidden; /* Ensures text doesn't overflow */
+    width: 50%;
+    margin-left: 10px;
+    transition: height 0.4s; /* Smooth transition for height */
+  }
+  
+  .dashboard .cards .blue {
+    padding: 0.5rem;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+   
+  }
+  
+   
+
+  .dashboard .cards .card {
+    display: flex;
+    align-items: flex-start; /* Align items at the start */
     justify-content: center;
-    position: relative;
-}
+    flex-direction: column;
+    text-align: center;
+    height: 200px;
+    width: 500px;
+    border-radius: 10px;
+    color: #1f1f1f;
+    cursor: pointer;
+    transition: transform 0.4s, height 0.4s; /* Smooth transition for height */
+  }
+  
+  .dashboard .cards .card.red p.tip {
+    font-size: 1em;
+    font-weight: 700;
+    margin-left: 42px;
+    margin-top:40px;
+  }
+  .dashboard .cards .card.blue p.tip{
+    font-size: 1em;
+    font-weight: 700;
+    margin-left: 26px;
+    margin-top:40px;
+  }
+  
+  .dashboard .cards .card p.second-text {
+    font-size: 0.7em;
+    margin: 10px 0; /* Added margin for spacing */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.4s; /* Smooth transition for opacity */
+  }
+  
+  .dashboard .cards .card:hover {
+    transform: scale(1.1);
+    height: 300px; /* Increase height on hover */
+  }
+  
+  .dashboard .cards .card:hover p.second-text {
+    opacity: 1; /* Reveal second text */
+  }
+  
+  .dashboard .cards:hover > .card:not(:hover) {
+    filter: blur(10px);
+    transform: scale(0.9);
+  }
 
-.dashboard-container h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
+/* End of Dashboard css */
 
-.dashboard-container p {
-    font-size: 16px;
-}
 
 .grid-container {
     display: grid;
@@ -182,22 +365,39 @@ p.right-aligned {
 }
 
 /* CSS for weather search */
+.row .input-group .form-control{
+    width: 200px;
+    border: 2px solid;
+    height: 32px;
+    margin-top: 1px;
+}
+.input-group-btn .btn.btn-primary{
+    background-color: #e7c34f;
+    border: none;
+}
+
+.input-group-btn .btn.btn-primary:focus,
+.input-group-btn .btn.btn-primary:active{
+    background-color: #b2973c;
+}
 .weather_data_print {
     width: 60%;
     height: 130px;
-    margin: 0 auto;
+    margin-top: 50px;
+    margin-left: 307px;
+    /* margin: 0 auto; */
     padding: 20px;
-    border: 1px solid #ccc;
+    /* border: 1px solid wheat; */
     box-sizing: border-box;
-    background-color: #333;
-    color: #fff;
+    background-color: #2e2e2e;
+    color: whitesmoke;
     font-family: Arial, sans-serif;
     display: flex;
 }
 .weather-container {
     display: flex;
     align-items: center;
-    background-color: #333;
+    background-color: #2e2e2e;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -250,10 +450,10 @@ p.right-aligned {
     height: 200px;
     margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    /* border: 1px solid wheat; */
     box-sizing: border-box;
-    background-color: #333;
-    color: #fff;
+    background-color: #2e2e2e;
+    color: whitesmoke;
     font-family: Arial, sans-serif;
     display: flex;
 }
@@ -262,19 +462,19 @@ p.right-aligned {
     align-items: center;
     width: 100%;
     height: 150px;
-    background-color: #333;
+    background-color: #2e2e2e;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 .day {
-    background-color: #444;
+    background-color: #2e2e2e;
     padding: 10px;
     border-radius: 10px;
     text-align: center;
     width: 80px;
     border: none;
-    color: #fff;
+    color: whitesmoke;
     font-size: 16px;
     cursor: pointer;
     margin:10px;
@@ -285,7 +485,7 @@ p.right-aligned {
 }
 .highlight {
     width: 16%;
-    background-color: #555;
+    background-color: #4e4b4b;
 }
 .day:focus {
     outline: none;
@@ -298,7 +498,7 @@ p.right-aligned {
 }
 /* CSS for forest fire prediction */
 .form-container {
-    margin-top: 30px;
+    margin-top: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -309,61 +509,64 @@ p.right-aligned {
     width: 100%;
     max-width: 600px;
     margin-bottom: 20px;
-    background-color: lightgrey;
+    background-color: #1f1f1f;
 }
 .input-group {
     position: relative;
     margin: 0 10px;
     width: 150px;
-    background-color: lightgrey;
+    background-color: #1f1f1f;
 }
 .input-group label {
     position: absolute;
     top: -10px;
     left: 0;
     font-size: 12px;
-    background-color: lightgrey;
+    background-color: #1f1f1f;
     padding: 0 5px;
+    color: whitesmoke;
 }
 .input-group input {
     width: 100%;
     border: none;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid wheat;
     outline: none;
     font-size: 16px;
     padding: 5px 0;
-    background-color: lightgrey;
+    background-color: #1f1f1f;
+    color: wheat;
 }
 .button-container {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 35px;
 }
 .button_predict {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     border: none;
-    background-color: #333333;
-    color: white;
+    background-color: #e7c34f;
+    color: black;
     border-radius: 5px;
 
 }
 button:hover {
-    background-color: #707070;
+    background-color: #b2973c;
 }
 .message-container {
     text-align: center;
-    margin-top: 20px;
-    background: #EBEDEB;
-    color: #856404;
-    border: 1px solid #ffeeba;
+    margin-top: 70px;
+    margin-left: 10px ;
+    background: #2e2e2e;
+    color: wheat;
+    border: 1px solid #2e2e2e;
     padding: 10px;
     border-radius: 5px;
     max-width: 600px;
     width: 100%;
 }
 .message-container:hover {
-    background: #B0B0B0;
-    color: white;
+    background: wheat;
+    color: black;
     cursor: pointer;
 }
