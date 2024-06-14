@@ -66,7 +66,6 @@ params = urllib.parse.quote_plus(
     f'DRIVER={{{driver}}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
 )
 connection_string = f'mssql+pyodbc:///?odbc_connect={params}'
-print(connection_string)
 # Configure the SQLAlchemy part of the app instance
 app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

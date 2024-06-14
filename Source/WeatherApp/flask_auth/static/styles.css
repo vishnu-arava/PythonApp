@@ -364,11 +364,15 @@ p.right-aligned {
 }
 
 /* CSS for weather search */
+.row{
+    margin-left: 350px !important;
+}
 .row .input-group .form-control{
     width: 200px;
     border: 2px solid;
     height: 32px;
     margin-top: 1px;
+    justify-content: center;
 }
 .input-group-btn .btn.btn-primary{
     background-color: #e7c34f;
@@ -490,7 +494,7 @@ p.right-aligned {
 .paragraph_secondrow{
     display: flex;
     font-size: 15px;
-    align:center;
+    text-align:center;
 }
 /* CSS for forest fire prediction */
 .form-container {

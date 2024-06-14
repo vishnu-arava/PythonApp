@@ -128,7 +128,6 @@ def get_matching_cities(query):
 
 @app.route('/')
 def home():
-    print('This is the home page')
     app.logger.info('Loading the home page')
     return render_template('home.html')
 
@@ -197,7 +196,6 @@ def weather():
 
     if request.method == 'POST':
         city = request.form['city']
-        print(city)
     else:
         city = 'hyderabad'
     if not city:
@@ -224,7 +222,6 @@ def weather():
             emptdict['weather_code'] = str(weather_description_code[str(dict['weathercode'][i])])
             weekly_weather_list.append(emptdict)
             emptdict = {}
-        print(weekly_weather_list)
     except:
         return render_template('weather_search.html', maindata=[{
             'cityname': '',
