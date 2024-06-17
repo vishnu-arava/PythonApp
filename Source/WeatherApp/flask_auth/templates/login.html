@@ -1,23 +1,24 @@
 {% extends "layout.html" %}
-{% block title %}Login{% endblock %}
-{% block content %}
 
+{% block title %}Login{% endblock %}
+
+{% block content %}
 <div class="login-container">
     <h2>Login</h2>
     <form method="POST" action="{{ url_for('login') }}">
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.username.label }}
-            {{ form.username(size=32) }}
+            {{ form.username(size=32, class="form-control") }}
         </div>
         <div class="form-group">
             {{ form.password.label }}
-            {{ form.password(size=32) }}
+            {{ form.password(size=32, class="form-control") }}
         </div>
         <div class="form-group">
-            {{ form.submit() }}
+            {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
-    <p class="right">Dont have a account? <a href="{{ url_for('register') }}">register here</a></p>
+    <p class="right">Don't have an account? <a style="color: whitesmoke;" href="{{ url_for('register') }}">Register here</a></p>
 </div>
 {% endblock %}

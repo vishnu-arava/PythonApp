@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, flash, session,jsonify
 import requests
-from flask_auth import app, mysql, bcrypt
+from flask_auth import mysql, bcrypt, app 
+from flask_auth import GEODBApiKey as GEODB_API_KEY, OpenWeatherApiKey as api_key_OW
 from flask_auth.forms import RegistrationForm, LoginForm
 import urllib.request
 from flask import (request)
@@ -9,18 +10,42 @@ import pickle
 import numpy as np
 import pandas as pd
 import os
-import warnings
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
+from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-file_handler = RotatingFileHandler('Logfiles/app.log', maxBytes=1024 * 1024 * 10, backupCount=5)
-file_handler.setFormatter(formatter)
-app.logger.addHandler(file_handler)
-app.logger.setLevel(logging.DEBUG)
+# Create a logger for the app
+app_logger = logging.getLogger('app_logger')
+app_logger.setLevel(logging.DEBUG)
+
+# Handler for logging info and above messages
+info_handler = RotatingFileHandler('Logs/info.log', maxBytes=1024 * 1024 * 10, backupCount=5)
+info_handler.setLevel(logging.INFO)
+info_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+# Handler for logging error and above messages
+error_handler = RotatingFileHandler('Logs/error.log', maxBytes=1024 * 1024 * 10, backupCount=5)
+error_handler.setLevel(logging.ERROR)
+error_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+# Add handlers to the logger
+app_logger.addHandler(info_handler)
+app_logger.addHandler(error_handler)
+
+app.logger = app_logger
+
+class User(mysql.Model, UserMixin):
+    __tablename__ = 'users'  # Ensure the model matches the existing table name
+    id = mysql.Column(mysql.Integer, primary_key=True)
+    username = mysql.Column(mysql.String(20), unique=True, nullable=False)
+    email = mysql.Column(mysql.String(120), unique=True, nullable=False)
+    password = mysql.Column(mysql.String(60), nullable=False)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}')"
 
 weather_description_code = {
         '0': "Clear sky",
@@ -52,7 +77,7 @@ weather_description_code = {
         '96': "Thunderstorm with slight hail",
         '99': "Thunderstorm with heavy hail"
     }
-GEODB_API_KEY = '03b7c4734dmsha8ae33637250f48p11c63fjsn48372cbe71f6'
+
 def get_cities():
 
     url = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities"
@@ -69,9 +94,8 @@ def tocelcius(temp):
     return str(round(float(temp) - 273.16,2))
 
 def get_coordinates(city_name):
-    api_key = '48a90ac42caa09f90dcaeee4096b9e53'
     source = urllib.request.urlopen(
-        'http://api.openweathermap.org/data/2.5/weather?q=' + city_name + '&appid=' + api_key).read()
+        'https://api.openweathermap.org/data/2.5/weather?q=' + city_name + '&appid=' + api_key_OW).read()
     list_of_data = json.loads(source)
     return float(list_of_data['coord']['lat']), float(list_of_data['coord']['lon'])
 
@@ -117,10 +141,9 @@ def register():
         email = form.email.data
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
-        cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO users (username, email, password) VALUES (%s, %s, %s)', (username, email, password))
-        mysql.connection.commit()
-        cursor.close()
+        user = User(username=form.username.data, email=form.email.data, password=password)
+        mysql.session.add(user)
+        mysql.session.commit()
 
         flash('You have successfully registered!', 'success')
         app.logger.info(f'user:{username} account has been created')
@@ -137,13 +160,10 @@ def login():
         username = form.username.data
         password = form.password.data
 
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM users WHERE username = %s', [username])
-        user = cursor.fetchone()
-        cursor.close()
-
-        if user and bcrypt.check_password_hash(user[3], password):  # user[3] is the password field
-            session['username'] = user[1]  # user[1] is the username field
+        user = User.query.filter_by(username=form.username.data).first()
+     
+        if user and bcrypt.check_password_hash(user.password, password):
+            session['username'] = user.username
             flash('Login successful!', 'success')
             app.logger.info(f'user:{username} has logged in successfully')
             return redirect(url_for('dashboard'))
@@ -168,7 +188,7 @@ def logout():
 
 
 
-@app.route('/page1',methods=['POST','GET'])
+@app.route('/weather_search',methods=['POST','GET'])
 def weather():
     app.logger.info('Loading the weather search page')
     emptdict = {}
@@ -176,7 +196,6 @@ def weather():
 
     if request.method == 'POST':
         city = request.form['city']
-        print(city)
     else:
         city = 'hyderabad'
     if not city:
@@ -203,9 +222,8 @@ def weather():
             emptdict['weather_code'] = str(weather_description_code[str(dict['weathercode'][i])])
             weekly_weather_list.append(emptdict)
             emptdict = {}
-        print(weekly_weather_list)
     except:
-        return render_template('page1.html', maindata=[{
+        return render_template('weather_search.html', maindata=[{
             'cityname': '',
             'date': '',
             'day':'',
@@ -230,7 +248,40 @@ def weather():
             'windirection':'',
             'weather_code':''
         }])
-    return render_template('page1.html', maindata=weekly_weather_list)
+    return render_template('weather_search.html', maindata=weekly_weather_list)
+@app.route('/weather', methods=['GET'])
+def weather_data():
+    day = request.args.get('day')
+    city = request.args.get('city', 'hyderabad')  # Default to 'hyderabad' if no city is provided
+
+    if not day:
+        return jsonify({'error': 'No day provided'}), 400
+
+    app.logger.info(f'Received request for weather data for day: {day} in city: {city}')  # Debugging information
+
+    weather_data = get_city_weather(city)
+    dict = weather_data['daily']
+    for i in range(0, len(dict['time'])):
+        date_object = datetime.strptime(dict['time'][i], '%Y-%m-%d')
+        if str(date_object.strftime('%A')) == day:
+            result = {
+                'cityname': city,
+                'date': dict['time'][i],
+                'day': day,
+                'temperature_min': str(dict['temperature_2m_min'][i]),
+                'temperature_max': str(dict['temperature_2m_max'][i]),
+                'precipitation': str(dict['precipitation_sum'][i]),
+                'humidity_min': str(dict['relative_humidity_2m_min'][i]),
+                'humidity_max': str(dict['relative_humidity_2m_max'][i]),
+                'windspeed_min': str(dict['windspeed_10m_min'][i]),
+                'windspeed_max': str(dict['wind_speed_10m_max'][i]),
+                'windirection': str(dict['winddirection_10m_dominant'][i]),
+                'weather_code': str(weather_description_code[str(dict['weathercode'][i])])
+            }
+            app.logger.info(f'Returning data: {result}')  # Debugging information
+            return jsonify(result)
+    return jsonify({'error': 'Weather data for the requested day not found'}), 404
+
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form['query']
@@ -238,10 +289,14 @@ def search():
     matching_cities = get_matching_cities(query)
     # Return the list of matching cities as JSON
     return jsonify(matching_cities)
+
+@app.route('/weather_predict')
+def predic_page():
+    return render_template("weather_predict.html")
 @app.route('/predict',methods=['POST','GET'])
 def predict():
    if not os.path.isfile('model.pkl'):
-       filename = 'flask_auth\Forest_fire.csv'
+       filename = r'\Forest_fire.csv'
        filepath = os.path.abspath(filename)
        data = pd.read_csv(filepath)
        data = np.array(data)
@@ -249,22 +304,21 @@ def predict():
        y = data[1:, -1]
        y = y.astype('int')
        X = X.astype('int')
-       # print(X,y)
        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
        log_reg = LogisticRegression()
        log_reg.fit(X_train, y_train)
-       inputt = [int(x) for x in "45 32 60".split(' ')]
-       final = [np.array(inputt)]
-       b = log_reg.predict_proba(final)
        pickle.dump(log_reg, open('model.pkl', 'wb'))
    model = pickle.load(open('model.pkl', 'rb'))
-   int_features=[int(x) for x in request.form.values()]
-   final=[np.array(int_features)]
-   print(int_features)
-   print(final)
-   prediction=model.predict_proba(final)
-   output='{0:.{1}f}'.format(prediction[0][1], 2)
-   if output>str(0.5):
-       return render_template('forest_fire.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output),bhai="kuch karna hain iska ab?")
-   else:
-       return render_template('forest_fire.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output),bhai="Your Forest is Safe for now")
+   if request.method == 'POST':
+       if request.form.values():
+           int_features=[int(x) for x in request.form.values() if x.strip()]
+           final=[np.array(int_features)]
+           if not int_features or (len(int_features)<2):
+               return render_template('weather_predict.html', pred='Enter Valid Details')
+           prediction=model.predict_proba(final)
+           positive_probability = prediction[0][1] * 100
+           output = '{:.2f}%'.format(positive_probability)
+           if output>str(70):
+               return render_template('weather_predict.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output))
+           else:
+               return render_template('weather_predict.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output))
