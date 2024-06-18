@@ -46,7 +46,7 @@
     <div class="forcast_data_print">
      <div class="forecast">
          {% for data in maindata %}
-        <button class="day highlight" onclick="fetchWeatherData('{{ data['day']}}')">
+        <button class="day highlight" onclick="fetchWeatherData('{{ data['day'] }}')">
             <p>{{ data['day'] }}</p>
             <!---<img src="partly_cloudy.png" alt=" ">-->
             <p class="paragraph_secondrow">{{ data['temperature_max'] }}°   {{ data['temperature_min'] }}°</p>
