@@ -1,6 +1,6 @@
 body{
     font-family: Arial, sans-serif;
-    background-color: #1f1f1f;
+    background-color: #2e2e2e;
     margin-bottom: 60px; /* Margin to ensure footer doesn't overlap content */
 }
 
@@ -9,25 +9,25 @@ footer {
     bottom: 0;
     width: 100%;
     height: 30px; /* Height of the footer */
-    background-color: #e7c34f;
-    color: black;
+    background-color: rgb(17, 17, 17);
+    color: white;
     text-align: center;
     padding-top: 5px; /* Vertical padding inside the footer */
 
 }
 .login-container .btn.btn-primary{
-    background-color: #e7c34f;
-    color: black;
+    background-color: black;
+    color: whitesmoke;
 }
 .login-container .btn.btn-primary:focus,
 .login-container .btn.btn-primary:active{
-    background-color: #b2973c;
+    background-color: #2e2e2e;
 }
 .login-container{
-    color: wheat;
+    color: black;
 }
 .register-container{
-    color: wheat;
+    color: black;
 }
 .form-control-registerform{
     border-radius: 5px;
@@ -35,18 +35,18 @@ footer {
     background-color:whitesmoke;
 }
 .register-container .btn.btn-primary{
-    background-color: #e7c34f;
-    color: black;
+    background-color: black;
+    color: whitesmoke;
 }
 .register-container .btn.btn-primary:focus,
 .register-container .btn.btn-primary:active{
-    background-color: #b2973c;
+    background-color: #2e2e2e;
 }
 .container {
     max-width: 500px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #2e2e2e;
+    background-color: #e7c34f;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -79,7 +79,7 @@ button {
     cursor: pointer;
 }
 .navbar {
-    background-color: #e7c34f;
+    background-color: black;
     overflow: hidden;
 }
 .navbar a {
@@ -97,10 +97,10 @@ button {
     color: 143601;
 }
 .navbar-nav > li > a, .navbar-brand, .logoutbutton-text, .glyphicon {
-    color: black !important;
+    color: whitesmoke !important;
 }
 .navbar-nav > li > a:hover, .navbar-brand:hover, .logoutbutton:hover .logoutbutton-text, .logoutbutton:hover .logoutbutton-sign svg, .navbar-nav > li > a:hover .glyphicon {
-    color: white !important;
+    color: lightgray !important;
 }
 .navbar .right {
     float: right;
@@ -128,7 +128,7 @@ button:hover {
     position: relative;
     overflow: hidden;
     transition-duration: .3s;
-    background-color: #e7c34f;
+    background-color: rgb(17, 17, 17);
 }
 
 .logoutbutton-sign {
@@ -144,7 +144,7 @@ button:hover {
 }
 
 .logoutbutton-sign svg path {
-    fill: black;
+    fill: white;
 }
 
 .logoutbutton-text {
@@ -467,6 +467,10 @@ p.right-aligned {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
+.forecast .day.highlight:hover{
+    background-color: black ;
+}
 .day {
     background-color: #2e2e2e;
     padding: 10px;
@@ -509,20 +513,20 @@ p.right-aligned {
     width: 100%;
     max-width: 600px;
     margin-bottom: 20px;
-    background-color: #1f1f1f;
+    background-color: #2e2e2e;
 }
 .input-group {
     position: relative;
     margin: 0 10px;
     width: 150px;
-    background-color: #1f1f1f;
+    background-color: #2e2e2e;
 }
 .input-group label {
     position: absolute;
     top: -10px;
     left: 0;
     font-size: 12px;
-    background-color: #1f1f1f;
+    background-color: #2e2e2e;
     padding: 0 5px;
     color: whitesmoke;
 }
@@ -533,7 +537,7 @@ p.right-aligned {
     outline: none;
     font-size: 16px;
     padding: 5px 0;
-    background-color: #1f1f1f;
+    background-color: #2e2e2e;
     color: wheat;
 }
 .button-container {
