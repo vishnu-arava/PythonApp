@@ -1,7 +1,20 @@
 {
     "parameters":{
-        "storageAccountName":{
-            "value":"weatherappstr1"
+        "storageAccountNames":{
+            "value":[
+                {
+                    "stgname":"weatherappstg1"
+                },
+                {
+                    "stgname":"weatherappstg2"
+                },
+                {
+                    "stgname":"weatherappstg3"       
+                },
+                {
+                    "stgname":"weatherappstg4"
+                }
+            ]
         },
         "skuName":{
             "value":"Standard_LRS"

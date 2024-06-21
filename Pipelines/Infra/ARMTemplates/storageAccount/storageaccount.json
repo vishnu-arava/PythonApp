@@ -3,9 +3,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "storageAccountName":{
-            "type":"string",
-            "defaultValue":"weatherappaccdef"
+        "storageAccountNames":{
+            "type":"array",
+            "defaultValue":["weatherappaccdef"]
         },
         "skuName":{
             "type":"string",
@@ -20,17 +20,21 @@
     "variables": {},
     "resources": [
         {
-        "name": "[parameters('storageAccountName')]",
+        "name": "[parameters('storageAccountNames')[copyIndex].stgList]",
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2023-01-01",
         "tags": {
-            "displayName": "[parameters('storageAccountName')]"
+            "displayName": "[parameters('storageAccountNames')[copyIndex].stgList]"
         },
         "location": "[resourceGroup().location]",
         "kind": "StorageV2",
         "sku": {
             "name": "[parameters('skuName')]",
             "tier": "[parameters('skuTier')]"
+        },
+        "copy":{
+            "name": "stgList",
+            "count": "[length(parameters('storageAccountNames'))]"
         }
     }
     ],
