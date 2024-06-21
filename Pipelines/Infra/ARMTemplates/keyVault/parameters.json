@@ -8,6 +8,26 @@
         },
         "objectId":{
             "value": "c83fca92-09af-411d-bb27-74229b3d819c"
+        },
+        "secrets":{
+            "value":[
+                {
+                    "secretName":"DataBaseName",
+                    "secretValue":"Testvalue1"
+                },
+                {
+                    "secretName":"DataBasePassword",
+                    "secretValue":"Testvalue2"
+                },
+                {
+                    "secretName":"DataBaseServerLink",
+                    "secretValue":"Testvalue3"
+                },
+                {
+                    "secretName":"DataBaseUserName",
+                    "secretValue":"Testvalue4"
+                }
+            ]
         }
     }
 }
