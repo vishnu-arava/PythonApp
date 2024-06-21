@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "keyvaultname": {
+            "type": "string",
+            "defaultValue": "weatherapp-kv"
+        },
+        "tenantId": {
+            "type": "string",
+            "defaultValue":"026b8468-803d-4300-8831-bef5b66f82cf"
+        },
+        "objectId": {
+            "type": "string",
+            "defaultValue":"c83fca92-09af-411d-bb27-74229b3d819c"
+        },
+        "secrets": {
+            "type": "array",
+            "defaultValue": [{
+                "secretName":"secretName",
+                "secretValue":"secretValue"
+            }]
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+        "name": "[parameters('keyvaultname')]",
+        "type": "Microsoft.KeyVault/vaults",
+        "apiVersion": "2023-02-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "[parameters('keyvaultname')]"
+        },
+        "properties": {
+            "enabledForDeployment": true,
+            "enabledForTemplateDeployment": true,
+            "enabledForDiskEncryption": true,
+            "tenantId": "[parameters('tenantId')]",
+            "accessPolicies": [
+                {
+                    "tenantId": "[parameters('tenantId')]",
+                    "objectId": "[parameters('objectId')]",
+                    "permissions": {
+                        "keys": [
+                            "Get"
+                        ],
+                        "secrets": [
+                            "List",
+                            "Get",
+                            "Set"
+                        ]
+                    }
+                }
+            ],
+            "sku": {
+                "name": "standard",
+                "family": "A"
+            }
+        },
+        "resources": [
+            {
+                "type": "secrets",
+                "name": "[parameters('secrets')[copyIndex()].secretName]",
+                "apiVersion": "2016-10-01",
+                "dependsOn": [
+                    "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultname'))]"
+                ],
+                "properties": {
+                    "value": "[parameters('secrets')[copyIndex()].secretValue]"
+                }
+            }
+        ],
+        "copy":{
+            "name":"key_vault",
+            "count":"[length(parameters('secrets'))]"
+        }
+    }
+    ],
+    "outputs": {}
+}

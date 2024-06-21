@@ -1,0 +1,13 @@
+{
+    "parameters":{
+        "keyvaultname":{
+            "value": "weatherapp-kv"
+        },
+        "tenantId":{
+            "value": "026b8468-803d-4300-8831-bef5b66f82cf"
+        },
+        "objectId":{
+            "value": "c83fca92-09af-411d-bb27-74229b3d819c"
+        }
+    }
+}
