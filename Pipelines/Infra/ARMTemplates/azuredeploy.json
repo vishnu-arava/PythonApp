@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccounts":{
+            "type": "array",
+            "defaultValue":["weathappstoraccdefault"]
+        },
+        "skuName": {
+            "type": "string",
+            "defaultValue":"Standard_LRS"
+        },
+        "kvName": {
+            "type": "string",
+            "defaultValue":"devopskv"
+        },
+        "dbSecretName": {
+            "type": "string",
+            "defaultValue":"DBSecName"
+        },
+        "dbSecretValue": {
+            "type": "securestring",
+            "defaultValue": "password"
+        },
+        "sqlPassword": {
+            "type": "string",
+            "defaultValue":"SQLPassword"
+        },
+        "sqlpasswordValue": {
+            "type": "securestring",
+            "defaultValue": "password123"
+        }
+        },
+    "functions": [],
+    "variables": {},
+    "resources": [
+     {
+            "name": "[parameters('storageAccounts')[copyIndex()].stgname]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2023-01-01",
+            "tags": {
+                "displayName": "[parameters('storageAccounts')[copyIndex()].stgname]"
+            },
+            "location": "[resourceGroup().location]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "tier": "Standard"
+            },
+            "copy": {
+                "name": "storageList",
+                "count": "[length(parameters('storageAccounts'))]"
+            }
+        }
+           
+    ],
+    "outputs": {}
+}
