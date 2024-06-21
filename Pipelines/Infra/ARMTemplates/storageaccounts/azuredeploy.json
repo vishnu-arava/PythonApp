@@ -1,0 +1,116 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+         "storageAccounts": {
+            "type": "array",
+            "defaultValue": ["weatherappstgaccdeafult"]
+        },
+         "skuName": {
+            "type": "string",
+            "defaultValue": "Standard_GRS"
+        },
+         "kvName": {
+            "type": "string",
+            "defaultValue": "devopskv"
+        },
+         "dbSecretName": {
+            "type": "string",
+            "defaultValue": "DBPassword"
+        },
+         "dbSecretValue": {
+            "type": "securestring",
+            "defaultValue": "password"
+        },
+         "sqlPassword": {
+            "type": "string",
+            "defaultValue": "SQLPASSWORD"
+        },
+         "sqlPasswordValue": {
+            "type": "securestring",
+            "defaultValue": "password123"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+     {
+        "name": "[parameters('storageAccounts')[copyIndex()].stgname]",
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2023-01-01",
+        "tags": {
+            "displayName": "[parameters('storageAccounts')[copyIndex()].stgname]"
+        },
+        "location": "[resourceGroup().location]",
+        "kind": "StorageV2",
+        "sku": {
+            "name": "[parameters('skuName') ]",
+            "tier": "Standard"
+        },
+        "copy": {
+            "name": "storageList",
+            "count": "[length(parameters('storageAccounts'))]"
+        }
+     },
+      {
+        "name": "[parameters('kvName')]",
+        "type": "Microsoft.KeyVault/vaults",
+        "apiVersion": "2023-02-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "[parameters('kvName')]"
+        },
+        "properties": {
+            "enabledForDeployment": true,
+            "enabledForTemplateDeployment": true,
+            "enabledForDiskEncryption": true,
+            "tenantId": "026b8468-803d-4300-8831-bef5b66f82cf",
+            "accessPolicies": [
+                {
+                    "tenantId": "026b8468-803d-4300-8831-bef5b66f82cf",
+                    "objectId": "b63e8dc6-35f6-4254-91bd-dd1f20e8015d",
+                    "permissions": {
+                        "keys": [
+                            "Get"
+                        ],
+                        "secrets": [
+                            "List",
+                            "Get",
+                            "Set"
+                        ]
+                    }
+                }
+            ],
+            "sku": {
+                "name": "standard",
+                "family": "A"
+            }
+        },
+        "resources": [
+            {
+                "type": "secrets",
+                "name": "[parameters('dbSecretName')]",
+                "apiVersion": "2016-10-01",
+                "dependsOn": [
+                    "[resourceId('Microsoft.KeyVault/vaults', parameters('kvName'))]"
+                ],
+                "properties": {
+                    "value": "[parameters('dbSecretValue')]"
+                }
+            },
+             {
+                "type": "secrets",
+                "name": "[parameters('sqlPassword')]",
+                "apiVersion": "2016-10-01",
+                "dependsOn": [
+                    "[resourceId('Microsoft.KeyVault/vaults', parameters('kvName'))]"
+                ],
+                "properties": {
+                    "value": "[parameters('sqlPasswordValue')]"
+                }
+            }
+        ]
+      }
+    ],
+    "outputs": {}
+}

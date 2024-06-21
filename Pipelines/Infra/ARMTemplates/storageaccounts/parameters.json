@@ -1,0 +1,38 @@
+{
+    "parameters": {
+        "storageAccounts": {
+            "value": [
+                {
+                    "stgname": "weatherflaskappstgacc5"
+                },
+                {
+                    "stgname": "weatherflaskappstgacc6"
+                },
+                {
+                    "stgname": "weatherflaskappstgacc7"
+                },
+                {
+                    "stgname": "weatherflaskappstgacc8"
+                }
+            ]
+        },
+        "skuName": {
+            "value": "Standard_LRS"
+        },
+        "kvName": {
+            "value": "weatherappdevkv"
+        },
+         "dbSecretName": {
+            "value": "DBPassword"
+        },
+         "dbSecretValue": {
+            "value": "change@12345"
+        },
+        "sqlPassword": {
+            "value": "SQLPASSWORD"
+        },
+         "sqlPasswordValue": {
+            "value": "password1234#"
+        }
+    }
+}
