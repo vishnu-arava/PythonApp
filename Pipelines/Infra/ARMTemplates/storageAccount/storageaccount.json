@@ -20,11 +20,11 @@
     "variables": {},
     "resources": [
         {
-        "name": "[parameters('storageAccountNames')[copyIndex].stgList]",
+        "name": "[parameters('storageAccountNames')[copyIndex()].stgname]",
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2023-01-01",
         "tags": {
-            "displayName": "[parameters('storageAccountNames')[copyIndex].stgList]"
+            "displayName": "[parameters('storageAccountNames')[copyIndex()].stgname]"
         },
         "location": "[resourceGroup().location]",
         "kind": "StorageV2",
