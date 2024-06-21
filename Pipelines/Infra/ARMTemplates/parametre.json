@@ -1,0 +1,10 @@
+{
+"parameters":{
+    "storageName":{
+        "value": "weatherappstracc"
+    },
+    "skuName":{
+        "value": "Standard_LRS"
+    }
+}
+}
