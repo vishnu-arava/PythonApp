@@ -16,8 +16,14 @@
                 }
             ]
         },
+        "env": {
+            "value": "qa"
+        },
         "skuName": {
             "value": "Standard_LRS"
+        },
+        "skuTier": {
+            "value": "Standard"
         },
         "kvName": {
             "value": "weatherappdevkv"
