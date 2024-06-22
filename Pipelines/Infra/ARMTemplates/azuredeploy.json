@@ -43,7 +43,6 @@
     "variables": {},
     "resources": [
         {
-
             "name": "[concat(parameters('storageAccounts')[copyIndex()].stgname,parameters('env'))]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2023-01-01",

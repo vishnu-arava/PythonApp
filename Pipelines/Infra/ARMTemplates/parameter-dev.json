@@ -1,18 +1,16 @@
 {
 "parameters": {
         "storageAccounts":{
-            
             "Value":[
                 {
-                    "stgname":"weatherappstoraccdev1"
+                    "stgname":"weatherappstgacc1"
                 },
                 {
-                     "stgname":"weatherappstoraccdev2"
+                     "stgname":"weatherappstgacc2"
                 },
                {
-                     "stgname":"weatherappstoraccdev3"
+                     "stgname":"weatherappstgacc3"
                }
-
     ]
         },
         "env":{
@@ -27,7 +25,7 @@
         },
         "kvName": {
            
-            "Value":"devopskv"
+            "Value":"devopsweatherappkv"
         },
         "dbSecretName": {
            

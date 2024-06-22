@@ -4,13 +4,13 @@
                 
                 "Value":[
                     {
-                        "stgname":"weatherappstoraccqa1"
+                        "stgname":"weatherappstg1"
                     },
                     {
-                         "stgname":"weatherappstoraccqa2"
+                         "stgname":"weatherappstg2"
                     },
                    {
-                         "stgname":"weatherappstoraccqa3"
+                         "stgname":"weatherappstg3"
                    }
     
         ]
@@ -27,7 +27,7 @@
              },
             "kvName": {
                
-                "Value":"devopskv"
+                "Value":"devopskernel1kv"
             },
             "dbSecretName": {
                
