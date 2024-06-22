@@ -62,6 +62,7 @@
             },
 
            "properties": {
+            //"publicNetworkAccess":""
 
            }
              
@@ -79,11 +80,11 @@
             "enabledForDeployment": true,
             "enabledForTemplateDeployment": true,
             "enabledForDiskEncryption": true,
-            "tenantId": "tenantId",
+            "tenantId": "026b8468-803d-4300-8831-bef5b66f82cf",
             "accessPolicies": [
                 {
-                    "tenantId": "tenantId",
-                    "objectId": "objectId",
+                    "tenantId": "026b8468-803d-4300-8831-bef5b66f82cf",
+                    "objectId": "5b395a6e-89db-4f5d-9644-394f8f44445b",
                     "permissions": {
                         "keys": [
                             "Get"
