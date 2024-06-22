@@ -25,7 +25,7 @@
         },
         "kvName": {
            
-            "Value":"devopsweatherappkv"
+            "Value":"devopsweather1appkv"
         },
         "dbSecretName": {
            
