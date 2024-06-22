@@ -2,7 +2,7 @@
     "parameters":{
         "vmStorageAccount":
         {
-            "value":"dk-weatherapp-vmStorageAccount"
+            "value":"dkweatherappvmStg"
         },
         "skuStorageAccountName":
         {
@@ -13,6 +13,33 @@
         },
         "vmName":{
             "value":"dk-weatherapp-ubuntu-vm"
+        },
+        "vmNetworkSecurityGroupsName":{
+            "value":"dk-weatherapp-vmNetworkSecurityGroup"
+        },
+        "vmVNetName":{
+            "value":"dk-weatherapp-vmVNet"
+        },
+        "vmSubnetName":{
+            "value":"dk-weatherapp-vmVNetSubnet"
+        },
+        "vmNetworkInterface":{
+            "value":"dk-weatherapp-vmNetworkInterface"
+        },
+        "vmUserName":{
+            "value":"dk-weatherapp-ubuntu-vm"
+        },
+        "vmPassword":{
+            "value":"Password@12345"
+        },
+        "vmSize":{
+            "value":"Standard_A2_v2"
+        },
+        "env":{
+            "value":"dev"
+        },
+        "location":{
+            "value":"centralus"
         }
     }
 }
