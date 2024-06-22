@@ -3,16 +3,16 @@
         "storageAccountNames":{
             "value":[
                 {
-                    "stgname":"weatherappstg1"
+                    "stgname":"dkstgacc1"
                 },
                 {
-                    "stgname":"weatherappstg2"
+                    "stgname":"dkstgacc2"
                 },
                 {
-                    "stgname":"weatherappstg3"       
+                    "stgname":"dkstgacc3"       
                 },
                 {
-                    "stgname":"weatherappstg4"
+                    "stgname":"dkstgacc4"
                 }
             ]
         },
@@ -21,6 +21,12 @@
         },
         "skuTier":{
             "value":"Standard"
+        },
+        "env":{
+            "value":"dev"
+        },
+        "location":{
+            "value":"centralus"
         }
     }
 }

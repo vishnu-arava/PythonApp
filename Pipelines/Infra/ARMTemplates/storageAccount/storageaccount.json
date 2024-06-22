@@ -14,19 +14,27 @@
         "skuTier":{
             "type": "string",
             "defaultValue":"Standard"
+        },
+        "env":{
+            "type": "string",
+            "defaultValue":"sandbox"
+        },
+        "location":{
+            "type": "string",
+            "defaultValue": "eastus2"
         }
     },
     "functions": [],
     "variables": {},
     "resources": [
         {
-        "name": "[parameters('storageAccountNames')[copyIndex()].stgname]",
+        "name": "[concat(parameters('storageAccountNames'),parameters('env'))[copyIndex()].stgname]",
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2023-01-01",
         "tags": {
-            "displayName": "[parameters('storageAccountNames')[copyIndex()].stgname]"
+            "displayName": "[concat(parameters('storageAccountNames'),parameters('env'))[copyIndex()].stgname]"
         },
-        "location": "[resourceGroup().location]",
+        "location": "[parameters('location')]",
         "kind": "StorageV2",
         "sku": {
             "name": "[parameters('skuName')]",

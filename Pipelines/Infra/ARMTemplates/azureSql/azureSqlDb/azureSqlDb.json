@@ -21,21 +21,29 @@
         "tlsVersion":{
             "type": "string",
             "defaultValue": "1.2"
-        }
+        },
+        "env":{
+            "type": "string",
+            "defaultValue":"sandbox"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "eastus2"
+        }    
     },
     "functions": [],
     "variables": {},
     "resources": [
  {
-    "name": "[parameters('serverName')]",
+    "name": "[concat(parameters('serverName'),'-',parameters('env'))]",
     "type": "Microsoft.Sql/servers",
     "apiVersion": "2021-11-01",
-    "location": "[resourceGroup().location]",
+    "location": "[parameters('location')]",
     "tags": {
-        "displayName": "[parameters('serverName')]"
+        "displayName": "[concat(parameters('serverName'),'-',parameters('env'))]"
     },
     "properties": {
-        "administratorLogin": "[parameters('userName')]",
+        "administratorLogin": "[concat(parameters('userName'),'-',parameters('env'))]",
         "administratorLoginPassword": "[parameters('password')]",
         "minimalTlsVersion": "[parameters('tlsVersion')]"
     },
@@ -44,9 +52,9 @@
             "type": "firewallRules",
             "apiVersion": "2014-04-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
+                "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName'),'-',parameters('env')))]"
             ],
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "name": "AllowAllWindowsAzureIps",
             "properties": {
                 "startIpAddress": "0.0.0.0",
@@ -56,15 +64,15 @@
     ]
  },
 {
-    "name": "[concat(parameters('serverName'),'/',parameters('dbName'))]",
+    "name": "[concat(concat(parameters('serverName'),'-',parameters('env')),'/',concat(parameters('dbName'),'-',parameters('env')))]",
     "type": "Microsoft.Sql/servers/databases",
     "apiVersion": "2021-11-01",
-    "location": "[resourceGroup().location]",
+    "location": "[parameters('location')]",
     "tags": {
-        "displayName": "[parameters('dbName')]"
+        "displayName": "[concat(parameters('dbName'),'-',parameters('env'))]"
     },
     "dependsOn": [
-        "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
+        "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName'),'-',parameters('env')))]"
     ],
     "properties": {
         "collation": "SQL_Latin1_General_CP1_CI_AS",
