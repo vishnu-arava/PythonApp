@@ -5,9 +5,9 @@ import os
 
 def install_packages():
     try:
-        pip_executable = os.path.join(venv_path, 'bin', 'pip') if os.name != 'nt' else os.path.join(venv_path, 'Scripts', 'pip')
-        odbc17  = os.path.abspath('odbc17.sh')
-        subprocess.run(['bash',odbc17])
+        pip_executable = os.path.join('venv', 'bin', 'pip') if os.name != 'nt' else os.path.join('venv', 'Scripts', 'pip')
+        odbc17  = subprocess.run(["find", "/home/", "-type", "f", "-name", "odbc17.sh"], text=True, capture_output=True).stdout
+        subprocess.run(['bash',odbc17[:-1]])
         subprocess.check_call([pip_executable, 'install', '--upgrade', 'pip', 'setuptools'])
         print("pip and setuptools upgraded successfully.")
 
@@ -20,7 +20,7 @@ def install_packages():
         # subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'libmysqlclient-dev'])
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'])
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'setuptools'])
-        
+
         subprocess.check_call([sys.executable, '-m','pip','install','-r','requirements.txt'])
         print("Required packages installed successfully.")
     except subprocess.CalledProcessError as e:
