@@ -23,7 +23,8 @@ def create_virtualenv(venv_path):
 def install_packages(venv_path, requirements_file):
     try:
         pip_executable = os.path.join(venv_path, 'bin', 'pip') if os.name != 'nt' else os.path.join(venv_path, 'Scripts', 'pip')
-
+        odbc17  = os.path.abspath('odbc17.sh')
+        subprocess.run(['bash',odbc17])
         subprocess.check_call([pip_executable, 'install', '--upgrade', 'pip', 'setuptools'])
         print("pip and setuptools upgraded successfully.")
 

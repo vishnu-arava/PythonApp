@@ -1,13 +1,5 @@
 {
     "parameters":{
-        "vmStorageAccount":
-        {
-            "value":"dkweatherappvmStg"
-        },
-        "skuStorageAccountName":
-        {
-            "value":"Standard_LRS"
-        },
         "vmPublicIPName":{
             "value":"dk-weatherapp-publicIpName"
         },
@@ -33,7 +25,7 @@
             "value":"Password@12345"
         },
         "vmSize":{
-            "value":"Standard_A2_v2"
+            "value":"Standard_B2ms"
         },
         "env":{
             "value":"dev"
