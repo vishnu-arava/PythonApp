@@ -1,0 +1,18 @@
+{
+    "parameters":{
+        "vmStorageAccount":
+        {
+            "value":"dk-weatherapp-vmStorageAccount"
+        },
+        "skuStorageAccountName":
+        {
+            "value":"Standard_LRS"
+        },
+        "vmPublicIPName":{
+            "value":"dk-weatherapp-publicIpName"
+        },
+        "vmName":{
+            "value":"dk-weatherapp-ubuntu-vm"
+        }
+    }
+}

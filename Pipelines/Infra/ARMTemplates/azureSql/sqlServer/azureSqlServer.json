@@ -1,0 +1,56 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "servername": {
+            "type": "string",
+            "defaultValue": "Weather-app-sql-server"
+        },
+        "userName": {
+            "type": "string",
+            "defaultValue":"devopsKernel"
+        },
+        "password": {
+            "type": "securestring",
+            "defaultValue":"Password@12345"
+        },
+        "tlsVersion":{
+            "type": "string",
+            "defaultValue": "1.2"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [ 
+        {
+            "name": "[parameters('servername')]",
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2021-11-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[parameters('servername')]"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('userName')]",
+                "administratorLoginPassword": "[parameters('password')]",
+                "minimalTlsVersion": "[parameters('tlsVersion')]"
+            },
+            "resources": [
+                {
+                    "type": "firewallRules",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers', parameters('servername'))]"
+                    ],
+                    "location": "[resourceGroup().location]",
+                    "name": "AllowAllWindowsAzureIps",
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}

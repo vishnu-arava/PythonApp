@@ -1,0 +1,19 @@
+{
+    "parameters":{
+        "serverName":{
+            "value":"dk-weatherapp-dev-sql-server"
+        },
+        "dbName":{
+            "value":"dk-weatherapp-dev-sql-db"
+        },
+        "userName":{
+            "value":"dk-weatherapp-dev-sql"
+        },
+        "password":{
+            "value":"Password@12345"
+        },
+        "tlsVersion":{
+            "value":"1.2"
+        }
+    }
+}
