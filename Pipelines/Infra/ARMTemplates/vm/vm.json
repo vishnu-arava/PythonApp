@@ -1,0 +1,196 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "env": {
+            "type": "string",
+            "defaultValue": "va"
+        },
+        "publicIPName": {
+            "type": "string",
+            "defaultValue": "myip"
+        },
+        "publicIPAllocationMethod": {
+            "type": "string",
+            "defaultValue": "Dynamic"
+        },
+        "nsgName": {
+            "type": "string",
+            "defaultValue": "NSG1"
+        },
+        "vmName": {
+            "type": "string",
+            "defaultValue": "vishnuVM"
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_B1s"
+        },
+        "vNet": {
+            "type": "string",
+            "defaultValue": "vishnuVMvnet"
+        },
+        "vSubnet": {
+            "type": "string",
+            "defaultValue": "vishnuVMsubnet"
+        },
+        "networkInterface": {
+            "type": "string",
+            "defaultValue": "vishnuVMnic"
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "vishnu"
+        },
+        "adminPassword": {
+            "type": "string",
+            "defaultValue": "Vishnusahi58206@*"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[concat(parameters('publicIPName'), '-', parameters('env'))]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[concat(parameters('publicIPName'), '-', parameters('env'))]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "[parameters('publicIPAllocationMethod')]",
+                "dnsSettings": {
+                    "domainNameLabel": "[toLower(concat(parameters('vmName'), '-', parameters('env')))]"
+                }
+            }
+        },
+        {
+            "name": "[concat(parameters('nsgName'), '-', parameters('env'))]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "nsgRule1",
+                        "properties": {
+                            "description": "description",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                    
+                ]
+            }
+        },
+        {
+            "name": "[concat(parameters('vNet'), '-', parameters('env'))]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('nsgName'), '-', parameters('env')))]"
+            ],
+            "tags": {
+                "displayName": "[concat(parameters('vNet'), '-', parameters('env'))]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[concat(parameters('vNet'), '-', parameters('env'))]",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('nsgName'), '-', parameters('env')))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[concat(parameters('networkInterface'), '-', parameters('env'))]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('publicIPName'), '-', parameters('env')))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('vNet'), '-', parameters('env')))]"
+            ],
+            "tags": {
+                "displayName": "[concat(parameters('networkInterface'), '-', parameters('env'))]"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('publicIPName'), '-', parameters('env')))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(parameters('vNet'), '-', parameters('env')), concat(parameters('vNet'), '-', parameters('env')))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[concat(parameters('vmName'), '-', parameters('env'))]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2023-03-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('networkInterface'), '-', parameters('env')))]"
+            ],
+            "tags": {
+                "displayName": "[concat(parameters('vmName'), '-', parameters('env'))]"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(parameters('vmName'), '-', parameters('env'))]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-jammy",
+                        "sku": "22_04-lts-gen2",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat(parameters('vmName'), '-', parameters('env'), '-', 'OSDisk')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('networkInterface'), '-', parameters('env')))]"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

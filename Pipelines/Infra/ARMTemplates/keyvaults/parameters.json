@@ -1,0 +1,16 @@
+{
+"parameters": {
+        "env": {
+            "value": "testenv"
+        },
+        "kvName": {
+            "value": "vishnukeyvault005"
+        },
+        "dbSecretName": {
+            "value": "mydbsecret"
+        },
+        "dbSecretValue": {
+            "value": "mydbsecret"
+        }
+    }
+}

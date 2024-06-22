@@ -1,0 +1,75 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "env": {
+            "type": "string",
+            "defaultValue": "testenv"
+        },
+        "kvName": {
+            "type": "string",
+            "defaultValue": "vishnukeyvault005"
+        },
+        "dbSecretName": {
+            "type": "string",
+            "defaultValue": "mydbsecret"
+        },
+        "dbSecretValue": {
+            "type": "string",
+            "defaultValue": "mydbsecret"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[concat(parameters('kvName'), parameters('env'))]",
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2023-02-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[concat(parameters('kvName'), parameters('env'))]"
+            },
+            "properties": {
+                "enabledForDeployment": true,
+                "enabledForTemplateDeployment": true,
+                "enabledForDiskEncryption": true,
+                "tenantId": "026b8468-803d-4300-8831-bef5b66f82cf",
+                "accessPolicies": [
+                    {
+                        "tenantId": "026b8468-803d-4300-8831-bef5b66f82cf",
+                        "objectId": "d54f52cd-98b1-4854-8154-9b18ffca2073",
+                        "permissions": {
+                            "keys": [
+                                "Get"
+                            ],
+                            "secrets": [
+                                "List",
+                                "Get",
+                                "Set"
+                            ]
+                        }
+                    }
+                ],
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                }
+            },
+            "resources": [
+                {
+                    "type": "secrets",
+                    "name": "[parameters('dbSecretName')]",
+                    "apiVersion": "2016-10-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.KeyVault/vaults', concat(parameters('kvName'), parameters('env')))]"
+                    ],
+                    "properties": {
+                        "value": "[parameters('dbSecretValue')]"
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}
