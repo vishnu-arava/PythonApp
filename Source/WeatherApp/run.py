@@ -22,6 +22,7 @@ def install_packages():
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'setuptools'])
         subprocess.check_call([pip_executable,'install','azure.identity'])
         subprocess.check_call([pip_executable,'install','azure.keyvault.secrets'])
+        subprocess.check_call([pip_executable,'install','pyodbc'])
         subprocess.check_call([sys.executable, '-m','pip','install','-r','requirements.txt'])
         print("Required packages installed successfully.")
     except subprocess.CalledProcessError as e:
