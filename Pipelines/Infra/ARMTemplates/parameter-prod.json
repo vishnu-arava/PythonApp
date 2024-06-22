@@ -1,0 +1,52 @@
+{
+    "parameters": {
+            "storageAccounts":{
+                
+                "Value":[
+                    {
+                        "stgname":"weatherappstoraccprod1"
+                    },
+                    {
+                         "stgname":"weatherappstoraccprod2"
+                    },
+                   {
+                         "stgname":"weatherappstoraccprod3"
+                   }
+    
+        ]
+            },
+            "env":{
+                "value":"prod"
+            },
+            "skuName": {
+                
+                "Value":"Premium_ZRS"
+            },
+            "skuTier": {
+            "value": "Premium"
+            },
+            "kvName": {
+               
+                "Value":"devopskv"
+            },
+            "dbSecretName": {
+               
+                "Value":"DBSecName"
+            },
+            "dbSecretValue": {
+                
+                "Value": "password"
+            },
+            "sqlPassword": {
+               
+                "Value":"SQLPassword"
+            },
+            "sqlpasswordValue": {
+               
+                "value": "password123"
+            }
+    
+    
+    
+        }
+    }

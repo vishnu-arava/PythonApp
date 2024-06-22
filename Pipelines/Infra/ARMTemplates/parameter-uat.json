@@ -1,0 +1,52 @@
+{
+    "parameters": {
+            "storageAccounts":{
+                
+                "Value":[
+                    {
+                        "stgname":"weatherappstoraccuat1"
+                    },
+                    {
+                         "stgname":"weatherappstoraccuat2"
+                    },
+                   {
+                         "stgname":"weatherappstoraccuat3"
+                   }
+    
+        ]
+            },
+            "env":{
+                "value":"uat"
+            },
+            "skuName": {
+                
+                "Value":"Premium_LRS"
+            },
+            "skuTier": {
+            "value": "Premium"
+             },
+            "kvName": {
+               
+                "Value":"devopskv"
+            },
+            "dbSecretName": {
+               
+                "Value":"DBSecName"
+            },
+            "dbSecretValue": {
+                
+                "Value": "password"
+            },
+            "sqlPassword": {
+               
+                "Value":"SQLPassword"
+            },
+            "sqlpasswordValue": {
+               
+                "value": "password123"
+            }
+    
+    
+    
+        }
+    }

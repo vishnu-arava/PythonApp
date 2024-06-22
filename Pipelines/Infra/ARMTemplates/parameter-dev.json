@@ -4,20 +4,26 @@
             
             "Value":[
                 {
-                    "stgname":"weatherappstoracc1"
+                    "stgname":"weatherappstoraccdev1"
                 },
                 {
-                     "stgname":"weatherappstoracc2"
+                     "stgname":"weatherappstoraccdev2"
                 },
                {
-                     "stgname":"weatherappstoracc3"
+                     "stgname":"weatherappstoraccdev3"
                }
 
     ]
         },
+        "env":{
+            "value":"dev"
+        },
         "skuName": {
             
             "Value":"Standard_LRS"
+        },
+        "skuTier": {
+            "value": "Standard"
         },
         "kvName": {
            

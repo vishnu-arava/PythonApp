@@ -2,6 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "env": {
+            "type": "string",
+            "defaultValue":"sandbox" 
+      },
         "storageAccounts":{
             "type": "array",
             "defaultValue":["weathappstoraccdefault"]
@@ -9,6 +13,10 @@
         "skuName": {
             "type": "string",
             "defaultValue":"Standard_LRS"
+        },
+        "skuTier": {
+            "type": "string",
+            "defaultvalue": "Standard"
         },
         "kvName": {
             "type": "string",
@@ -34,25 +42,92 @@
     "functions": [],
     "variables": {},
     "resources": [
-     {
-            "name": "[parameters('storageAccounts')[copyIndex()].stgname]",
+        {
+
+            "name": "[concat(parameters('storageAccounts')[copyIndex()].stgname,parameters('env'))]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2023-01-01",
             "tags": {
-                "displayName": "[parameters('storageAccounts')[copyIndex()].stgname]"
+                "displayName": "[concat(parameters('storageAccounts')[copyIndex()].stgname,parameters('env'))]"
             },
             "location": "[resourceGroup().location]",
             "kind": "StorageV2",
             "sku": {
                 "name": "[parameters('skuName')]",
-                "tier": "Standard"
+                "tier":"[parameters('skuTier')]"
             },
             "copy": {
                 "name": "storageList",
                 "count": "[length(parameters('storageAccounts'))]"
+            },
+
+           "properties": {
+
+           }
+             
+        
+        },
+        {
+        "name": "[concat(parameters('kvName'),parameters('env'))]",
+        "type": "Microsoft.KeyVault/vaults",
+        "apiVersion": "2023-02-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "[concat(parameters('kvName'),parameters('env'))]"
+        },
+        "properties": {
+            "enabledForDeployment": true,
+            "enabledForTemplateDeployment": true,
+            "enabledForDiskEncryption": true,
+            "tenantId": "tenantId",
+            "accessPolicies": [
+                {
+                    "tenantId": "tenantId",
+                    "objectId": "objectId",
+                    "permissions": {
+                        "keys": [
+                            "Get"
+                        ],
+                        "secrets": [
+                            "List",
+                            "Get",
+                            "Set"
+                        ]
+                    }
+                }
+            ],
+            "sku": {
+                "name": "standard",
+                "family": "A"
             }
-        }
-           
+        },
+        "resources": [
+            {
+                "type": "secrets",
+                "name": "[parameters('dbSecretName')]",
+                "apiVersion": "2016-10-01",
+                "dependsOn": [
+                    "[resourceId('Microsoft.KeyVault/vaults', concat(parameters('kvName'),parameters('env')))]"
+                ],
+                "properties": {
+                    "value": "[parameters('dbSecretValue')]"
+                }
+            },
+            {
+                    "type": "secrets",
+                "name": "[parameters('sqlPassword')]",
+                "apiVersion": "2016-10-01",
+                "dependsOn": [
+                    "[resourceId('Microsoft.KeyVault/vaults', concat(parameters('kvName'),parameters('env')))]"
+                ],
+                "properties": {
+                    "value": "[parameters('sqlpasswordValue')]"
+                }
+            }
+            
+        ]
+     }
+        
     ],
     "outputs": {}
 }
