@@ -4,7 +4,7 @@
     "parameters": {
         "keyvaultname": {
             "type": "string",
-            "defaultValue": "weatherappkeyvault"
+            "defaultValue": "dk-weatherapp-kv"
         },
         "tenantId": {
             "type": "string",
