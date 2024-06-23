@@ -3,16 +3,16 @@
         "storageAccounts": {
             "value": [
                 {
-                    "stgname": "weatherflaskappstgacc5"
+                    "stgname": "weatherappstgacc5"
                 },
                 {
-                    "stgname": "weatherflaskappstgacc6"
+                    "stgname": "weatherappstgacc6"
                 },
                 {
-                    "stgname": "weatherflaskappstgacc7"
+                    "stgname": "weatherappstgacc7"
                 },
                 {
-                    "stgname": "weatherflaskappstgacc8"
+                    "stgname": "weatherappstgacc8"
                 }
             ]
         },
@@ -26,7 +26,7 @@
             "value": "Standard"
         },
         "kvName": {
-            "value": "weatherappdevkv"
+            "value": "weatherappkv"
         },
          "dbSecretName": {
             "value": "DBPassword"
@@ -39,6 +39,12 @@
         },
          "sqlPasswordValue": {
             "value": "password1234#"
+        },
+        "publicNetworkAccess": {
+            "value": "Disabled"
+        },
+         "supportsHttps": {
+            "value": "false"
         }
     }
 }

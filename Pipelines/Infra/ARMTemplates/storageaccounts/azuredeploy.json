@@ -37,7 +37,16 @@
          "sqlPasswordValue": {
             "type": "securestring",
             "defaultValue": "password123"
+        },
+         "publicNetworkAccess": {
+            "type": "string",
+            "defaultValue": "Enabled"
+        },
+         "supportsHttps": {
+            "type": "string",
+            "defaultValue": "true"
         }
+
     },
     "functions": [],
     "variables": {},
@@ -51,6 +60,15 @@
         },
         "location": "[resourceGroup().location]",
         "kind": "StorageV2",
+        "properties":{
+           "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
+           "supportsHttpsTrafficOnly": "[parameters('supportsHttps')]",
+           "routingPreference": {
+                "publishInternetEndpoints": "true",
+                "publishMicrosoftEndpoints": "true",
+                "routingChoice": "MicrosoftRouting"
+            }
+        },
         "sku": {
             "name": "[parameters('skuName')]",
             "tier": "[parameters('skuTier')]"
