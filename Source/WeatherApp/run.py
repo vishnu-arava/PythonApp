@@ -14,7 +14,7 @@ def install_packages():
         subprocess.check_call([pip_executable, 'install', 'pipreqs'])
         print("pipreqs installed successfully.")
 
-        subprocess.run(['pipreqs', '.'])
+        subprocess.run([os.path.join('venv', 'pipreqs'), '.'])
         subprocess.run(['sed','-i','/azure_storage/d', 'requirements.txt'])      
         # subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'pkg-config'])
         # subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'libmysqlclient-dev'])
