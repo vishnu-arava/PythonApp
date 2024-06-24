@@ -195,7 +195,7 @@
     "outputs": {
         "vmPublicIP": {
             "type": "string",
-            "value": "[reference(concat(parameters('publicIPName'), '-', parameters('env'))).ipAddress]"
-    }
+            "value": "[reference(concat(parameters('publicIPName'), '-', parameters('env'))).properties.ipAddress]"
+        }
     }
 }
