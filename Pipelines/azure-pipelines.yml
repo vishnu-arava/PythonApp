@@ -7,7 +7,7 @@ pool:
 steps:
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
-    deploymentScope: 'RG-VA'
+    deploymentScope: 'Resource Group'
     azureResourceManagerConnection: 'New Free Trial (kollivenkata07)'
     subscriptionId: 'e3892e0d-01ed-466e-979b-ce235caaf7aa'
     action: 'Create Or Update Resource Group'
