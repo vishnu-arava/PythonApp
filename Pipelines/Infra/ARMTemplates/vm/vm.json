@@ -86,7 +86,6 @@
                             "direction": "Inbound"
                         }
                     }
-                    
                 ]
             }
         },
@@ -195,7 +194,7 @@
     "outputs": {
         "vmPublicIP": {
             "type": "string",
-            "value": "[reference(concat(parameters('publicIPName'), '-', parameters('env'))).properties.ipAddress]"
+            "value": "[reference(concat(parameters('publicIPName'), '-', parameters('env'))).ipAddress]"
         }
     }
 }
