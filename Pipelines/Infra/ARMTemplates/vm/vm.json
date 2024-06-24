@@ -124,7 +124,7 @@
             "name": "[concat(parameters('networkInterface'), '-', parameters('env'))]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
+            "location": "centralus",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('publicIPName'), '-', parameters('env')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('vNet'), '-', parameters('env')))]"
