@@ -221,7 +221,7 @@
     "outputs": {
       "hostname": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'),'-',parameters('env')))).dnsSettings.fqdn]"
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'),'-',parameters('env')))).publicIPAddress]"
     }
     }
 }
