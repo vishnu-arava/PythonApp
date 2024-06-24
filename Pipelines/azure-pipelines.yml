@@ -1,5 +1,5 @@
 trigger:
-- main
+- ARMvishnu
 
 pool:
   vmImage: 'ubuntu-latest'
