@@ -61,12 +61,18 @@
             },
 
            "properties": {
-            //"publicNetworkAccess":""
-
-           }
-             
-        
-        },
+            
+            "publicNetworkAccess": "Enabled",
+            "routingPreference": {
+                    "publishMicrosoftEndpoints": true,
+                    "publishInternetEndpoints": true,
+                    "routingChoice":"MicrosoftRouting"
+                 },
+            "allowBlobPublicAccess": true      
+            
+              }
+         
+      },
         {
         "name": "[concat(parameters('kvName'),parameters('env'))]",
         "type": "Microsoft.KeyVault/vaults",

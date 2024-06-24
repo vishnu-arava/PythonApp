@@ -1,0 +1,37 @@
+{
+    "parameters":
+{   "env":{
+        "value":"dev"
+},
+    "storagename": {
+            "defaultValue": "storageaccUbuntu"
+       },
+   "vmname": {
+            "Value":"VM-UbDK" 
+   },
+   "adminuser":{
+            "Value": "DKAdmin"
+    },
+    "adminpwd": {
+            "Value": "DKPWD@123"
+    },
+    "location": {
+            "Value":"Central India"
+        },
+    "publicIp": {
+             "Value": "VM-UbDKPublic-IP"
+        },
+    "nsg": {
+             "Value":"VM-UbDK-nsg"
+        },
+    "virtualNetwork": {
+            "Value": "VM-UbDK-VirtualNetwork"
+        },
+    "subnet": {
+           "Value":"VM-UbDKSubnet"
+        },
+     "networkInterface": {
+            "Value":"VM-UbDKNET"
+        }
+}
+}
