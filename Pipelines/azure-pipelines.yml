@@ -2,7 +2,9 @@ trigger:
 - ARMvishnu
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'vishnupool'
+  demands:
+  - agent.name -equals vishnuagent
 
 steps:
 - task: AzureResourceManagerTemplateDeployment@3
