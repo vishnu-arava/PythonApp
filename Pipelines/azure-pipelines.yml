@@ -14,7 +14,7 @@ steps:
     subscriptionId: 'e3892e0d-01ed-466e-979b-ce235caaf7aa'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'RG-VA'
-    location: 'centralus'
+    location: '[resourceGroup().location]'
     templateLocation: 'Linked artifact'
     csmFile: '$(System.DefaultWorkingDirectory)/Pipelines/Infra/ARMTemplates/vm/vm.json'
     csmParametersFile: '$(System.DefaultWorkingDirectory)//Pipelines/Infra/ARMTemplates/vm/parameters.json'
