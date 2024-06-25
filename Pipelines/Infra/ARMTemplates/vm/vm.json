@@ -192,7 +192,7 @@
         }
     ],
     "outputs": {
-        "hostname": {
+        "vmip": {
             "type": "string",
             "value": "[reference(concat(parameters('publicIPName'), '-', parameters('env'))).ipAddress]"
         }
