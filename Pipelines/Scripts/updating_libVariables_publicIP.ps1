@@ -3,12 +3,13 @@ Param(
     [string]$projectName,       # Your project name
     [string]$libVarGroupId,     # The ID of the variable group
     [string]$libVariableName,   # The name of the variable to update
-    [string]$patToken           # Personal Access Token (PAT)
+    [string]$patToken,           # Personal Access Token (PAT)
+    [string]$publicIpValue
 )
 
-$var = ConvertFrom-Json $(hostname)
-$value = $var.hostname.value
-$publicIpValue = $value
+# $var = ConvertFrom-Json $(hostname)
+# $value = $var.hostname.value
+# $publicIpValue = $value
 
 # Base64 encode the PAT
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$patToken"))
