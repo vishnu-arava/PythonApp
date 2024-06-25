@@ -6,9 +6,7 @@ Param(
     [string]$patToken           # Personal Access Token (PAT)
 )
 
-
-
-$var = ConvertFrom-Json '$(hostname)'
+$var = ConvertFrom-Json $(hostname)
 $value = $var.hostname.value
 $publicIpValue = $value
 
