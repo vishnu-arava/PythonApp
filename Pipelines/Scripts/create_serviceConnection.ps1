@@ -1,11 +1,11 @@
 Param(
-    [string]$organizationName = "venkatachaitanya095",
-    [string]$projectName = "PythonProjects",
-    [string]$patToken = "6zhjnvr62htkgggcfsk2krlepb37spctasuj6efca5t7p3cugp5a",
-    [string]$serviceConnectionName = "sshtestkv",
-    [string]$servicePublicIp = "13.89.101.74",
-    [string]$userName = "username",
-    [string]$password = "chaitanya@1998"
+    [string]$organizationName,
+    [string]$projectName,
+    [string]$patToken,
+    [string]$serviceConnectionName,
+    [string]$servicePublicIp,
+    [string]$userName,
+    [string]$password
 )
 
 # Encode PAT for authorization
@@ -36,7 +36,7 @@ try {
     $body = @{
         "name" = $serviceConnectionName
         "type" = "ssh"
-        "url" = $servicePublicIp
+        "url" = "ssh://"+$servicePublicIp
         "authorization" = @{
             "scheme" = "UsernamePassword"
             "parameters" = @{
@@ -49,10 +49,19 @@ try {
             "Port" = "22"
         }
         "isShared" = "true"
-        "projectReference" = @{
-            "id" = $projectId
-            "name" = $projectName
-        }
+        # "projectReference" = @{
+        #     "id" = $projectId
+        #     "name" = $projectName
+        # }
+        "serviceEndpointProjectReferences"= @(
+         @{
+            "projectReference"= @{
+                "id"= $projectId
+                "name"= $projectName
+             }
+            "name" = $serviceConnectionName
+         }
+        )
     } | ConvertTo-Json -Depth 100
 
     $projectResponse = Invoke-RestMethod -Uri $projectApiUrl -Method Get -Headers @{
