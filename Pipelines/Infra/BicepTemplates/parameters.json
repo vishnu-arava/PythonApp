@@ -1,0 +1,13 @@
+{
+    "parameters":{
+        "storageAccountName":{
+            "value":"weatherappbicepstr1"
+        },
+        "skuName":{
+            "value":"Standard_LRS"
+        },
+        "skuTier":{
+            "value":"Standard"
+        }
+    }
+}

@@ -1,0 +1,50 @@
+
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountNames":{
+            "type":"array",
+            "defaultValue":["weatherappaccdef"]
+        },
+        "skuName":{
+            "type":"string",
+            "defaultValue":"Standard_GRS"
+        },
+        "skuTier":{
+            "type": "string",
+            "defaultValue":"Standard"
+        },
+        "env":{
+            "type": "string",
+            "defaultValue":"sandbox"
+        },
+        "location":{
+            "type": "string",
+            "defaultValue": "eastus2"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+        "name": "[concat(parameters('storageAccountNames'),parameters('env'))[copyIndex()].stgname]",
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2023-01-01",
+        "tags": {
+            "displayName": "[concat(parameters('storageAccountNames'),parameters('env'))[copyIndex()].stgname]"
+        },
+        "location": "[parameters('location')]",
+        "kind": "StorageV2",
+        "sku": {
+            "name": "[parameters('skuName')]",
+            "tier": "[parameters('skuTier')]"
+        },
+        "copy":{
+            "name": "stgList",
+            "count": "[length(parameters('storageAccountNames'))]"
+        }
+    }
+    ],
+    "outputs": {}
+}

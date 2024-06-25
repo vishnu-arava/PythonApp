@@ -1,0 +1,25 @@
+{
+    "parameters":{
+        "serverName":{
+            "value":"dk-weatherapp-sql-server"
+        },
+        "dbName":{
+            "value":"dk-weatherapp-sql-db"
+        },
+        "userName":{
+            "value":"dk-weatherapp-sql"
+        },
+        "password":{
+            "value":"Password@12345"
+        },
+        "tlsVersion":{
+            "value":"1.2"
+        },
+        "env":{
+            "value":"uat"
+        },
+        "location":{
+            "value":"centralus"
+        }
+    }
+}

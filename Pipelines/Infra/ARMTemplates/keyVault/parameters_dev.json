@@ -1,0 +1,47 @@
+{
+    "parameters":{
+        "keyvaultname":{
+            "value": "dk-weatherapp-kv"
+        },
+        "tenantId":{
+            "value": "026b8468-803d-4300-8831-bef5b66f82cf"
+        },
+        "objectId":{
+            "value": "c83fca92-09af-411d-bb27-74229b3d819c"
+        },
+        "secrets":{
+            "value":[
+                {
+                    "secretName":"DataBaseName",
+                    "secretValue":"dk-weatherapp-sql-db-dev"
+                },
+                {
+                    "secretName":"DataBasePassword",
+                    "secretValue":"Password@12345"
+                },
+                {
+                    "secretName":"DataBaseServerLink",
+                    "secretValue":"dk-weatherapp-sql-server-dev.database.windows.net"
+                },
+                {
+                    "secretName":"DataBaseUserName",
+                    "secretValue":"dk-weatherapp-sql-db-dev"
+                },
+                {
+                    "secretName":"GEODBApiKey",
+                    "secretValue":"03b7c4734dmsha8ae33637250f48p11c63fjsn48372cbe71f6" 
+                },
+                {
+                    "secretName":"OpenWeatherApiKey",
+                    "secretValue":"48a90ac42caa09f90dcaeee4096b9e53"
+                }
+            ]
+        },
+        "env":{
+            "value":"dev"
+        },
+        "location":{
+            "value":"centralus"
+        }
+    }
+}

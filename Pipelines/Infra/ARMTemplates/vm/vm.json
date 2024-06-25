@@ -1,0 +1,227 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        // "vmStorageAccount":{
+        //     "type": "string",
+        //     "defaultValue":"dkweatherappvmStg"
+        // },
+        // "skuStorageAccountName":{
+        //     "type": "string",
+        //     "defaultValue":"Standard_LRS"
+        // },
+        "vmPublicIPName":{
+            "type": "string",
+            "defaultValue": "dk-weatherapp-publicIpName"
+        },
+        "vmName":{
+            "type": "string",
+            "defaultValue": "dk-weatherapp-ubuntu-vm"
+        },
+        "vmNetworkSecurityGroupsName":{
+            "type": "string",
+            "defaultValue": "dk-weatherapp-vmNetworkSecurityGroup"
+        },
+        "vmVNetName":{
+            "type": "string",
+            "defaultValue": "dk-weatherapp-vmVNet"
+        },
+        "vmSubnetName":{
+            "type": "string",
+            "defaultValue": "dk-weatherapp-vmVNetSubnet"
+        },
+        "vmNetworkInterface":{
+            "type": "string",
+            "defaultValue": "dk-weatherapp-vmNetworkInterface"
+        },
+        "vmUserName":{
+            "type": "string",
+            "defaultValue": "dk-weatherapp-ubuntu-vm"
+        },
+        "vmPassword":{
+            "type": "securestring",
+            "defaultValue": "Password@12345"
+        },
+        "vmSize":{
+            "type": "string",
+            "defaultValue": "Standard_A2_v2"
+        },
+        "env":{
+            "type": "string",
+            "defaultValue":"sandbox"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue":"eastus2"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+//   {
+//     "name": "[toLower(concat(parameters('vmStorageAccount'),parameters('env')))]",
+//     "type": "Microsoft.Storage/storageAccounts",
+//     "apiVersion": "2023-01-01",
+//     "location": "[parameters('location')]",
+//     "tags": {
+//         "displayName": "[concat(parameters('vmStorageAccount'),parameters('env'))]"
+//     },
+//     "sku": {
+//         "name": "[parameters('skuStorageAccountName')]"
+//     },
+//     "kind": "Storage"
+//   },
+  {
+    "name": "[concat(parameters('vmPublicIPName'),'-',parameters('env'))]",
+    "type": "Microsoft.Network/publicIPAddresses",
+    "apiVersion": "2023-04-01",
+    "location": "[parameters('location')]",
+    "tags": {
+        "displayName": "[concat(parameters('vmPublicIPName'),'-',parameters('env'))]"
+    },
+    "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+            "domainNameLabel": "[toLower(concat(parameters('vmName'),'-',parameters('env')))]"
+        }
+    }
+  },
+  {
+    "name": "[concat(parameters('vmNetworkSecurityGroupsName'),'-',parameters('env'))]",
+    "type": "Microsoft.Network/networkSecurityGroups",
+    "apiVersion": "2023-04-01",
+    "location": "[parameters('location')]",
+    "properties": {
+        "securityRules": [
+            {
+                "name": "nsgRule1",
+                "properties": {
+                    "description": "description",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "22",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                }
+            }
+        ]
+    }
+  },
+  {
+    "name": "[concat(parameters('vmVNetName'),'-',parameters('env'))]",
+    "type": "Microsoft.Network/virtualNetworks",
+    "apiVersion": "2023-04-01",
+    "location": "[parameters('location')]",
+    "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('vmNetworkSecurityGroupsName'),'-',parameters('env')))]"
+    ],
+    "tags": {
+        "displayName": "[concat(parameters('vmVNetName'),'-',parameters('env'))]"
+    },
+    "properties": {
+        "addressSpace": {
+            "addressPrefixes": [
+                "10.0.0.0/16"
+            ]
+        },
+        "subnets": [
+            {
+                "name": "[concat(parameters('vmSubnetName'),'-',parameters('env'))]",
+                "properties": {
+                    "addressPrefix": "10.0.0.0/24",
+                    "networkSecurityGroup": {
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('vmNetworkSecurityGroupsName'),'-',parameters('env')))]"
+                    }
+                }
+            }
+        ]
+    }
+  },
+  {
+    "name": "[concat(parameters('vmNetworkInterface'),'-',parameters('env'))]",
+    "type": "Microsoft.Network/networkInterfaces",
+    "apiVersion": "2023-04-01",
+    "location": "[parameters('location')]",
+    "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'),'-',parameters('env')))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('vmVNetName'),'-',parameters('env')))]"
+    ],
+    "tags": {
+        "displayName": "[concat(parameters('vmNetworkInterface'),'-',parameters('env'))]"
+    },
+    "properties": {
+        "ipConfigurations": [
+            {
+                "name": "ipConfig1",
+                "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "publicIPAddress": {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'),'-',parameters('env')))]"
+                    },
+                    "subnet": {
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(parameters('vmVNetName'),'-',parameters('env')), concat(parameters('vmSubnetName'),'-',parameters('env')))]"
+                    }
+                }
+            }
+        ]
+    }
+  },
+  {
+    "name": "[concat(parameters('vmName'),'-',parameters('env'))]",
+    "type": "Microsoft.Compute/virtualMachines",
+    "apiVersion": "2023-03-01",
+    "location": "[parameters('location')]",
+    "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmNetworkInterface'),'-',parameters('env')))]"
+    ],
+    "tags": {
+        "displayName": "[concat(parameters('vmName'),'-',parameters('env'))]"
+    },
+    "properties": {
+        "hardwareProfile": {
+            "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+            "computerName": "[concat(parameters('vmName'),'-',parameters('env'))]",
+            "adminUsername": "[concat(parameters('vmUserName'),'-',parameters('env'))]",
+            "adminPassword": "[parameters('vmPassword')]"
+        },
+        "storageProfile": {
+            "imageReference": {
+                "publisher": "Canonical",
+                "offer": "0001-com-ubuntu-server-jammy",
+                "sku": "22_04-lts-gen2",
+                "version": "latest"
+            },
+            "osDisk": {
+                "name": "[concat(parameters('vmName'),'-',parameters('env'),'-OSDisk')]",
+                "caching": "ReadWrite",
+                "createOption": "FromImage"
+            }
+        },
+        "networkProfile": {
+            "networkInterfaces": [
+                {
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmNetworkInterface'),'-',parameters('env')))]"
+                }
+            ]
+        }
+        // "diagnosticsProfile": {
+        //     "bootDiagnostics": {
+        //         "enabled": true,
+        //         "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower(concat(parameters('vmStorageAccount'),parameters('env'))))).primaryEndpoints.blob]"
+        //     }
+        // }
+    }
+  }
+    ],
+    "outputs": {
+      "hostname": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'),'-',parameters('env')))).ipAddress]"
+    }
+    }
+}
