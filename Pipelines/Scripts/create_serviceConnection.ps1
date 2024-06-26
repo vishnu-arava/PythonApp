@@ -2,7 +2,6 @@ Param(
     [string]$organizationName,
     [string]$projectName,
     [string]$patToken,
-    [string]$serviceConnectionName ,
     [string]$servicePublicIp,
     [string]$userName,
     [string]$password,
@@ -13,6 +12,7 @@ Param(
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($patToken)"))
 # Define the URL to fetch the project details
 $projectApiUrl = "https://dev.azure.com/$organizationName/_apis/projects/$projectName"+"?api-version=6.0"
+$serviceConnectionName = "vmServiceConnection($servicePublicIp)"
 try {
     # Fetch the project details
     $projectResponse = Invoke-RestMethod -Uri $projectApiUrl -Method Get -Headers @{
