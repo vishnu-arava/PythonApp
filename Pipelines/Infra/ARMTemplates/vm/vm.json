@@ -219,11 +219,11 @@
   }
     ],
     "outputs": {
-    "hostname": {
+    "vmIpAdderess": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'), '-', parameters('env')))).ipAddress]"
     },
-    "username": {
+    "vmUserName": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Compute/virtualMachines', concat(parameters('vmName'), '-', parameters('env')))).osProfile.adminUsername]"
     }
