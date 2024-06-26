@@ -219,9 +219,17 @@
   }
     ],
     "outputs": {
-      "hostname": {
+    "hostname": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'),'-',parameters('env')))).ipAddress]"
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'), '-', parameters('env')))).ipAddress]"
+    },
+    "username": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Compute/virtualMachines', concat(parameters('vmName'), '-', parameters('env')))).osProfile.adminUsername]"
+    },
+    "password": {
+        "type": "string",
+        "value": "[reference(resourceId('Microsoft.Compute/virtualMachines', concat(parameters('vmName'), '-', parameters('env')))).osProfile.adminPassword]"
     }
-    }
+  }
 }
