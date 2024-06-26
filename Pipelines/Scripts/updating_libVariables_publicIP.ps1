@@ -27,12 +27,6 @@ try {
     $uri = "https://dev.azure.com/$organizationName/$projectName/_apis/distributedtask/variablegroups/$libVarGroupId"+"?api-version=6.0-preview.2"
     $response = Invoke-RestMethod -Uri $uri -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
 
-    # Check if the variable exists in the group
-    $variableExists = $response.variables.GetEnumerator() | Where-Object { $_.Key -eq $libVariableParameterName }
-    if (-not $variableExists) {
-        throw "Variable '$libVariableParameterName' not found in the library variable group."
-    }
-
     # Update the variable value
     $response.variables.$libVariableParameterName.value = $valuetoUpdate
 
