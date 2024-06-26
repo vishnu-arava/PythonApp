@@ -6,22 +6,14 @@ Param(
     [string]$patToken,           # Personal Access Token (PAT)
     [string]$publicIpValue
 )
-
-# $var = ConvertFrom-Json $(hostname)
-# $value = $var.hostname.value
-# $publicIpValue = $value
-
 # Base64 encode the PAT
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$patToken"))
-
 # Get the existing variable group
 $uri = "https://dev.azure.com/$organizationName/$projectName/_apis/distributedtask/variablegroups/$libVarGroupId"+"?api-version=6.0-preview.2"
 try {
     $response = Invoke-RestMethod -Uri $uri -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
-
     # Update the variable value
     $response.variables.$libVariableName.value = $publicIpValue
-
     # Update the variable group
     $json = $response | ConvertTo-Json -Depth 100
     Invoke-RestMethod -Uri $uri -Method Put -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo); "Content-Type"="application/json"} -Body $json
@@ -33,7 +25,3 @@ catch {
     "⚠️ Error in line $($_.InvocationInfo.ScriptLineNumber): $($Error[0])"
     exit 1
 }
-
-
-
-

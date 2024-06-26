@@ -1,13 +1,13 @@
 Param(
-    [string]$organizationName = "venkatachaitanya095",
-    [string]$projectName = "PythonProjects",
-    [string]$patToken = "6zhjnvr62htkgggcfsk2krlepb37spctasuj6efca5t7p3cugp5a",
-    [string]$serviceConnectionName = "testserviceconnection1",
-    [string]$servicePublicIp = "13.89.101.74",
-    [string]$userName = "username",
-    [string]$password = "password",
-    [string]$libVariableName ="vm_weatherapp_publicip",
-    [string]$libVariableParameterName = "ssh_serviceconnection"
+    [string]$organizationName,
+    [string]$projectName,
+    [string]$patToken,
+    [string]$serviceConnectionName ,
+    [string]$servicePublicIp,
+    [string]$userName,
+    [string]$password,
+    [string]$libVariableName,
+    [string]$libVariableParameterName
 )
 # Encode PAT for authorization
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($patToken)"))
