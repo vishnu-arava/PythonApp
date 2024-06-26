@@ -28,7 +28,8 @@ try {
     $response = Invoke-RestMethod -Uri $uri -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
 
     # Check if the variable exists in the group
-    if (-not $response.variables.ContainsKey($libVariableParameterName)) {
+    $variableExists = $response.variables.GetEnumerator() | Where-Object { $_.Key -eq $libVariableParameterName }
+    if (-not $variableExists) {
         throw "Variable '$libVariableParameterName' not found in the library variable group."
     }
 
