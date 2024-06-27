@@ -28,7 +28,5 @@ $json = $MyvariableGroupIdResponse | ConvertTo-Json -Depth 100
 
 # Update the variable group
 $updateUrl = "https://dev.azure.com/$organization/$project/_apis/distributedtask/variablegroups/$MyvariableGroupId"+"?api-version=7.1-preview.2"
-Invoke-RestMethod -Uri $updateUrl -Method Put -Headers @{
-    Authorization = ("Basic {0}" -f $base64AuthInfo)
-    Content-Type  = "application/json"
-} -Body $json
+Invoke-RestMethod -Uri $uri -Method Put -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo); Content-Type="application/json"} -Body $json
+
