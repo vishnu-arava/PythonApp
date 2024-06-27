@@ -194,7 +194,7 @@
     "outputs": {
         "vmip": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('publicIPName'), '-', parameters('env')))).ipAddress]"
+            "value": "[reference(concat(parameters('publicIPName'), '-', parameters('env'))).ipAddress]"
         }
     }
 }
