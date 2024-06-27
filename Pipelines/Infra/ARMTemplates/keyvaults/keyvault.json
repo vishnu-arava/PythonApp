@@ -17,6 +17,14 @@
         "dbSecretValue": {
             "type": "string",
             "defaultValue": "mydbsecret"
+        },
+        "tenentId": {
+            "type": "string",
+            "defaultValue": "mydbsecret"
+        },
+        "objectId": {
+            "type": "string",
+            "defaultValue": "mydbsecret"
         }
     },
     "functions": [],
@@ -34,11 +42,11 @@
                 "enabledForDeployment": true,
                 "enabledForTemplateDeployment": true,
                 "enabledForDiskEncryption": true,
-                "tenantId": "026b8468-803d-4300-8831-bef5b66f82cf",
+                "tenantId": "[parameters('tenentId')]",
                 "accessPolicies": [
                     {
-                        "tenantId": "026b8468-803d-4300-8831-bef5b66f82cf",
-                        "objectId": "d54f52cd-98b1-4854-8154-9b18ffca2073",
+                        "tenantId": "[parameters('tenentId')]",
+                        "objectId": "[parameters('objectId')]",
                         "permissions": {
                             "keys": [
                                 "Get"
@@ -59,7 +67,7 @@
             "resources": [
                 {
                     "type": "secrets",
-                    "name": "[parameters('dbSecretName')]",
+                    "name": "[parameters('DataBaseName')]",
                     "apiVersion": "2016-10-01",
                     "dependsOn": [
                         "[resourceId('Microsoft.KeyVault/vaults', concat(parameters('kvName'), parameters('env')))]"

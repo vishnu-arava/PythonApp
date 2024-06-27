@@ -1,0 +1,97 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "env": {
+            "type": "string",
+            "defaultValue": "env"
+        },
+        "sqlServerName": {
+            "type": "string",
+            "defaultValue": "name"
+        },
+        "sqlLocation": {
+            "type": "string",
+            "defaultValue": "location"
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "username"
+        },
+        "adminPassword": {
+            "type": "string",
+            "defaultValue": "password"
+        },
+        "AllowIps": {
+            "type": "string",
+            "defaultValue": "allow"
+        },
+        "startIpAddress": {
+            "type": "string",
+            "defaultValue": "1.2.3.4"
+        },
+        "endIpAddress": {
+            "type": "string",
+            "defaultValue": "1.2.3.5"
+        },
+        "mySqlDbName": {
+            "type": "string",
+            "defaultValue": "sqldb"
+        },
+        "tlsVersion": {
+            "type": "string",
+            "defaultValue": "1.2"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[concat(parameters('sqlServerName'), parameters('env'))]",
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2021-11-01",
+            "location": "[parameters('sqlLocation')]",
+            "tags": {
+                "displayName": "[concat(parameters('sqlServerName'), parameters('env'))]"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('adminUsername')]",
+                "administratorLoginPassword": "[parameters('adminPassword')]",
+                "minimalTlsVersion": "[parameters('tlsVersion')]"
+            },
+            "resources": [
+                {
+                    "type": "firewallRules",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers', concat(parameters('sqlServerName'), parameters('env')))]"
+                    ],
+                    "location": "[parameters('sqlLocation')]",
+                    "name": "[concat(parameters('AllowIps'), parameters('env'))]",
+                    "properties": {
+                        "startIpAddress": "[parameters('startIpAddress')]",
+                        "endIpAddress": "[parameters('endIpAddress')]"
+                    }
+                }
+            ]
+        },
+                {
+                    "name": "[concat(parameters('sqlServerName'), parameters('env'), '/', parameters('mySqlDbName'), parameters('env'))]",
+                    "type": "Microsoft.Sql/servers/databases",
+                    "apiVersion": "2021-11-01",
+                    "location": "[parameters('sqlLocation')]",
+                    "tags": {
+                        "displayName": "[concat(parameters('mySqlDbName'), parameters('env'))]"
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers', concat(parameters('sqlServerName'), parameters('env')))]"
+                    ],
+                    "properties": {
+                        "collation": "SQL_Latin1_General_CP1_CI_AS",
+                        "edition": "Basic",
+                        "maxSizeBytes": 1073741824,
+                        "requestedServiceObjectiveName": "Basic"
+                    }
+                }
+    ]
+}
