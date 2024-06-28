@@ -197,8 +197,8 @@
                 "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('publicIPName'), '-', parameters('env')))]",
                 "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('vmName'), '-', parameters('env')))]"
             ],
+            "kind": "AzurePowerShell",
             "properties": {
-                "forceUpdateTag": "[newGuid()]",
                 "azPowerShellVersion": "3.0",
                 "scriptContent": "[concat('while (-not (Get-AzPublicIpAddress -ResourceGroupName ', resourceGroup().name, ' -Name ', concat(parameters('publicIPName'), '-', parameters('env')), ').IpAddress)) { Start-Sleep -Seconds 10 }')]",
                 "timeout": "PT30M",
