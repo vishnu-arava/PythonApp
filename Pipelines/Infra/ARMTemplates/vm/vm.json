@@ -47,8 +47,6 @@
             "defaultValue": "Vishnusahi58206@*"
         }
     },
-    "functions": [],
-    "variables": {},
     "resources": [
         {
             "name": "[concat(parameters('publicIPName'), '-', parameters('env'))]",
@@ -188,6 +186,24 @@
                         }
                     ]
                 }
+            }
+        },
+        {
+            "name": "[concat(parameters('publicIPName'), '-', parameters('env'), '-waitForIP')]",
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2020-10-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('publicIPName'), '-', parameters('env')))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('vmName'), '-', parameters('env')))]"
+            ],
+            "properties": {
+                "forceUpdateTag": "[newGuid()]",
+                "azPowerShellVersion": "3.0",
+                "scriptContent": "[concat('while (-not (Get-AzPublicIpAddress -ResourceGroupName ', resourceGroup().name, ' -Name ', concat(parameters('publicIPName'), '-', parameters('env')), ').IpAddress)) { Start-Sleep -Seconds 10 }')]",
+                "timeout": "PT30M",
+                "cleanupPreference": "OnSuccess",
+                "retentionInterval": "P1D"
             }
         }
     ],
