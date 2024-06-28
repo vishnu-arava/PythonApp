@@ -139,7 +139,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('publicIPName'), '-', parameters('env')))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(parameters('vSubnet'), '-', parameters('env')), concat(parameters('vNet'), '-', parameters('env')))]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(parameters('vNet'), '-', parameters('env')), concat(parameters('vSubnet'), '-', parameters('env')))]"
                             }
                         }
                     }
