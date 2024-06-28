@@ -200,7 +200,7 @@
             "kind": "AzurePowerShell",
             "properties": {
                 "azPowerShellVersion": "3.0",
-                "scriptContent": "[concat('while (-not (Get-AzPublicIpAddress -ResourceGroupName ', resourceGroup().name, ' -Name ', concat(parameters('publicIPName'), '-', parameters('env')), ').IpAddress)) { Start-Sleep -Seconds 10 }')]",
+                "scriptContent": "[concat('while (-not (Get-AzPublicIpAddress -ResourceGroupName ''', resourceGroup().name, ''' -Name ''', concat(parameters('publicIPName'), '-', parameters('env')), ''').IpAddress)) { Start-Sleep -Seconds 10 }')]",
                 "timeout": "PT30M",
                 "cleanupPreference": "OnSuccess",
                 "retentionInterval": "P1D"
