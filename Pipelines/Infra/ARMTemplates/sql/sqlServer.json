@@ -1,0 +1,55 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sqlServerName":{
+            "type": "string",
+            "defaultValue": "sqlServer111"
+        },
+        "adminLogin": {
+            "type": "string",
+            "defaultValue":"adminUser"
+        },
+        "adminPWD": {
+            "type": "securestring",
+            "defaultValue":"adminPassWD"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue":"eastus"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {      "name": "parameters('sqlServerName')",
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2021-11-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('sqlServerName')]"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('adminLogin')]",
+                "administratorLoginPassword": "[parameters('adminPWD')]"
+            },
+            "resources": [
+                { 
+                    "type": "firewallRules",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+                        //"[parameters('sqlServerName')]"
+                    ],
+                    "location": "[parameters('location')]",
+                    "name": "AllowAllWindowsAzureIps",
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}   

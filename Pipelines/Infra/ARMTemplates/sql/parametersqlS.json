@@ -1,0 +1,17 @@
+{
+"parameters": {
+        "sqlServerName":{
+          "Value": "sqlServerDK"
+        },
+        "adminLogin": {
+           "Value":"adminUserDK"
+        },
+        "adminPWD": {
+           "Value":"adminPassWD@DK"
+        },
+        "location": {
+         "value": "centralus"
+        }
+
+    }
+}

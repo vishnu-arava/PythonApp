@@ -1,0 +1,37 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "serverName": {
+            "type": "string",
+            "defaultValue":"sqlServer123"
+        },
+        "sqlDBName": {
+            "type": "string",
+            "defaultValue":"sqlDB123"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+      {
+        "name": "parameters('serverName')/parameters('sqlDBName')",
+        "type": "Microsoft.Sql/servers/databases",
+        "apiVersion": "2021-11-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "[parameters('sqlDBName')]"
+        },
+        "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
+        ],
+        "properties": {
+            "collation": "SQL_Latin1_General_CP1_CI_AS",
+            "edition": "Basic",
+                      "maxSizeBytes": 1073741824,
+            "requestedServiceObjectiveName": "Basic"
+        }
+      }
+    ],
+    "outputs": {}
+}

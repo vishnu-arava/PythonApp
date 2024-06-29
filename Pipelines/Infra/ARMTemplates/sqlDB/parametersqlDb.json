@@ -1,0 +1,10 @@
+{
+    "parameters": {
+    "serverName": {
+        "Value":"sqlServerDK"
+    },
+    "sqlDBName": {
+        "Value":"sqlDBDK"
+    }
+}
+}
