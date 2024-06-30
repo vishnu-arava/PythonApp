@@ -1,7 +1,7 @@
 {
 "parameters": {
         "sqlServerName":{
-          "Value": "sqlServerDK"
+          "Value": "sqlserverdk"
         },
         "adminLogin": {
            "Value":"adminUserDK"

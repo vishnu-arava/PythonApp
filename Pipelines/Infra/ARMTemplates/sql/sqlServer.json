@@ -4,7 +4,7 @@
     "parameters": {
         "sqlServerName":{
             "type": "string",
-            "defaultValue": "sqlServer111"
+            "defaultValue": "sqlserver111"
         },
         "adminLogin": {
             "type": "string",
@@ -22,7 +22,7 @@
     "functions": [],
     "variables": {},
     "resources": [
-        {      "name": "parameters('sqlServerName')",
+        {      "name": "[parameters('sqlServerName')]",
             "type": "Microsoft.Sql/servers",
             "apiVersion": "2021-11-01",
             "location": "[parameters('location')]",

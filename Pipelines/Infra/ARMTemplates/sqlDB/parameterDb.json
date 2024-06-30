@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "serverName": {
-            "value": "sqlServerDevopsKernel"
+            "value": "sqlserverdevopskernel"
         },
         "sqlDBName": {
-            "value": "sqlDBDevopsKernel"
+            "value": "sqldbdevopskernel"
         }
     }
 }
