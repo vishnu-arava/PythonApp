@@ -219,13 +219,13 @@
   }
     ],
     "outputs": {
-    "vmIpAdderess": {
-      "type": "string",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'), '-', parameters('env')))).ipAddress]"
+    "vmName":{
+        "type": "string",
+        "value":"[concat(parameters('vmName'),'-',parameters('env'))]"
     },
     "vmUserName": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Compute/virtualMachines', concat(parameters('vmName'), '-', parameters('env')))).osProfile.adminUsername]"
+      "value": "[concat(parameters('vmUserName'),'-',parameters('env'))]"
     }
   }
 }

@@ -4,13 +4,15 @@ Param(
     [string]$libVariableName,           # The name of the library 
     [string]$libVariableParameterName,  # The name of the variable to update
     [string]$patToken,                  # Personal Access Token (PAT)
-    [string]$valuetoUpdate              # The value to update
+    [string]$valuetoUpdate,             # The value to update
+    [string]$pipelineName,
+    [string]$pipelineVariableName       
 )
 
 # Base64 encode the PAT
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$patToken"))
 
-try {
+try {   
     # API call to get the id of Library Variable
     $libvariableuri = "https://dev.azure.com/$organizationName/$projectName/_apis/distributedtask/variablegroups/?api-version=6.0-preview.2"
     $response = Invoke-RestMethod -Uri $libvariableuri -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
