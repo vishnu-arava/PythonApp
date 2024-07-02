@@ -7,10 +7,10 @@
         "Value":"sqldatabasedk"
     },
     "adminLogin":{
-        "Value": "adminUserDK"
+        "Value": "devopskerneluser"
     },
     "adminPWD": {
-        "Value": "adminPWDDK@123"
+        "Value": "devopskernelpwd@123"
     },
     "location": {
         "Value":"centralus"

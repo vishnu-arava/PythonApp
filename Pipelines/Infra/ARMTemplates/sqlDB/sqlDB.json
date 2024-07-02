@@ -12,11 +12,11 @@
         },
         "adminLogin":{
             "type": "string",
-            "defaultValue": "adminUser"
+            "defaultValue": "devopskernel1234"
         },
         "adminPWD": {
             "type": "string",
-            "defaultValue": "adminPWD@123"
+            "defaultValue": "devopskernel@1234"
         },
         "location": {
             "type": "string",
