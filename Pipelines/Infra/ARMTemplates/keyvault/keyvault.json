@@ -1,0 +1,89 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "keyvault": {
+            "type": "string",
+            "defaultValue": "keyvaultDK"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "centralus"
+        },
+        "tenandID": {
+            "type": "string",
+            "defaultValue":"026b8468-803d-4300-8831-bef5b66f82cf"
+        },
+        "objectID": {
+            "type": "string",
+            "defaultValue": "5b395a6e-89db-4f5d-9644-394f8f44445b"
+        },
+        "secrets": {
+            "type": "array",
+            "defaultValue": [
+                {
+                    "secretname":"secretName",
+                    "secretvalue":"secretValue"
+                }
+            ]
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('keyvault')]",
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2023-02-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('keyvault')]"
+            },
+            "properties": {
+                "enabledForDeployment": true,
+                "enabledForTemplateDeployment": true,
+                "enabledForDiskEncryption": true,
+                "tenantId": "[parameters('tenandID')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[parameters('tenandID')]",
+                        "objectId": "[parameters('objectID')]",
+                        "permissions": {
+                            "keys": [
+                                "Get"
+                            ],
+                            "secrets": [
+                                "List",
+                                "Get",
+                                "Set"
+                            ]
+                        }
+                    }
+                ],
+                "sku": {
+                    "name": "standard",
+                    "family": "A"
+                }
+            },
+            "resources": [
+                {
+                    "type": "secrets",
+                   // "name": "[concat(concat(parameters('keyvaultname'),'-',parameters('env')), '/', parameters('secrets')[copyIndex()].secretName)]",
+                    "name": "[parameters('secrets')[copyIndex()].secretname]",
+                    "apiVersion": "2016-10-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvault'))]"
+                    ],
+                    "properties": {
+                        "value": "[parameters('secrets')[copyIndex()].secretvalue]"
+                    },
+                    "copy": {
+                        "name": "secretcount",
+                        "count": "[length(parameters('secrets'))]"
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}

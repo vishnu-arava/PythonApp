@@ -4,19 +4,79 @@
     "parameters": {
         "serverName": {
             "type": "string",
-            "defaultValue":"sqlserver123"
+            "defaultValue":"sqlserverDK"
         },
         "sqlDBName": {
             "type": "string",
-            "defaultValue":"sqlDB123"
+            "defaultValue":"sqldatabaseDK"
+        },
+        "adminLogin":{
+            "type": "string",
+            "defaultValue": "adminUser"
+        },
+        "adminPWD": {
+            "type": "string",
+            "defaultValue": "adminPWD@123"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue":"centralus"
         }
-    },
+            
+        },
     "functions": [],
     "variables": {},
     "resources": [
-      
+        {
+            "name": "[parameters('serverName')]",
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2021-11-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('serverName')]"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('adminLogin')]",
+                "administratorLoginPassword": "[parameters('adminPWD')]"
+            },
+            "resources": [
+                {
+                    "type": "firewallRules",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
+                    ],
+                    "location": "[parameters('location')]",
+                    "name": "AllowAllWindowsAzureIps",
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                }
 
-        
+            ]
+        },
+        {
+            //"name": "[concat(concat(parameters('serverName'),'-',parameters('env')),'/',concat(parameters('dbName'),'-',parameters('env')))]",
+           //"name": "[parameters('sqlDBNam')]",
+           "name":"[concat(parameters('serverName'),'/',parameters('sqlDBName'))]",
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2021-11-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('sqlDBName')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
+            ],
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "edition": "Basic",
+                "maxSizeBytes": 1073741824,
+                "requestedServiceObjectiveName": "Basic"
+            }
+        }
+
     ],
     "outputs": {}
 }

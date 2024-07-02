@@ -1,10 +1,20 @@
 {
-    "parameters": {
+     "parameters": {
     "serverName": {
-        "Value":"sqlserverDK"
+        "Value":"sqlserverdk"
     },
     "sqlDBName": {
-        "Value":"sqldbdk"
+        "Value":"sqldatabasedk"
+    },
+    "adminLogin":{
+        "Value": "adminUserDK"
+    },
+    "adminPWD": {
+        "Value": "adminPWD@123"
+    },
+    "location": {
+        "Value":"centralus"
     }
+        
 }
 }

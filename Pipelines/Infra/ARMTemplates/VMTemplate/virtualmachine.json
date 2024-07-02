@@ -191,6 +191,7 @@
                         "version": "latest"
                     },
                     "osDisk": {
+                        
                         "name": "VM-Ubuntu-OSDisk",
                         "caching": "ReadWrite",
                         "createOption": "FromImage"

@@ -1,0 +1,34 @@
+{
+"parameters": {
+        "keyvault": {
+            "Value": "keyvaultDK"
+        },
+        "location": {
+            "Value": "centralus"
+        },
+        "tenandID": {
+            "Value":"026b8468-803d-4300-8831-bef5b66f82cf"
+        },
+        "objectID": {
+           "Value": "5b395a6e-89db-4f5d-9644-394f8f44445b"
+        },
+        "secrets": {
+            "Value": [
+                
+                    {
+                         "secretName":"DatabaseName",
+                         "secretValue":"sqldatabasedk"
+                    } ,
+                    {
+                        "secretName":"DatabaseUsername",
+                        "secretValue":"adminUserDK"
+                    },
+                    {
+                        "secretName":"DatabasePassword",
+                        "secretValue":"adminPWD@123"
+                    }
+         
+            ]
+        }
+    }
+}
