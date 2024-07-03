@@ -1,0 +1,40 @@
+2024-06-10 13:41:02,214 - INFO - Loading the home page
+2024-06-10 13:41:02,783 - INFO - Loading the home page
+2024-06-10 13:41:05,557 - INFO - Loading the login page
+2024-06-10 13:41:11,151 - INFO - Loading the login page
+2024-06-10 13:41:19,317 - WARNING - Wrong credentials have been used for login
+2024-06-10 13:42:15,862 - INFO - Loading the register page
+2024-06-10 13:42:29,266 - INFO - Loading the register page
+2024-06-10 13:42:31,405 - INFO - user:satyam account has been created
+2024-06-10 13:42:31,420 - INFO - Loading the login page
+2024-06-10 13:42:40,430 - INFO - Loading the login page
+2024-06-10 13:42:40,804 - INFO - Loading the login page
+2024-06-10 13:42:41,524 - INFO - user:satyam has logged in successfully
+2024-06-10 13:42:45,531 - INFO - user:satyam has logged in successfully
+2024-06-10 13:42:46,380 - INFO - Loading the dashboard
+2024-06-10 13:42:49,152 - INFO - Loading the weather search page
+2024-06-10 13:42:49,152 - INFO - The city : hyderabad was given for the search
+2024-06-10 13:42:55,743 - INFO - Loading the weather search page
+2024-06-10 13:42:55,744 - INFO - The city : siddipet was given for the search
+2024-06-10 13:43:01,609 - INFO - Loading the weather search page
+2024-06-10 13:43:01,609 - WARNING - No city has been provided for the search
+2024-06-10 13:43:02,496 - INFO - Received request for weather data for day: Tuesday in city: siddipet
+2024-06-10 13:43:04,840 - INFO - Returning data: {'cityname': 'siddipet', 'date': '2024-06-11', 'day': 'Tuesday', 'temperature_min': '24.5', 'temperature_max': '32.2', 'precipitation': '0.4', 'humidity_min': '58', 'humidity_max': '92', 'windspeed_min': '7.2', 'windspeed_max': '13.0', 'windirection': '275', 'weather_code': 'Overcast'}
+2024-06-10 13:43:08,535 - INFO - Loading the weather search page
+2024-06-10 13:43:08,538 - WARNING - No city has been provided for the search
+2024-06-10 13:43:10,144 - INFO - Loading the weather search page
+2024-06-10 13:43:10,144 - WARNING - No city has been provided for the search
+2024-06-10 13:43:15,525 - INFO - Loading the weather search page
+2024-06-10 13:43:15,525 - INFO - The city : Delhi was given for the search
+2024-06-10 13:43:21,115 - INFO - Loading the weather search page
+2024-06-10 13:43:21,115 - INFO - The city : mumbai was given for the search
+2024-06-10 13:43:26,978 - INFO - Loading the weather search page
+2024-06-10 13:43:26,981 - INFO - The city : siddipet was given for the search
+2024-06-10 13:44:28,830 - INFO - Loading the weather search page
+2024-06-10 13:44:28,830 - INFO - The city : hyderabad was given for the search
+2024-06-10 13:44:30,481 - INFO - Loading the weather search page
+2024-06-10 13:44:30,481 - INFO - The city : hyderabad was given for the search
+2024-06-10 13:44:42,330 - INFO - Loading the weather search page
+2024-06-10 13:44:42,333 - INFO - The city : Delhi was given for the search
+2024-06-10 13:45:29,432 - INFO - Loading the dashboard
+2024-06-10 13:45:32,526 - INFO - Loading the dashboard

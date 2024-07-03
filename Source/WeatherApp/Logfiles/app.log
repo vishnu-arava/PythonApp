@@ -1,0 +1,762 @@
+2024-05-25 10:46:38,924 - INFO - Loading the home page
+2024-05-25 10:46:43,811 - INFO - Loading the register page
+2024-05-25 10:47:11,087 - INFO - Loading the register page
+2024-05-25 10:47:11,429 - ERROR - Exception on /register [POST]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 56, in register
+    cursor.execute('INSERT INTO users (username, email, password) VALUES (%s, %s, %s)', (username, email, password))
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\MySQLdb\cursors.py", line 179, in execute
+    res = self._query(mogrified_query)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\MySQLdb\cursors.py", line 330, in _query
+    db.query(q)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\MySQLdb\connections.py", line 261, in query
+    _mysql.connection.query(self, query)
+MySQLdb.ProgrammingError: (1146, "Table 'flask.users' doesn't exist")
+2024-05-25 10:49:56,052 - INFO - Loading the home page
+2024-05-25 10:49:58,203 - INFO - Loading the register page
+2024-05-25 10:54:02,227 - INFO - Loading the register page
+2024-05-25 10:54:02,462 - INFO - user:satyam account has been created
+2024-05-25 10:54:02,471 - INFO - Loading the login page
+2024-05-25 10:54:17,511 - INFO - Loading the login page
+2024-05-25 10:54:17,732 - INFO - user:satyam has logged in successfully
+2024-05-25 10:54:17,739 - INFO - Loading the dashboard
+2024-05-25 10:54:22,917 - INFO - Loading the weather search page
+2024-05-25 10:54:22,917 - INFO - The city : mathura was given for the search
+2024-05-25 10:54:29,186 - INFO - Loading the weather search page
+2024-05-25 10:54:29,186 - INFO - The city : hyderabad was given for the search
+2024-05-25 10:54:40,597 - INFO - Loading the weather search page
+2024-05-25 10:54:40,598 - INFO - The city : siddipet was given for the search
+2024-05-25 10:54:48,687 - INFO - Loading the weather search page
+2024-05-25 10:54:48,688 - INFO - The city : Delhi was given for the search
+2024-05-25 10:54:53,101 - INFO - Loading the weather search page
+2024-05-25 10:54:53,101 - INFO - The city : mathura was given for the search
+2024-05-25 10:54:56,615 - INFO - Loading the dashboard
+2024-05-25 10:54:58,697 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 144, in predict
+    data = pd.read_csv(filepath)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+             ^^^^^
+OSError: [Errno 22] Invalid argument: 'D:\\DevOpsKernel\\workspaces\\chaitanyarepos\\PythonFlaskMarketWeatherApp\\Source\\WeatherApp\\https:\\github.com\\nachi-hebbar\\Forest-Fire-Prediction-Website\\blob\\master\\Forest_fire.csv'
+2024-05-25 10:58:33,457 - INFO - Loading the home page
+2024-05-25 10:58:35,451 - INFO - Loading the login page
+2024-05-25 10:58:39,399 - INFO - Loading the dashboard
+2024-05-25 10:58:41,198 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 144, in predict
+    data = pd.read_csv(filepath)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+             ^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\DevOpsKernel\\workspaces\\chaitanyarepos\\PythonFlaskMarketWeatherApp\\Source\\WeatherApp\\Forest_fire.csv'
+2024-05-25 10:59:53,991 - INFO - Loading the home page
+2024-05-25 10:59:55,001 - INFO - Loading the dashboard
+2024-05-25 10:59:59,010 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 144, in predict
+    data = pd.read_csv(filepath)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+             ^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\DevOpsKernel\\workspaces\\chaitanyarepos\\PythonFlaskMarketWeatherApp\\Source\\WeatherApp\\Forest_fire.csv'
+2024-05-25 11:00:21,895 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 169, in predict
+    prediction=model.predict_proba(final)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_logistic.py", line 1431, in predict_proba
+    return super()._predict_proba_lr(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 397, in _predict_proba_lr
+    prob = self.decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 363, in decision_function
+    X = self._validate_data(X, accept_sparse="csr", reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 633, in _validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1091, in check_array
+    raise ValueError(
+ValueError: Found array with 0 feature(s) (shape=(1, 0)) while a minimum of 1 is required by LogisticRegression.
+2024-05-25 11:00:23,832 - INFO - Loading the home page
+2024-05-25 11:00:25,977 - INFO - Loading the dashboard
+2024-05-25 11:00:27,702 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 169, in predict
+    prediction=model.predict_proba(final)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_logistic.py", line 1431, in predict_proba
+    return super()._predict_proba_lr(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 397, in _predict_proba_lr
+    prob = self.decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 363, in decision_function
+    X = self._validate_data(X, accept_sparse="csr", reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 633, in _validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1091, in check_array
+    raise ValueError(
+ValueError: Found array with 0 feature(s) (shape=(1, 0)) while a minimum of 1 is required by LogisticRegression.
+2024-05-25 11:02:25,594 - INFO - Loading the home page
+2024-05-25 11:02:28,155 - INFO - Loading the dashboard
+2024-05-25 11:02:29,439 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 169, in predict
+    prediction=model.predict_proba(final)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_logistic.py", line 1431, in predict_proba
+    return super()._predict_proba_lr(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 397, in _predict_proba_lr
+    prob = self.decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 363, in decision_function
+    X = self._validate_data(X, accept_sparse="csr", reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 633, in _validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1091, in check_array
+    raise ValueError(
+ValueError: Found array with 0 feature(s) (shape=(1, 0)) while a minimum of 1 is required by LogisticRegression.
+2024-05-25 11:06:34,509 - INFO - Loading the home page
+2024-05-25 11:06:36,595 - INFO - Loading the dashboard
+2024-05-25 11:06:39,889 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 170, in predict
+    prediction=model.predict_proba(final)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_logistic.py", line 1431, in predict_proba
+    return super()._predict_proba_lr(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 397, in _predict_proba_lr
+    prob = self.decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 363, in decision_function
+    X = self._validate_data(X, accept_sparse="csr", reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 633, in _validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1091, in check_array
+    raise ValueError(
+ValueError: Found array with 0 feature(s) (shape=(1, 0)) while a minimum of 1 is required by LogisticRegression.
+2024-05-25 11:08:01,440 - INFO - Loading the home page
+2024-05-25 11:08:03,528 - INFO - Loading the dashboard
+2024-05-25 11:08:04,688 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 171, in predict
+    prediction=model.predict_proba(final)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_logistic.py", line 1431, in predict_proba
+    return super()._predict_proba_lr(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 397, in _predict_proba_lr
+    prob = self.decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 363, in decision_function
+    X = self._validate_data(X, accept_sparse="csr", reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 633, in _validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1091, in check_array
+    raise ValueError(
+ValueError: Found array with 0 feature(s) (shape=(1, 0)) while a minimum of 1 is required by LogisticRegression.
+2024-05-25 11:13:35,604 - INFO - Loading the home page
+2024-05-25 11:13:39,730 - INFO - Loading the dashboard
+2024-05-25 11:13:41,017 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 171, in predict
+    prediction=model.predict_proba(final)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_logistic.py", line 1431, in predict_proba
+    return super()._predict_proba_lr(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 397, in _predict_proba_lr
+    prob = self.decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 363, in decision_function
+    X = self._validate_data(X, accept_sparse="csr", reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 633, in _validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1091, in check_array
+    raise ValueError(
+ValueError: Found array with 0 feature(s) (shape=(1, 0)) while a minimum of 1 is required by LogisticRegression.
+2024-05-25 11:15:41,507 - INFO - Loading the home page
+2024-05-25 11:16:12,696 - INFO - Loading the dashboard
+2024-05-25 11:16:14,009 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 171, in predict
+    prediction=model.predict_proba(final)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_logistic.py", line 1431, in predict_proba
+    return super()._predict_proba_lr(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 397, in _predict_proba_lr
+    prob = self.decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 363, in decision_function
+    X = self._validate_data(X, accept_sparse="csr", reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 633, in _validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1091, in check_array
+    raise ValueError(
+ValueError: Found array with 0 feature(s) (shape=(1, 0)) while a minimum of 1 is required by LogisticRegression.
+2024-05-25 11:17:25,446 - INFO - Loading the home page
+2024-05-25 11:17:31,109 - INFO - Loading the dashboard
+2024-05-25 11:17:32,662 - INFO - Loading the weather search page
+2024-05-25 11:17:32,667 - INFO - The city : mathura was given for the search
+2024-05-25 11:17:32,670 - ERROR - Exception on /page1 [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1348, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1282, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1328, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1277, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1037, in _send_output
+    self.send(msg)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 975, in send
+    self.connect()
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 941, in connect
+    self.sock = self._create_connection(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 827, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 962, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 120, in weather
+    source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid='+api_key).read()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 519, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1377, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1351, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno 11001] getaddrinfo failed>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 122, in weather
+    return abort(404)
+           ^^^^^
+NameError: name 'abort' is not defined
+2024-05-25 11:17:38,495 - INFO - Loading the home page
+2024-05-25 11:17:41,279 - INFO - Loading the dashboard
+2024-05-25 11:17:42,824 - INFO - Loading the weather search page
+2024-05-25 11:17:42,824 - INFO - The city : mathura was given for the search
+2024-05-25 11:17:42,827 - ERROR - Exception on /page1 [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1348, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1282, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1328, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1277, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1037, in _send_output
+    self.send(msg)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 975, in send
+    self.connect()
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 941, in connect
+    self.sock = self._create_connection(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 827, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 962, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 120, in weather
+    source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid='+api_key).read()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 519, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1377, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1351, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno 11001] getaddrinfo failed>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 122, in weather
+    return abort(404)
+           ^^^^^
+NameError: name 'abort' is not defined
+2024-05-25 11:18:58,049 - INFO - Loading the home page
+2024-05-25 11:18:59,295 - INFO - Loading the dashboard
+2024-05-25 11:19:00,228 - INFO - Loading the weather search page
+2024-05-25 11:19:00,229 - INFO - The city : mathura was given for the search
+2024-05-25 11:19:25,975 - INFO - Loading the dashboard
+2024-05-25 11:19:27,753 - INFO - Loading the weather search page
+2024-05-25 11:19:27,754 - INFO - The city : mathura was given for the search
+2024-05-25 11:19:45,697 - INFO - Loading the dashboard
+2024-05-25 11:19:47,732 - INFO - Loading the weather search page
+2024-05-25 11:19:47,733 - INFO - The city : mathura was given for the search
+2024-05-25 11:22:36,578 - INFO - Loading the home page
+2024-05-25 11:22:37,933 - INFO - Loading the dashboard
+2024-05-25 11:22:39,481 - INFO - Loading the weather search page
+2024-05-25 11:22:39,483 - INFO - The city : mathura was given for the search
+2024-05-25 11:22:39,484 - ERROR - Exception on /page1 [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1348, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1282, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1328, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1277, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1037, in _send_output
+    self.send(msg)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 975, in send
+    self.connect()
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 941, in connect
+    self.sock = self._create_connection(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 827, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 962, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 120, in weather
+    source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid='+api_key).read()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 519, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1377, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1351, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno 11001] getaddrinfo failed>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 122, in weather
+    return abort(404)
+           ^^^^^
+NameError: name 'abort' is not defined
+2024-05-25 11:23:02,318 - INFO - Loading the home page
+2024-05-25 11:23:03,502 - INFO - Loading the dashboard
+2024-05-25 11:23:05,655 - INFO - Loading the weather search page
+2024-05-25 11:23:05,655 - INFO - The city : mathura was given for the search
+2024-05-25 11:23:05,657 - ERROR - Exception on /page1 [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1348, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1282, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1328, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1277, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1037, in _send_output
+    self.send(msg)
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 975, in send
+    self.connect()
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 941, in connect
+    self.sock = self._create_connection(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 827, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 962, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 120, in weather
+    source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid='+api_key).read()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 519, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1377, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\urllib\request.py", line 1351, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno 11001] getaddrinfo failed>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 122, in weather
+    return abort(404)
+           ^^^^^
+NameError: name 'abort' is not defined
+2024-05-25 11:23:29,781 - INFO - Loading the home page
+2024-05-25 11:24:25,710 - INFO - Loading the dashboard
+2024-05-25 11:24:27,127 - INFO - Loading the weather search page
+2024-05-25 11:24:27,128 - INFO - The city : mathura was given for the search
+2024-05-25 11:24:34,616 - INFO - the user has logged out
+2024-05-25 11:24:34,628 - INFO - Loading the login page
+2024-05-25 11:45:50,752 - INFO - Loading the login page
+2024-05-25 11:45:51,079 - INFO - user:satyam has logged in successfully
+2024-05-25 11:45:51,096 - INFO - Loading the dashboard
+2024-05-25 11:45:56,161 - INFO - Loading the weather search page
+2024-05-25 11:45:56,161 - INFO - The city : mathura was given for the search
+2024-05-25 11:50:52,975 - INFO - Loading the weather search page
+2024-05-25 11:50:52,977 - INFO - The city : siddipet was given for the search
+2024-05-25 11:59:12,749 - INFO - Loading the dashboard
+2024-05-25 11:59:18,082 - INFO - Loading the dashboard
+2024-05-25 11:59:19,681 - INFO - Loading the weather search page
+2024-05-25 11:59:19,681 - INFO - The city : mathura was given for the search
+2024-05-25 11:59:22,069 - INFO - Loading the dashboard
+2024-05-25 12:06:20,930 - INFO - Loading the weather search page
+2024-05-25 12:06:20,931 - INFO - The city : mathura was given for the search
+2024-05-25 12:06:24,903 - INFO - Loading the weather search page
+2024-05-25 12:06:24,905 - INFO - The city : mumbai was given for the search
+2024-05-25 12:08:25,873 - INFO - Loading the dashboard
+2024-05-25 12:09:12,292 - INFO - Loading the weather search page
+2024-05-25 12:09:12,292 - INFO - The city : mathura was given for the search
+2024-05-25 12:09:18,126 - INFO - Loading the weather search page
+2024-05-25 12:09:18,127 - INFO - The city : mathura was given for the search
+2024-05-25 12:09:20,493 - ERROR - Exception on /predict [GET]
+Traceback (most recent call last):
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DevOpsKernel\workspaces\chaitanyarepos\PythonFlaskMarketWeatherApp\Source\WeatherApp\flask_auth\routes.py", line 171, in predict
+    prediction=model.predict_proba(final)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_logistic.py", line 1431, in predict_proba
+    return super()._predict_proba_lr(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 397, in _predict_proba_lr
+    prob = self.decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\linear_model\_base.py", line 363, in decision_function
+    X = self._validate_data(X, accept_sparse="csr", reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 633, in _validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srikanth\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1091, in check_array
+    raise ValueError(
+ValueError: Found array with 0 feature(s) (shape=(1, 0)) while a minimum of 1 is required by LogisticRegression.
+2024-05-25 12:20:34,304 - INFO - Loading the home page
+2024-05-25 12:23:24,529 - INFO - Loading the dashboard
+2024-05-25 12:23:25,636 - INFO - Loading the weather search page
+2024-05-25 12:23:25,637 - INFO - The city : mathura was given for the search
+2024-05-29 15:59:24,027 - INFO - Loading the home page
+2024-05-29 15:59:27,889 - INFO - Loading the login page
+2024-05-29 16:00:01,205 - INFO - Loading the login page
+2024-05-29 16:00:04,251 - INFO - Loading the login page
+2024-05-29 16:00:08,290 - INFO - Loading the login page
+2024-05-29 16:02:25,660 - INFO - Loading the login page
+2024-05-29 16:02:30,845 - INFO - Loading the login page
+2024-05-29 16:02:31,402 - INFO - user:satyam has logged in successfully
+2024-05-29 16:02:31,409 - INFO - Loading the dashboard
+2024-05-29 16:02:34,124 - INFO - Loading the weather search page
+2024-05-29 16:02:34,124 - INFO - The city : hyderabad was given for the search
