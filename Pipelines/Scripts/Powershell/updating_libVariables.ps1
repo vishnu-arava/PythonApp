@@ -6,11 +6,33 @@ Param(
     [string]$patToken,                  # Personal Access Token (PAT)
     [string]$valuetoUpdate,             # The value to update
     [string]$pipelineName,
-    [string]$pipelineVariableName       
+    [string]$pipelineVariableName
 )
 
 # Base64 encode the PAT
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$patToken"))
+
+function pipelineVariablesUpdate{
+    $pipelineApiUrl = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineName/runs"
+    $runId = (Invoke-RestMethod -Uri $pipelineApiUrl -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}).value[0].id
+    $setVariableUrl = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineName/runs/$runId/variables?api-version=6.0-preview.1"
+    $variableBody = @{
+        "variables" = @{
+            $pipelineVariableName = @{
+                "value" = $valuetoUpdate
+                "isSecret" = $false
+            }
+        }
+    } | ConvertTo-Json -Depth 100
+
+    Invoke-RestMethod -Uri $setVariableUrl -Method Patch -Headers @{
+        Authorization = "Basic $base64AuthInfo"
+        "Content-Type" = "application/json"
+    } -Body $variableBody
+    Write-Host "Pipeline Variable :$pipelineVariableName updated successfully with value: $valuetoUpdate"
+}
+
+
 
 try {   
     # API call to get the id of Library Variable
@@ -37,6 +59,7 @@ try {
     Invoke-RestMethod -Uri $uri -Method Put -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo); "Content-Type"="application/json"} -Body $json
 
     Write-Host "Variable group updated successfully with value: $valuetoUpdate"
+    pipelineVariablesUpdate
     exit 0
 }
 catch {
