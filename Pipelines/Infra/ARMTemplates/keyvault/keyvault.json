@@ -78,11 +78,11 @@
                     "properties": {
                      //   "value": "[parameters('secrets')[copyIndex()].secretvalue]"
                      "value":"[parameters('secrets')[copyIndex(0)].secretvalue]"
+                    },
+                    "copy": {
+                       "name": "secretcount",
+                     "count": "[length(parameters('secrets'))]"
                     }
-                    //"copy": {
-                    //    "name": "secretcount",
-                    //    "count": "[length(parameters('secrets'))]"
-                   // }
                 }
             ]
         }
