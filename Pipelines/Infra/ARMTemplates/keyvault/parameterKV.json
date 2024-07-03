@@ -14,19 +14,11 @@
         },
         "secrets": {
             "Value": [
-                
                     {
                          "secretName":"DatabaseName",
                          "secretValue":"sqldatabasedk"
-                    } ,
-                    {
-                        "secretName":"DatabaseUsername",
-                        "secretValue":"adminUserDK"
-                    },
-                    {
-                        "secretName":"DatabasePassword",
-                        "secretValue":"adminPWD@123"
-                    }
+                    } 
+                    
          
             ]
         }
