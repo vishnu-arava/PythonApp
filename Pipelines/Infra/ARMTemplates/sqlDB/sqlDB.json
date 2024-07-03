@@ -12,7 +12,7 @@
         },
         "adminLogin":{
             "type": "string",
-            "defaultValue": "devopskernel1234"
+            "defaultValue": "devopskerneladmin"
         },
         "adminPWD": {
             "type": "string",
