@@ -22,8 +22,8 @@
             "type": "array",
             "defaultValue": [
                 {
-                    "secretname":"secretName",
-                    "secretvalue":"secretValue"
+                    "secretname":"secretName1",
+                    "secretvalue":"secretValue1"
                 }
             ]
         }
@@ -67,7 +67,7 @@
             },
             "resources": [
                 {
-                    "type": "secrets",
+                    "type": "Microsoft.KeyVault/vaults/secrets",
                   
                     "name": "[parameters('secrets')[copyIndex()].secretname]",
                     "apiVersion": "2016-10-01",
