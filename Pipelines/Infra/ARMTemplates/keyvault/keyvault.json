@@ -68,16 +68,13 @@
             "resources": [
                 {
                     "type": "Microsoft.KeyVault/vaults/secrets",
-                  
-                   // "name": "[parameters('secrets')[copyIndex()].secretname]",
-                   "name":"[parameters('secrets')[copyIndex(0)].secretname]",
+                    "name":"[parameters('secrets')[copyIndex()].secretname]",
                     "apiVersion": "2016-10-01",
                     "dependsOn": [
                         "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvault'))]"
                     ],
                     "properties": {
-                     //   "value": "[parameters('secrets')[copyIndex()].secretvalue]"
-                     "value":"[parameters('secrets')[copyIndex(0)].secretvalue]"
+                        "value":"[parameters('secrets')[copyIndex()].secretvalue]"
                     },
                     "copy": {
                        "name": "secretcount",
