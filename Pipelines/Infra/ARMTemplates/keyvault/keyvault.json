@@ -68,7 +68,7 @@
             "resources": [
                 {
                     "type": "secrets",
-                   // "name": "[concat(concat(parameters('keyvaultname'),'-',parameters('env')), '/', parameters('secrets')[copyIndex()].secretName)]",
+                  
                     "name": "[parameters('secrets')[copyIndex()].secretname]",
                     "apiVersion": "2016-10-01",
                     "dependsOn": [
