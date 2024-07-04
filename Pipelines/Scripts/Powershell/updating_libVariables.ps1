@@ -12,7 +12,7 @@ Param(
 # Base64 encode the PAT
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$patToken"))
 
-function pipelineVariablesUpdate{
+function pipelineVariablesUpdate {
     $pipelineurl = "https://vsrm.dev.azure.com/$organizationName/$projectName/_apis/release/releases/?api-version=7.1-preview.8"
 
     $pipelinelist = Invoke-RestMethod -Uri $pipelineurl -Method Get -Headers @{ Authorization = "Basic $base64AuthInfo" }
@@ -47,15 +47,16 @@ function pipelineVariablesUpdate{
         }
     } | ConvertTo-Json -Depth 100
     Write-Output "Variable Body: $variableBody"
-    $updateReponse = Invoke-RestMethod -Uri $uri -Method Put -Headers @{
+    $updateReponse = Invoke-RestMethod -Uri $currentReleaseResponse -Method Put -Headers @{
         Authorization = "Basic $base64AuthInfo"
         "Content-Type" = "application/json"
         Accept = "application/json; api-version=7.1-preview.8"
     } -Body $variableBody
     $updateReponse.variables
-    Write-Host "Pipeline Variable: $pipelineVariableName  updated successfully with value: $valuetoUpdate"
+    Write-Host "Pipeline Variable: $pipelineVariableName updated successfully with value: $valuetoUpdate"
 }
-try {   
+
+try {
     # API call to get the id of Library Variable
     $libvariableuri = "https://dev.azure.com/$organizationName/$projectName/_apis/distributedtask/variablegroups/?api-version=6.0-preview.2"
     $response = Invoke-RestMethod -Uri $libvariableuri -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
