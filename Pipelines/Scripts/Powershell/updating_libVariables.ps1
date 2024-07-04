@@ -37,23 +37,22 @@ function pipelineVariablesUpdate {
     }
     $keepForever = $currentRelease.keepForever
     Write-Output "Current keepForever value: $keepForever"
-    $variableBody = @{
-        keepForever = $keepForever
-        variables = @{
-            $pipelineVariableName = @{
-                value = $valuetoUpdate
-                isSecret = $false
-            }
-        }
-    } | ConvertTo-Json -Depth 100
-    Write-Output "Variable Body: $variableBody"
-    $updateReponse = Invoke-RestMethod -Uri $currentReleaseResponse -Method Put -Headers @{
-        Authorization = "Basic $base64AuthInfo"
-        "Content-Type" = "application/json"
-        Accept = "application/json; api-version=7.1-preview.8"
-    } -Body $variableBody
-    $updateReponse.variables
-    Write-Host "Pipeline Variable: $pipelineVariableName updated successfully with value: $valuetoUpdate"
+    $currentRelease.variables.$pipelineVariableName.value = $valuetoUpdate
+    $variableBody = $currentRelease | ConvertTo-Json -Depth 100
+    # Write-Output "Variable Body: $variableBody"
+    try {
+        $updateReponse = Invoke-RestMethod -Uri $currentReleaseResponse -Method Put -Headers @{
+            Authorization = "Basic $base64AuthInfo"
+            "Content-Type" = "application/json"
+            Accept = "application/json; api-version=7.1-preview.8"
+        } -Body $variableBody
+        Write-Host $updateReponse.variable
+        Write-Host "Pipeline Variable: $pipelineVariableName updated successfully with value: $valuetoUpdate"
+    }
+    catch {
+        Write-Host "⚠️ Error updating pipeline variable: $($_.Exception.Message)"
+        exit 1
+    }
 }
 
 try {
