@@ -13,27 +13,48 @@ Param(
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$patToken"))
 
 function pipelineVariablesUpdate{
-    $pipelineApiUrl = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineName/runs"
-    $runId = (Invoke-RestMethod -Uri $pipelineApiUrl -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}).value[0].id
-    $setVariableUrl = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineName/runs/$runId/variables?api-version=6.0-preview.1"
+    $pipelineurl = "https://vsrm.dev.azure.com/$organizationName/$projectName/_apis/release/releases/?api-version=7.1-preview.8"
+
+    $pipelinelist = Invoke-RestMethod -Uri $pipelineurl -Method Get -Headers @{ Authorization = "Basic $base64AuthInfo" }
+    $arr = @()
+    foreach ($pipelinelist in $pipelinelist.value) {
+        if ($pipelinelist.releaseDefinition.name -eq 'deploying_weatherapp') {
+            [int]$id = $pipelinelist.id
+            $arr += $id
+        }
+    }
+    if ($arr.Count -eq 0) {
+        Write-Error "No releases found with the name 'deploying_weatherapp'"
+        return
+    }
+    $currentReleaseId = $arr[0]
+    Write-Output "Release ID: $currentReleaseId"
+    $currentReleaseResponse = "https://vsrm.dev.azure.com/$organizationName/$projectName/_apis/release/releases/$currentReleaseId/?api-version=7.1-preview.8"
+    Write-Output "URI for fetching release details: $currentReleaseResponse"
+    $currentRelease = Invoke-RestMethod -Uri $currentReleaseResponse -Method Get -Headers @{
+        Authorization = "Basic $base64AuthInfo"
+        Accept = "application/json; api-version=7.1-preview.8"
+    }
+    $keepForever = $currentRelease.keepForever
+    Write-Output "Current keepForever value: $keepForever"
     $variableBody = @{
-        "variables" = @{
+        keepForever = $keepForever
+        variables = @{
             $pipelineVariableName = @{
-                "value" = $valuetoUpdate
-                "isSecret" = $false
+                value = $valuetoUpdate
+                isSecret = $false
             }
         }
     } | ConvertTo-Json -Depth 100
-
-    Invoke-RestMethod -Uri $setVariableUrl -Method Patch -Headers @{
+    Write-Output "Variable Body: $variableBody"
+    $updateReponse = Invoke-RestMethod -Uri $uri -Method Patch -Headers @{
         Authorization = "Basic $base64AuthInfo"
         "Content-Type" = "application/json"
+        Accept = "application/json; api-version=7.1-preview.8"
     } -Body $variableBody
-    Write-Host "Pipeline Variable :$pipelineVariableName updated successfully with value: $valuetoUpdate"
+    $updateReponse.variables
+    Write-Host "Pipeline Variable: $pipelineVariableName  updated successfully with value: $valuetoUpdate"
 }
-
-
-
 try {   
     # API call to get the id of Library Variable
     $libvariableuri = "https://dev.azure.com/$organizationName/$projectName/_apis/distributedtask/variablegroups/?api-version=6.0-preview.2"
