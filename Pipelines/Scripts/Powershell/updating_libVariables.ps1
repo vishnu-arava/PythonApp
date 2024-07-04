@@ -47,7 +47,7 @@ function pipelineVariablesUpdate{
         }
     } | ConvertTo-Json -Depth 100
     Write-Output "Variable Body: $variableBody"
-    $updateReponse = Invoke-RestMethod -Uri $uri -Method Patch -Headers @{
+    $updateReponse = Invoke-RestMethod -Uri $uri -Method Put -Headers @{
         Authorization = "Basic $base64AuthInfo"
         "Content-Type" = "application/json"
         Accept = "application/json; api-version=7.1-preview.8"
