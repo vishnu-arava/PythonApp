@@ -1,0 +1,32 @@
+{
+    "parameters":{
+        "storageAccountNames":{
+            "value":[
+                {
+                    "stgname":"dkstgacc1"
+                },
+                {
+                    "stgname":"dkstgacc2"
+                },
+                {
+                    "stgname":"dkstgacc3"       
+                },
+                {
+                    "stgname":"dkstgacc4"
+                }
+            ]
+        },
+        "skuName":{
+            "value":"Standard_LRS"
+        },
+        "skuTier":{
+            "value":"Standard"
+        },
+        "env":{
+            "value":"dev"
+        },
+        "location":{
+            "value":"centralus"
+        }
+    }
+}

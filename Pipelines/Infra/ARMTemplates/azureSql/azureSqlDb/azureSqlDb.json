@@ -1,0 +1,86 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "serverName":{
+            "type": "string",
+            "defaultValue":"dk-weatherapp-dev-sql-server"
+        },
+        "dbName": {
+            "type": "string",
+            "defaultValue": "dk-weatherapp-dev-sql-db"
+        },
+        "userName": {
+            "type": "string",
+            "defaultValue":"devopsKernel"
+        },
+        "password": {
+            "type": "securestring",
+            "defaultValue":"Password@12345"
+        },
+        "tlsVersion":{
+            "type": "string",
+            "defaultValue": "1.2"
+        },
+        "env":{
+            "type": "string",
+            "defaultValue":"sandbox"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "eastus2"
+        }    
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+ {
+    "name": "[concat(parameters('serverName'),'-',parameters('env'))]",
+    "type": "Microsoft.Sql/servers",
+    "apiVersion": "2021-11-01",
+    "location": "[parameters('location')]",
+    "tags": {
+        "displayName": "[concat(parameters('serverName'),'-',parameters('env'))]"
+    },
+    "properties": {
+        "administratorLogin": "[concat(parameters('userName'),'-',parameters('env'))]",
+        "administratorLoginPassword": "[parameters('password')]",
+        "minimalTlsVersion": "[parameters('tlsVersion')]"
+    },
+    "resources": [
+        {
+            "type": "firewallRules",
+            "apiVersion": "2014-04-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName'),'-',parameters('env')))]"
+            ],
+            "location": "[parameters('location')]",
+            "name": "AllowAllWindowsAzureIps",
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        }
+    ]
+ },
+{
+    "name": "[concat(concat(parameters('serverName'),'-',parameters('env')),'/',concat(parameters('dbName'),'-',parameters('env')))]",
+    "type": "Microsoft.Sql/servers/databases",
+    "apiVersion": "2021-11-01",
+    "location": "[parameters('location')]",
+    "tags": {
+        "displayName": "[concat(parameters('dbName'),'-',parameters('env'))]"
+    },
+    "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName'),'-',parameters('env')))]"
+    ],
+    "properties": {
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "edition": "Basic",
+        "maxSizeBytes": 1073741824,
+        "requestedServiceObjectiveName": "Basic"
+    }
+}
+    ],
+    "outputs": {}
+}

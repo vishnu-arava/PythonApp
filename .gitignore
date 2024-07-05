@@ -1,0 +1,9 @@
+instance/*.db
+**/__pycache__/*
+**/instance/*.db
+**/requirements.txt
+**/*venv
+**/.idea
+app.log
+model.pkl
+**/Logs
