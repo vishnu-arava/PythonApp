@@ -2,14 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        // "vmStorageAccount":{
-        //     "type": "string",
-        //     "defaultValue":"dkweatherappvmStg"
-        // },
-        // "skuStorageAccountName":{
-        //     "type": "string",
-        //     "defaultValue":"Standard_LRS"
-        // },
         "vmPublicIPName":{
             "type": "string",
             "defaultValue": "dk-weatherapp-publicIpName"
@@ -58,19 +50,6 @@
     "functions": [],
     "variables": {},
     "resources": [
-//   {
-//     "name": "[toLower(concat(parameters('vmStorageAccount'),parameters('env')))]",
-//     "type": "Microsoft.Storage/storageAccounts",
-//     "apiVersion": "2023-01-01",
-//     "location": "[parameters('location')]",
-//     "tags": {
-//         "displayName": "[concat(parameters('vmStorageAccount'),parameters('env'))]"
-//     },
-//     "sku": {
-//         "name": "[parameters('skuStorageAccountName')]"
-//     },
-//     "kind": "Storage"
-//   },
   {
     "name": "[concat(parameters('vmPublicIPName'),'-',parameters('env'))]",
     "type": "Microsoft.Network/publicIPAddresses",
@@ -209,19 +188,17 @@
                 }
             ]
         }
-        // "diagnosticsProfile": {
-        //     "bootDiagnostics": {
-        //         "enabled": true,
-        //         "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower(concat(parameters('vmStorageAccount'),parameters('env'))))).primaryEndpoints.blob]"
-        //     }
-        // }
     }
   }
     ],
     "outputs": {
-      "hostname": {
+    "vmName":{
+        "type": "string",
+        "value":"[concat(parameters('vmName'),'-',parameters('env'))]"
+    },
+    "vmUserName": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vmPublicIPName'),'-',parameters('env')))).ipAddress]"
+      "value": "[concat(parameters('vmUserName'),'-',parameters('env'))]"
     }
-    }
+  }
 }

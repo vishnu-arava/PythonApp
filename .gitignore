@@ -6,3 +6,4 @@ instance/*.db
 **/.idea
 app.log
 model.pkl
+**/Logs
