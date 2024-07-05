@@ -117,20 +117,15 @@ def get_city_weather(city_name):
         return None
 
 def get_matching_cities(query):
-    # List of cities (you might want to fetch this from a database or external API)
     cities = ["Hyderabad", "London", "New York", "Los Angeles", "Paris", "Tokyo", "Sydney"]
-
-    # Filter cities based on the query
     matching_cities = [city for city in cities if query.lower() in city.lower()]
 
     return matching_cities
-
 
 @app.route('/')
 def home():
     app.logger.info('Loading the home page')
     return render_template('home.html')
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -185,8 +180,6 @@ def logout():
     app.logger.info(f'the user has logged out')
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
-
-
 
 @app.route('/weather_search',methods=['POST','GET'])
 def weather():
@@ -249,16 +242,14 @@ def weather():
             'weather_code':''
         }])
     return render_template('weather_search.html', maindata=weekly_weather_list)
+
 @app.route('/weather', methods=['GET'])
 def weather_data():
     day = request.args.get('day')
     city = request.args.get('city', 'hyderabad')  # Default to 'hyderabad' if no city is provided
-
     if not day:
         return jsonify({'error': 'No day provided'}), 400
-
-    app.logger.info(f'Received request for weather data for day: {day} in city: {city}')  # Debugging information
-
+    app.logger.info(f'Received request for weather data for day: {day} in city: {city}')
     weather_data = get_city_weather(city)
     dict = weather_data['daily']
     for i in range(0, len(dict['time'])):
@@ -278,21 +269,20 @@ def weather_data():
                 'windirection': str(dict['winddirection_10m_dominant'][i]),
                 'weather_code': str(weather_description_code[str(dict['weathercode'][i])])
             }
-            app.logger.info(f'Returning data: {result}')  # Debugging information
+            app.logger.info(f'Returning data: {result}')
             return jsonify(result)
     return jsonify({'error': 'Weather data for the requested day not found'}), 404
 
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form['query']
-    # Assuming you have a function get_matching_cities(query) that returns a list of matching cities
     matching_cities = get_matching_cities(query)
-    # Return the list of matching cities as JSON
     return jsonify(matching_cities)
 
 @app.route('/weather_predict')
 def predic_page():
     return render_template("weather_predict.html")
+
 @app.route('/predict',methods=['POST','GET'])
 def predict():
    if not os.path.isfile('model.pkl'):
