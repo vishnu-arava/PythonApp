@@ -48,4 +48,4 @@ if __name__ == '__main__':
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade setuptools'], shell=True)
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
     from flask_auth import app
-    app.run(host='52.162.107.46',port=80,debug=True,use_reloader=False)
+    app.run(host='weatharapp.azurewebsites.net',port=80,debug=True,use_reloader=False)
