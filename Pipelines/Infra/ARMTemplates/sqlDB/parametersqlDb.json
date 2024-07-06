@@ -7,7 +7,7 @@
         "Value":"sqldatabasedk"
     },
     "adminLogin":{
-        "Value": "devopskernel-admin"
+        "Value": "devopskerneladmin"
     },
     "adminPWD": {
         "Value": "devopskernelpwd@123"
