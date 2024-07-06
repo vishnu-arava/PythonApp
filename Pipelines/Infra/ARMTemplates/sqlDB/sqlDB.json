@@ -4,11 +4,11 @@
     "parameters": {
         "serverName": {
             "type": "string",
-            "defaultValue":"sqlserverDK"
+            "defaultValue":"sqlserverdk"
         },
         "sqlDBName": {
             "type": "string",
-            "defaultValue":"sqldatabaseDK"
+            "defaultValue":"sqldatabasedk"
         },
         "adminLogin":{
             "type": "string",
