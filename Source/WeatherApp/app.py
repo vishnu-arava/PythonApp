@@ -48,4 +48,4 @@ if __name__ == '__main__':
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade setuptools'], shell=True)
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
     from flask_auth import app
-    app.run(use_reloader=False)
+    app.run(port=80,use_reloader=False)
