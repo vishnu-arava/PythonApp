@@ -85,7 +85,7 @@ def get_cities():
         "X-RapidAPI-Key": GEODB_API_KEY,
         "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
     }
-    response = requests.get(url, headers=headers, params={"limit": 10})
+    response = requests.get(url, headers=headers, params={"limit": 1000})
     data = response.json()
     cities = [city['name'] for city in data['data']]
     return cities
@@ -312,3 +312,23 @@ def predict():
                return render_template('weather_predict.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output))
            else:
                return render_template('weather_predict.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output))
+           
+@app.route('/totalWeatherReport',methods=['POST','GET'])
+def totalWeatherReport():
+    if request.method == 'POST':
+        countryname = request.form['country']
+    try:
+        if countryname == '':
+            countryname = 'india'
+        print(countryname)
+        worldclimateapiurl = "http://127.0.0.1:5001/country"
+        params = {
+            'countryname':countryname,
+            'apikey':'48a90ac42caa09f90dcaeee4096b9e53'
+        }
+        response = requests.get(worldclimateapiurl,params=params)
+        statesData = response.json()
+        print(statesData)
+        return render_template('weatherReport.html')
+    except:
+        return render_template('weatherReport.html')

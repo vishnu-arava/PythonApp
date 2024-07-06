@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}weatherReport{% endblock %}
+
+{% block main_content %}
+<!-- No container here -->
+{% endblock %}
+
+{% block additional_content %}
+<br>
+<br>
+<br>
+<br>
+<div class="row">
+<form method="post" class="col-md-6 col-md-offset-3">
+    <div class="input-group">
+    <input type="text" class="form-control" name="country" placeholder="Search" id="country-input">
+        <input type="hidden" name="selected_country" id="selected-country" value="">
+    <div class="input-group-btn">
+        <button class="btn btn-primary" type="submit">
+        <i class="glyphicon glyphicon-search"></i>
+        </button>
+    </div>
+    </div>
+</form>
+</div>
+<div class="statesbasediv">
+    
+</div>
+{% endblock %}
+
