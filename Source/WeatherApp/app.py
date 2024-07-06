@@ -5,7 +5,7 @@ import os
 
 def install_packages():
     try:
-        pip_executable = os.path.join('venv', 'bin', 'pip') if os.name != 'nt' else os.path.join('venv', 'Scripts', 'pip')
+        pip_executable = os.path.join('antenv', 'bin', 'pip') if os.name != 'nt' else os.path.join('antenv', 'Scripts', 'pip')
         # odbc17  = subprocess.run(["find", "/home/", "-type", "f", "-name", "odbc17.sh"], text=True, capture_output=True).stdout
         # subprocess.run(['bash',odbc17[:-1]])
         subprocess.check_call([pip_executable, 'install', '--upgrade', 'pip', 'setuptools'])
@@ -14,7 +14,7 @@ def install_packages():
         subprocess.check_call([pip_executable, 'install', 'pipreqs'])
         print("pipreqs installed successfully.")
 
-        subprocess.run(['venv/bin/pipreqs', '.'])
+        subprocess.run(['antenv/bin/pipreqs', '.'])
         subprocess.run(['sed','-i','/azure_storage/d', 'requirements.txt'])      
         # subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'pkg-config'])
         # subprocess.check_call(['sudo', 'apt-get', 'install', '-y', 'libmysqlclient-dev'])
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     if (os.name=='posix'):
         install_packages()
     if (os.name=='nt'):
-        venv_path = "venv"
+        venv_path = "antenv"
         subprocess.run([sys.executable, "-m", "venv", venv_path])
         activation_script = os.path.join(venv_path, "bin", "activate")
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pipreqs'])
