@@ -31,7 +31,7 @@
     "functions": [],
     "variables": {},
     "resources": [
-        {
+            {
             "name": "[parameters('keyvault')]",
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2023-02-01",
@@ -65,7 +65,6 @@
                     "family": "A"
                 }
             },
-            "resources": [
                 {
                     "type": "Microsoft.KeyVault/vaults/secrets",
                     "name":"[parameters('secrets')[copyIndex()].secretname]",
@@ -81,8 +80,8 @@
                      "count": "[length(parameters('secrets'))]"
                     }
                 }
-            ]
-        }
+            
+        
     ],
     "outputs": {}
 }
