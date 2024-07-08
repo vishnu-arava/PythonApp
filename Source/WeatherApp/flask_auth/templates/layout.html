@@ -18,6 +18,7 @@
                     <li><a href="{{ url_for('dashboard') }}">Home</a></li>
                     <li><a href="{{ url_for('weather') }}">Weather Search</a></li>
                     <li><a href="{{ url_for('predic_page') }}">Forest Fire Prediction</a></li>
+                    <li><a href="{{ url_for('totalWeatherReport') }}">Weather Report</a></li>
                 {% else %}
                     <li><a href="{{ url_for('login') }}">Home</a></li>
                 {% endif %}
@@ -42,23 +43,24 @@
             </ul>
         </div>
     </nav>
-    <br>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flashes">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    {% block main_content %}
-    <div class="container" style="margin-top: 70px;">
-        {% block content %}{% endblock %}
+    <div class="content-wrapper">
+        <br>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flashes">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block main_content %}
+        <div class="container" style="margin-top: 70px;">
+            {% block content %}{% endblock %}
+        </div>
+        {% endblock %}
+        {% block additional_content %}{% endblock %}
     </div>
-    {% endblock %}
-    
-    {% block additional_content %}{% endblock %}
     <footer>
         &copy; 2024 WeatherApp. All rights reserved.
     </footer>
@@ -77,5 +79,4 @@
         });
     </script>
 </body>
-
 </html>
