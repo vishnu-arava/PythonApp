@@ -328,7 +328,14 @@ def totalWeatherReport():
         }
         response = requests.get(worldclimateapiurl,params=params)
         statesData = response.json()
+        data = json.loads(statesData)
         print(statesData)
+        totalstates=data['count']
+        totalStatesData=data['value']
+        print("Total states :",totalstates)
+        print(type(totalstates))
+        print("states data is :",totalStatesData)
+        print(type(totalStatesData))
         return render_template('weatherReport.html')
     except:
         return render_template('weatherReport.html')

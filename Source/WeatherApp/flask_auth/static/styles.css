@@ -5,9 +5,11 @@ body{
     height: 100%;
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 html{
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -627,4 +629,77 @@ button:hover {
     margin-top: 300px;
     width: 1920px;
     height: 300px;
+}
+
+
+.wr-horizontal-container {
+    margin-top: 100px;
+    display: flex;
+    overflow-x: hidden;
+    width: 100%;
+    height: 400px;
+    background-color: #3a3939;
+    scroll-behavior: smooth;
+}
+.wr-horizontal-container:hover {
+    overflow-x: auto;
+}
+.wr-scrolling-content {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+}
+.wr-scrolling-container {
+    width: 250px;
+    height: 100%;
+    background-color: #b2973c;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.wr-top-text {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.wr-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+.wr-grid-item {
+    background-color: #b2973c;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 15px;
+}
+.wr-grid-item img {
+    max-width: 40%;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.wr-scroll-button {
+    background-color: #2e2e2e;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    margin-top: 1px;
+    font-size: 15px;
+    font-weight: bold;
+}
+.wr-scroll-button:hover{
+    background-color: #464545;
 }
