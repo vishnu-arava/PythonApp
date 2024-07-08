@@ -1,10 +1,10 @@
 # Define your parameters
-$organization = "venkatachaitanya095"                 # Replace with your organization name
-$project = "PythonProjects"                           # Replace with your project name
-$patToken = "oh3nptvun3alxhvr7bmht3zvvzhlgp233cugvjrp4mwjsytzr6cq"                        # Replace with your PAT token
-$MyLibVarGroup = "KeyVaultUpdatePublicIP-VA"     # Replace with your library variable group name
-$LibVarName = "vmPublicIP"                # Replace with your library variable name
-$LibVarValue = "10.2.1.1"                   # Replace with your public IP
+$organization = "organization"                 # Replace with your organization name
+$project = "project"                           # Replace with your project name
+$patToken = "patToken"                        # Replace with your PAT token
+$MyLibVarGroup = "MyLibVarGroup"     # Replace with your library variable group name
+$LibVarName = "LibVarName"                # Replace with your library variable name
+$LibVarValue = "LibVarValue"                   # Replace with your public IP
 # $ReleaseVarName = "ReleaseVarName"                        # Replace with your Release variable name
 # $ReleaseVarValue = "ReleaseVarValue"                     # Replace with your Release variable value
 # $BasePipelineName = "your_base_pipeline_name"       # Replace with your base pipeline name
