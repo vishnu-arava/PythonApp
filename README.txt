@@ -7,3 +7,6 @@ FILEPATH=$(find . -type f -name odbc17.sh)
 dos2unix "$FILEPATH"
 bash $FILEPATH
 python3 app.py
+
+
+https://medium.com/@adnanrahic/hello-world-app-with-node-js-and-express-c1eb7cfa8a30
