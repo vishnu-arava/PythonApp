@@ -46,4 +46,4 @@ if __name__ == '__main__':
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
     from flask_auth import app
     # app.run(host='0.0.0.0',port=5000,debug=True,use_reloader=False)
-    app.run()
+    app.run(port=8000)
