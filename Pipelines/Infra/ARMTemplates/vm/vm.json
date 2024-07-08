@@ -190,13 +190,17 @@
         }
     ],
     "outputs": {
-        "vmip": {
-            "type": "string",
-            "value": "[reference(concat(parameters('publicIPName'), '-', parameters('env'))).ipAddress]"
-        },
         "vmname": {
             "type": "string",
             "value": "[concat(parameters('vmName'), '-', parameters('env'))]"
+        },
+        "vmusername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
         }
+        // "vmip": {
+        //     "type": "string",
+        //     "value": "[reference(concat(parameters('publicIPName'), '-', parameters('env'))).ipAddress]"
+        // }
     }
 }
