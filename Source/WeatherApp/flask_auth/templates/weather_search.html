@@ -7,10 +7,9 @@
 {% endblock %}
 
 {% block additional_content %}
-    </div>
-     <br>
-     <br>
-     <br>
+<br>
+<br>
+<br>
   <div class="row">
     <form method="post" class="col-md-6 col-md-offset-3">
       <div class="input-group">
@@ -65,8 +64,6 @@
     function fetchWeatherData(day) {
         console.log(`The hidden file has been updated : ${document.getElementById('selected-city').value}`);
         const selectedCity = document.getElementById('selected-city').value || 'hyderabad';
-        console.log(`Fetching weather data for: ${day} in ${selectedCity}`);  // Debugging information
-
         fetch(`/weather?day=${day}&city=${selectedCity}`)
             .then(response => {
                 if (!response.ok) {
@@ -75,7 +72,6 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Data received:', data);  // Debugging information
                 document.querySelector('#weather_data_print .temperature').innerHTML = data.temperature_max + '<span>°C </span>';
                 document.querySelector('#weather_data_print .weather-info').innerHTML = `
                     <div>Precipitation: ${data.precipitation}%</div>

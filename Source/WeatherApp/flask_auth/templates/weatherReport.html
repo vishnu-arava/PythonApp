@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}weatherReport{% endblock %}
+
+{% block main_content %}
+<!-- No container here -->
+{% endblock %}
+
+{% block additional_content %}
+<br>
+<br>
+<br>
+<br>
+<div class="row">
+<form method="post" class="col-md-6 col-md-offset-3">
+    <div class="input-group">
+    <input type="text" class="form-control" name="country" placeholder="Search" id="country-input">
+        <input type="hidden" name="selected_country" id="selected-country" value="">
+    <div class="input-group-btn">
+        <button class="btn btn-primary" type="submit">
+        <i class="glyphicon glyphicon-search"></i>
+        </button>
+    </div>
+    </div>
+</form>
+</div>
+{% if statesdata %}
+<div class="wr-horizontal-container" id="wr-horizontal-container">
+    <div class="wr-scrolling-content" id="wr-scrolling-content">
+    </div>
+</div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.getElementById('wr-scrolling-content');
+        const numberOfItems = 10;
+        let scrollInterval; 
+        const sampleContent = [
+            { text: 'Item 1', image: 'https://via.placeholder.com/150' },
+            { text: 'Item 2', image: 'https://via.placeholder.com/150' },
+            { text: 'Item 3', image: 'https://via.placeholder.com/150' },
+            { text: 'Item 4', image: 'https://via.placeholder.com/150' }
+        ];
+        for (let i = 0; i < numberOfItems; i++) {
+            const item = document.createElement('div');
+            item.className = 'wr-scrolling-container';
+            item.innerHTML = `
+                <div class="wr-top-text">Top Text ${i + 1}</div>
+                <div class="wr-grid">
+                    ${sampleContent.map(content => `
+                        <div class="wr-grid-item">
+                            <img src="${content.image}" alt="IMG">
+                            <div>${content.text}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="wr-scroll-button">FORECAST</button>
+            `;
+            container.appendChild(item);
+        }
+        let currentIndex = 0;
+        const scrollingContent = document.getElementById('wr-horizontal-container');
+
+        function startScrolling() {
+            scrollInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % numberOfItems;
+                const scrollAmount = currentIndex * 220; // Adjust according to container width + margin
+                scrollingContent.scrollLeft = scrollAmount;
+            }, 2000); // Adjust scrolling speed as needed
+        }
+        startScrolling();
+        scrollingContent.addEventListener('mouseenter', function() {
+            clearInterval(scrollInterval); // Stop the scrolling interval
+        });
+        scrollingContent.addEventListener('mouseleave', function() {
+            startScrolling(); // Start scrolling again
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}
+
