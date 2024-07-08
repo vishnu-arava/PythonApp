@@ -14,15 +14,15 @@ curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trust
 curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
 
 # Update package lists and install ODBC drivers and tools
-sudo apt-get update
-sudo ACCEPT_EULA=Y apt-get install -y msodbcsql17
+apt-get update #sudo
+ACCEPT_EULA=Y apt-get install -y msodbcsql17 #sudo
 
 # Optional: for bcp and sqlcmd
-sudo ACCEPT_EULA=Y apt-get install -y mssql-tools
+ACCEPT_EULA=Y apt-get install -y mssql-tools #sudo
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 source ~/.bashrc
 
 # Optional: for unixODBC development headers
-sudo apt-get install -y unixodbc-dev
+apt-get install -y unixodbc-dev #sudo
 
 echo "Finished odbc17.sh script."
