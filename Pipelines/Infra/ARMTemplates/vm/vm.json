@@ -147,7 +147,7 @@
             }
         },
         {
-            "name": "[concat(parameters('vmName'), '-', parameters('env'))]",
+            "name": "[parameters('vmName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
             "location": "[resourceGroup().location]",
@@ -155,7 +155,7 @@
                 "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('networkInterface'), '-', parameters('env')))]"
             ],
             "tags": {
-                "displayName": "[concat(parameters('vmName'), '-', parameters('env'))]"
+                "displayName": "[parameters('vmName')]"
             },
             "properties": {
                 "hardwareProfile": {
@@ -174,7 +174,7 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "[concat(parameters('vmName'), '-', parameters('env'), '-', 'OSDisk')]",
+                        "name": "[concat(parameters('vmName'), '-', 'OSDisk')]",
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
                     }
@@ -192,7 +192,7 @@
     "outputs": {
         "vmname": {
             "type": "string",
-            "value": "[concat(parameters('vmName'), '-', parameters('env'))]"
+            "value": "[parameters('vmName')]"
         },
         "vmusername": {
             "type": "string",
