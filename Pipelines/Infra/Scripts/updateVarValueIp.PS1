@@ -1,10 +1,12 @@
 # Define your parameters
+Param(
 $organization
 $project
 $patToken
 $MyLibVarGroup
 $LibVarName
 $LibVarValue
+)
 # $ReleaseVarName = "ReleaseVarName"                        # Replace with your Release variable name
 # $ReleaseVarValue = "ReleaseVarValue"                     # Replace with your Release variable value
 # $BasePipelineName = "your_base_pipeline_name"       # Replace with your base pipeline name
