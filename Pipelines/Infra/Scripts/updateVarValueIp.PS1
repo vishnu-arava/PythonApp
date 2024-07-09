@@ -25,6 +25,7 @@ if ($null -eq $MyLibVarGroupResponse) {
 
 $MyLibVarGroupResponseid = $MyLibVarGroupResponse.id
 $MyvariableGroupIdURL = "https://dev.azure.com/$organization/$project/_apis/distributedtask/variablegroups/$MyLibVarGroupResponseid"+"?api-version=7.1-preview.2"
+Write-Output "$MyvariableGroupIdURL"
 $MyvariableGroupIdResponse = Invoke-RestMethod -Uri $MyvariableGroupIdURL -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
 $MyvariableGroupIdResponse.variables.$LibVarName.value = $LibVarValue
 
