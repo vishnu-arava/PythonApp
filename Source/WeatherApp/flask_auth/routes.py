@@ -336,6 +336,6 @@ def totalWeatherReport():
         print(type(totalstates))
         print("states data is :",totalStatesData)
         print(type(totalStatesData))
-        return render_template('weatherReport.html')
+        return render_template('weatherReport.html',statesdata=totalStatesData)
     except:
         return render_template('weatherReport.html')

@@ -640,14 +640,16 @@ button:hover {
     height: 400px;
     background-color: #3a3939;
     scroll-behavior: smooth;
+    scroll-snap-type: x mandatory; /* Ensures items snap into place during scroll */
 }
 .wr-horizontal-container:hover {
-    overflow-x: auto;
+    overflow-x: auto; /* Allows manual scrolling when hovered */
 }
 .wr-scrolling-content {
     display: flex;
-    gap: 20px;
+    gap: 20px; /* Increased gap for better separation */
     padding: 10px;
+    scroll-snap-align: start; /* Ensures items start aligned in the scroll container */
 }
 .wr-scrolling-container {
     width: 250px;
@@ -661,6 +663,7 @@ button:hover {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    scroll-snap-align: center; /* Ensures each item centers in the view */
 }
 .wr-top-text {
     text-align: center;
