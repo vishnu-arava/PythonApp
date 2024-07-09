@@ -1,10 +1,10 @@
 # Define your parameters
-$organization                 # Replace with your organization name
-$project                           # Replace with your project name
-$patToken                        # Replace with your PAT token
-$MyLibVarGroup     # Replace with your library variable group name
-$LibVarName                     # Replace with your library variable name
-$LibVarValue                   # Replace with your public IP
+$organization
+$project
+$patToken
+$MyLibVarGroup
+$LibVarName
+$LibVarValue
 # $ReleaseVarName = "ReleaseVarName"                        # Replace with your Release variable name
 # $ReleaseVarValue = "ReleaseVarValue"                     # Replace with your Release variable value
 # $BasePipelineName = "your_base_pipeline_name"       # Replace with your base pipeline name
