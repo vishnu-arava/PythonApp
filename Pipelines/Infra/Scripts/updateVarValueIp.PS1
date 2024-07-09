@@ -1,10 +1,10 @@
 # Define your parameters
 Param(
-$organization
-$project
-$patToken
-$MyLibVarGroup
-$LibVarName
+$organization,
+$project,
+$patToken,
+$MyLibVarGroup,
+$LibVarName,
 $LibVarValue
 )
 # $ReleaseVarName = "ReleaseVarName"                        # Replace with your Release variable name
