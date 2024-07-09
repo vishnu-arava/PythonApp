@@ -15,7 +15,6 @@ $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$(
 # Get the variable group ID
 $variableGroupsUrl = "https://dev.azure.com/$organization/$project/_apis/distributedtask/variablegroups"+"?api-version=7.1-preview.2"
 Write-Output "url is: $variableGroupsUrl"
-Write-Output "$MyvariableGroupIdURL"
 $variableGroupsResponse = Invoke-RestMethod -Uri $variableGroupsUrl -Method Get -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
 $MyLibVarGroupResponse = $variableGroupsResponse.value | Where-Object { $_.name -eq $MyLibVarGroup }
 
