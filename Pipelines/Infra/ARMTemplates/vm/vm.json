@@ -4,31 +4,31 @@
     "parameters": {
         "vmPublicIPName":{
             "type": "string",
-            "defaultValue": "dk-weatherapp-publicIpName"
+            "defaultValue": "dk-sonarqube-publicIpName"
         },
         "vmName":{
             "type": "string",
-            "defaultValue": "dk-weatherapp-ubuntu-vm"
+            "defaultValue": "dk-sonarqube-ubuntu-vm"
         },
         "vmNetworkSecurityGroupsName":{
             "type": "string",
-            "defaultValue": "dk-weatherapp-vmNetworkSecurityGroup"
+            "defaultValue": "dk-sonarqube-vmNetworkSecurityGroup"
         },
         "vmVNetName":{
             "type": "string",
-            "defaultValue": "dk-weatherapp-vmVNet"
+            "defaultValue": "dk-sonarqube-vmVNet"
         },
         "vmSubnetName":{
             "type": "string",
-            "defaultValue": "dk-weatherapp-vmVNetSubnet"
+            "defaultValue": "dk-sonarqube-vmVNetSubnet"
         },
         "vmNetworkInterface":{
             "type": "string",
-            "defaultValue": "dk-weatherapp-vmNetworkInterface"
+            "defaultValue": "dk-sonarqube-vmNetworkInterface"
         },
         "vmUserName":{
             "type": "string",
-            "defaultValue": "dk-weatherapp-ubuntu-vm"
+            "defaultValue": "dk-sonarqube-ubuntu-vm"
         },
         "vmPassword":{
             "type": "securestring",
@@ -188,6 +188,22 @@
                 }
             ]
         }
+    }
+  },
+  {
+    "condition": "[equals(parameters('env'), 'prod')]",
+    "type": "Microsoft.Authorization/locks",
+    "apiVersion": "2020-05-01",
+    "name": "[concat(parameters('vmName'),'-',parameters('env'),'-locks')]",
+    "scope": "[concat('Microsoft.Compute/virtualMachines','/',concat(parameters('vmName'),'-',parameters('env')))]",
+    "properties": {
+    "level": "CanNotDelete",
+    "notes": "Cannot Delete this Virtual Machine",
+    "owners": [
+        {
+        "applicationId": "2823b1b8-5acf-4407-94a6-cc2ff7c1ad02"
+        }
+    ]
     }
   }
     ],
