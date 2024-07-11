@@ -189,22 +189,6 @@
             ]
         }
     }
-  },
-  {
-    "condition": "[equals(parameters('env'), 'prod')]",
-    "type": "Microsoft.Authorization/locks",
-    "apiVersion": "2020-05-01",
-    "name": "[concat(parameters('vmName'),'-',parameters('env'),'-locks')]",
-    "scope": "[concat('Microsoft.Compute/virtualMachines','/',concat(parameters('vmName'),'-',parameters('env')))]",
-    "properties": {
-    "level": "CanNotDelete",
-    "notes": "Cannot Delete this Virtual Machine",
-    "owners": [
-        {
-        "applicationId": "2823b1b8-5acf-4407-94a6-cc2ff7c1ad02"
-        }
-    ]
-    }
   }
     ],
     "outputs": {
