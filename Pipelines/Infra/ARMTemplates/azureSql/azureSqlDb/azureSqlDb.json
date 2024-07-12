@@ -82,5 +82,22 @@
     }
 }
     ],
-    "outputs": {}
+    "outputs": {
+        "sqldblink": {
+            "type": "string",
+            "value": "[concat(parameters('serverName'),'.database.windows.net')]"
+        },
+        "sqldbname":{
+            "type": "string",
+            "value": "[concat(parameters('dbName'),'-',parameters('env'))]"
+        },
+        "sqldbusername": {
+            "type": "string",
+            "value": "[concat(parameters('userName'),'-',parameters('env'))]"
+        },
+        "sqlpass": {
+            "type": "string",
+            "value": "[parameters('password')]"
+        }
+    }
 }

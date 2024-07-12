@@ -199,6 +199,10 @@
     "vmUserName": {
       "type": "string",
       "value": "[concat(parameters('vmUserName'),'-',parameters('env'))]"
+    },
+    "vmPass":{
+        "type": "string",
+        "value": "[parameters('vmPassword')]"
     }
   }
 }
