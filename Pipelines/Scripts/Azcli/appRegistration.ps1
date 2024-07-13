@@ -13,7 +13,7 @@ Write-Host "App service and service principle created successfully"
 $clientSecretValue=az ad app credential reset --id $objectId --append --display-name $appRegistrationClientSecretName --end-date '2024-12-31' --query password --output tsv
 
 [string]$subscriptionId=az account list --query "[?contains(user.name, 'kollichaitanya2024@gmail.com')].id" --output tsv
-
+Write-Host "Subbscription id is : $subscriptionId"
 [string]$scope = "/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 Write-Host "Scope is : $scope"
 az role assignment create --role "Key Vault Secrets User" --assignee-object-id $appRegServicePrincipleObjectId --scope $scope --assignee-principal-type ServicePrincipal
