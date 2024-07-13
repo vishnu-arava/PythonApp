@@ -1,0 +1,19 @@
+{
+    "parameters": {
+        "appServicePlanName":{
+            "value": "vishnuAppServicePlan"
+        },
+        "appServiceName": {
+            "value": "vishnuAppService"
+        },
+        "location": {
+            "value": "canadacentral"
+        },
+        "sku": {
+            "value": "F1"
+        },
+        "linuxFxVersion": {
+            "value": "PYTHON|3.10"
+        }
+    }
+}

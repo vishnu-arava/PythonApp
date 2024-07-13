@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServicePlanName":{
+            "type": "string",
+            "defaultValue": "Default"
+        },
+        "appServiceName": {
+            "type": "string",
+            "defaultValue": "Default"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "cDefault"
+        },
+        "sku": {
+            "type": "string",
+            "defaultValue": "F1"
+        },
+        "linuxFxVersion": {
+            "type": "string",
+            "defaultValue": "Default"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-02-01",
+            "name": "[Parameters('appServicePlanName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('sku')]",
+                "tier": "Free"
+            },
+            "kind": "linux",
+            "properties": {
+                "reserved": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-02-01",
+            "name": "[parameters('appServiceName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', Parameters('appServicePlanName'))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+                "siteConfig": {
+                    "linuxFxVersion": "[parameters('linuxFxVersion')]",
+                    "minTlsVersion": "1.2",
+                    "ftpsState": "FtpsOnly"
+                },
+                "httpsOnly": true
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            }
+        }
+
+    ]
+}
