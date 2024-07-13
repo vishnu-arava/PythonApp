@@ -2,11 +2,7 @@ param(
     [string]$appRegistrationName,
     [string]$appRegistrationClientSecretName,
     [string]$keyVaultName,
-    [string]$resourceGroupName,
-    [string]$DataBaseName,
-    [string]$DataBasePassword,
-    [string]$DataBaseServerLink,
-    [string]$DataBaseUserName
+    [string]$resourceGroupName
 )
 $tenantId=az account list --query "[?contains(user.name, 'kollichaitanya2024@gmail.com')].tenantId" --output tsv
 $appId=az ad app create --display-name $appRegistrationName --query appId --output tsv
@@ -23,10 +19,5 @@ az role assignment create --role "Key Vault Secrets User" --assignee-object-id $
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationClientSecret" --value $clientSecretValue
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationTenantId" --value $tenantId
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationClientId" --value $appId
-
-az keyvault secret set --vault-name $keyVaultName --name "DataBaseName" --value $DataBaseName
-az keyvault secret set --vault-name $keyVaultName --name "DataBasePassword" --value $  
-az keyvault secret set --vault-name $keyVaultName --name "DataBaseServerLink" --value $DataBaseServerLink
-az keyvault secret set --vault-name $keyVaultName --name "DataBaseUserName" --value $DataBaseUserName
 
 Write-Host "Key Vault values updated"
