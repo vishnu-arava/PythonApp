@@ -29,6 +29,7 @@ stages:
         pool: Satyam
         steps: 
           - task: ArchiveFiles@2
+            displayName: 'Archive API'
             inputs:
               rootFolderOrFile: 'source/WorldClimateApi'
               includeRootFolder: false
@@ -37,6 +38,7 @@ stages:
               replaceExistingArchive: true
           
           - task: ArchiveFiles@2
+            displayName: 'Archive WebApp'
             inputs:
               rootFolderOrFile: 'source/weatherapp'
               includeRootFolder: false
