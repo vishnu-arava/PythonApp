@@ -17,7 +17,7 @@ parameters:
     default: dev
 
 variables:
-  - name: appserviceName"
+  - name: "appserviceName"
     value: "dk-weatherapp-web"
 
 stages:
@@ -103,7 +103,7 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
-                    WebAppName: 'weatherapp'
+                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
                     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
                 - task: PowerShell@2
