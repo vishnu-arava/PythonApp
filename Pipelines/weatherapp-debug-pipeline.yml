@@ -17,7 +17,7 @@ parameters:
     default: dev
 
 variables:
-  - name: "appserviceName"
+  - name: appserviceName
     value: "dk-weatherapp-web"
 
 stages:
