@@ -20,8 +20,14 @@ Write-Host "Scope is : $scope"
 az role assignment create --role "Key Vault Secrets User" --assignee-object-id $appRegServicePrincipleObjectId --scope $scope --assignee-principal-type ServicePrincipal
 
 az keyvault secret list --vault-name $keyVaultName
+Write-Host "AppRegistrationClientSecret is : $clientSecretValue" 
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationClientSecret" --value $clientSecretValue
+Write-Host "AppRegistrationClientSecret Updated"
+Write-Host "AppRegistrationTenantId is : $tenantId" 
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationTenantId" --value $tenantId
+Write-Host "AppRegistrationTenantId Updated"
+Write-Host "AppRegistrationClientId is : $appId" 
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationClientId" --value $appId
+Write-Host "AppRegistrationClientId Updated"
 
 Write-Host "Key Vault values updated"
