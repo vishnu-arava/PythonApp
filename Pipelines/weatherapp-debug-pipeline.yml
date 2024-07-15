@@ -9,7 +9,7 @@ stages:
   - stage: "Build"
     displayName: "Building WeatherApp"
     jobs:
-      - job: "Build WeathetherApp"
+      - job: "BuildWeathetherApp"
         displayName: "Build WeathetherApp"
         pool: vishnupool
         steps:
@@ -31,12 +31,12 @@ stages:
               publishLocation: 'Container'
 
 
-  - stage: "Dev-Infra"
-    displayName: "Dev-Infra"
+  - stage: "DevInfra"
+    displayName: "Dev Infra"
     dependsOn: Build
     jobs:
-      - deployment: "Build-Dev-Infra"
-        displayName: "Build-Dev-Infra"
+      - deployment: "BuildDevInfra"
+        displayName: "Build Dev Infra"
         pool: vishnupool
         environment: Dev
         strategy:
@@ -99,12 +99,12 @@ stages:
                     scriptLocation: 'inlineScript'
                     inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
 
-  - stage: "Dev-App"
-    displayName: "Dev-App"
-    dependsOn: Dev-Infra
+  - stage: "DevApp"
+    displayName: "Dev App"
+    dependsOn: DevInfra
     jobs:
-      - deployment: "Dev-App: WeatherApp"
-        displayName: "Dev-App: WeatherApp"
+      - deployment: "DevApp"
+        displayName: "Dev App: WeatherApp"
         pool: vishnupool
         environment: Dev
         strategy:
