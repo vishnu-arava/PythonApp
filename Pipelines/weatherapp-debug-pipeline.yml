@@ -95,7 +95,6 @@ stages:
                     targetType: 'inline'
                     script: |
                       # Write your PowerShell commands here.
-                      
                       Get-ChildItem -Recurse $(System.ArtifactsDirectory)/downloads
 
   - stage: "DevApp"
