@@ -103,7 +103,7 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
-                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
+                    WebAppName: 'weatherapp'
                     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
                 - task: PowerShell@2
