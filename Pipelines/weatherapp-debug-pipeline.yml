@@ -31,14 +31,14 @@ stages:
               publishLocation: 'Container'
 
 
-  - stage: "DevInfra"
-    displayName: "Dev Infra"
+  - stage: "PreProdInfra"
+    displayName: "PreProd Infra"
     dependsOn: Build
     jobs:
-      - deployment: "BuildDevInfra"
-        displayName: "Build Dev Infra"
+      - deployment: "BuildPreProdInfra"
+        displayName: "Build PreProd Infra"
         pool: vishnupool
-        environment: Dev
+        environment: PreProd
         strategy:
           runOnce:
             deploy:
@@ -99,14 +99,14 @@ stages:
                     scriptLocation: 'inlineScript'
                     inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
 
-  - stage: "DevApp"
-    displayName: "Dev App"
-    dependsOn: DevInfra
+  - stage: "PreProdApp"
+    displayName: "PreProd App"
+    dependsOn: PreProdInfra
     jobs:
-      - deployment: "DevApp"
-        displayName: "Dev App: WeatherApp"
+      - deployment: "PreProdApp"
+        displayName: "PreProd App: WeatherApp"
         pool: vishnupool
-        environment: Dev
+        environment: PreProd
         strategy:
           runOnce:
             deploy:
