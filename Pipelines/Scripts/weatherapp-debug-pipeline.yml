@@ -66,7 +66,7 @@ stages:
                    buildType: 'current'
                    downloadType: 'single'
                    artifactName: 'drop'
-                   downloadPath: '$(System.ArtifactsDirectory)/download'
+                   downloadPath: '$(System.ArtifactsDirectory)'
                
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
@@ -84,9 +84,9 @@ stages:
                    buildType: 'current'
                    downloadType: 'single'
                    artifactName: 'drop'
-                   downloadPath: '$(System.ArtifactsDirectory)/download'
+                   downloadPath: '$(System.ArtifactsDirectory)'
                - task: PowerShell@2
                  inputs:
                    targetType: 'inline'
                    script: |
-                     Get-ChildItem $(System.ArtifactsDirectory)/download/drop
+                     Get-ChildItem $(System.ArtifactsDirectory)/drop
