@@ -1,0 +1,52 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+pool:
+  name: vishnupool
+  vmImage: vishnuagent
+
+stages:
+  - stage: build
+    displayName: Build
+    jobs:
+      - job: "BuildWeatherapp"
+        displayName: 'Build Weatherapp'
+        pool: Satyam
+        steps:
+          - bash: |
+              echo "Hello world"
+            displayName: "Bash Script"
+          
+          - script: |
+              echo "hello world multiline"
+            displayName: 'Run Script multiline'
+      
+      - job: "TestWeatherapp"
+        displayName: 'Test Weatherapp'
+        dependsOn: BuildWeatherapp
+        condition: failed()
+        steps:
+          - script: echo "hello world"
+            displayName: 'Run Script'
+          
+          - script: |
+              echo "hello world multiline"
+            displayName: 'Run Script multiline'
+  
+  - stage: Deploy
+    jobs:
+      - job: 'DeployInfra'
+        displayName: 'Build Weatherapp'
+        pool: Satyam
+        steps:
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'New Free Trial (kollichaitanya2024)'
+              scriptType: 'ps'
+              scriptLocation: 'inlineScript'
+              inlineScript: 'az group list'

@@ -1,0 +1,204 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+pool:
+  name: vishnupool
+  vmImage: vishnuagent
+
+stages:
+  - stage: "Build"
+    displayName: "Build WeatherApp"
+    jobs:
+      - job: "BuildWeatherapp"
+        displayName: 'Build Weatherapp'
+        pool: Satyam
+        steps: 
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: 'source/weatherapp'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/weatherapp.zip'
+              replaceExistingArchive: true
+          
+          - task: CopyFiles@2
+            displayName: "Copy Infra files"
+            inputs:
+              SourceFolder: 'Pipelines/Infra/ARMTemplates'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/InfraArm'
+          
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifacts"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+  
+  - stage: "DevInfra"
+    displayName: "DEV Deploy: Infra"
+    dependsOn: Build
+    jobs:
+      - deployment: "DeployInfra"
+        displayName: 'Deploy Infra'
+        pool: Satyam
+        environment: Dev
+        strategy:
+          runOnce:
+            deploy:
+              steps: 
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                  
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Write your PowerShell commands here.
+                      
+                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
+
+  - stage: "DevApp"
+    displayName: "DEV Deploy: Weather App"
+    dependsOn: DevInfra
+    jobs:
+      - deployment: "DeployApp"
+        displayName: 'Deploy App'
+        pool: Satyam
+        environment: Dev
+        strategy:
+          runOnce:
+            deploy:
+              steps: 
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                  
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Write your PowerShell commands here.
+                      
+                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
+
+  - stage: "QaInfra"
+    displayName: "QA Deploy: Infra"
+    dependsOn: Build
+    jobs:
+    
+      - deployment: "DeployInfra"
+        displayName: 'Deploy Infra'
+        pool: Satyam
+        environment: Qa
+        strategy:
+          runOnce:
+            deploy:
+              steps: 
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                  
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Write your PowerShell commands here.
+                      
+                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
+      
+  - stage: "QaApp"
+    displayName: "QA Deploy: Weather App"
+    dependsOn: QaInfra
+    jobs:
+      - deployment: "DeployApp"
+        displayName: 'Deploy App'
+        pool: Satyam
+        environment: Qa
+        strategy:
+          runOnce:
+            deploy:
+              steps: 
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                  
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Write your PowerShell commands here.
+                      
+                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
+
+
+  - stage: "PerfInfra"
+    displayName: "Perf Deploy: Infra"
+    dependsOn: Build
+    jobs:
+      - deployment: "DeployInfra"
+        displayName: 'Deploy Infra'
+        pool: Satyam
+        environment: Perf
+        strategy:
+          runOnce:
+            deploy:
+              steps: 
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                  
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Write your PowerShell commands here.
+                      
+                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
+
+  - stage: "PerfApp"
+    displayName: "Perf Deploy: Weather App"
+    dependsOn: PerfInfra
+    jobs:
+      - deployment: "DeployApp"
+        displayName: 'Deploy App'
+        pool: Satyam
+        environment: Perf
+        strategy:
+          runOnce:
+            deploy:
+              steps: 
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                  
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Write your PowerShell commands here.
+                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
