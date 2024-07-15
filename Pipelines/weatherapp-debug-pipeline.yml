@@ -18,7 +18,7 @@ parameters:
 
 variables:
   - name: appserviceName
-    value: "dk-weatherapp-web"
+    value: dk-weatherapp-web
 
 stages:
   - stage: "Build"
