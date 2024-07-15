@@ -15,7 +15,17 @@ stages:
     displayName: Build
     jobs:
       - job: "BuildWeatherapp"
-        displayName: 'BuildWeatherapp'
+        displayName: 'Build Weatherapp'
+        steps:
+          - script: echo "hello world"
+            displayName: 'Run Script'
+          
+          - script: |
+              echo "hello world multiline"
+            displayName: 'Run Script multiline'
+      
+      - job: "TestWeatherapp"
+        displayName: 'Test Weatherapp'
         steps:
           - script: echo "hello world"
             displayName: 'Run Script'
