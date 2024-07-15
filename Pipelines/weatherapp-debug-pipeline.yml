@@ -85,7 +85,7 @@ stages:
                     script: |
                       # Write your PowerShell commands here.
                       
-                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
+                      Get-ChildItem -Recurse $(System.ArtifactsDirectory)/downloads
 
   - stage: "DevApp"
     displayName: "DEV Deploy: Weather App"
@@ -112,7 +112,7 @@ stages:
                     script: |
                       # Write your PowerShell commands here.
                       
-                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
+                      Get-ChildItem -Recurse $(System.ArtifactsDirectory)/downloads
 
   - stage: "QaInfra"
     displayName: "QA Deploy: Infra"
