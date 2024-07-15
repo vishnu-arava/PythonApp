@@ -2,8 +2,7 @@ trigger:
 - none
 
 pool:
-  name: vishnupool
-  vmImage: vishnuagent
+  vmImage: ubuntu-latest
 
 stages:
   - stage: "Build"
@@ -11,7 +10,6 @@ stages:
     jobs:
       - job: "BuildWeathetherApp"
         displayName: "Build WeathetherApp"
-        pool: vishnupool
         steps:
           - task: ArchiveFiles@2
             inputs:
@@ -37,7 +35,6 @@ stages:
     jobs:
       - deployment: "BuildPreProdInfra"
         displayName: "Build PreProd Infra"
-        pool: vishnupool
         environment: PreProd
         strategy:
           runOnce:
@@ -105,7 +102,6 @@ stages:
     jobs:
       - deployment: "PreProdApp"
         displayName: "PreProd App: WeatherApp"
-        pool: vishnupool
         environment: PreProd
         strategy:
           runOnce:
