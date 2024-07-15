@@ -2,8 +2,7 @@ trigger:
 - none
 
 pool:
-  name: vishnupool
-  vmImage: vishnuagent
+  vmImage: ubuntu-latest
 
 stages:
   - stage: "Build"
