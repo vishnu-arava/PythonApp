@@ -89,4 +89,4 @@ stages:
                  inputs:
                    targetType: 'inline'
                    script: |
-                     Get-ChildItem $(System.ArtifactsDirectory)/download
+                     Get-ChildItem $(System.ArtifactsDirectory)/download/drop
