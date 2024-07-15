@@ -18,15 +18,18 @@ stages:
         displayName: 'Build Weatherapp'
         pool: Satyam
         steps:
-          - script: echo "hello world"
+          - script: echo "hello world"; exit 1
             displayName: 'Run Script'
           
           - script: |
               echo "hello world multiline"
             displayName: 'Run Script multiline'
+            condition: always()
       
       - job: "TestWeatherapp"
         displayName: 'Test Weatherapp'
+        dependsOn: BuildWeatherapp
+        condition: failed()
         steps:
           - script: echo "hello world"
             displayName: 'Run Script'
