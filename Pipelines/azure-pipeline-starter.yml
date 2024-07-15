@@ -20,7 +20,6 @@ stages:
         steps:
           - bash: |
               echo "Hello world"
-              exit 1
             displayName: "Bash Script"
           
           - script: |
