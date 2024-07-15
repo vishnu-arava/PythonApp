@@ -40,14 +40,14 @@ stages:
               ArtifactName: 'drop'
               publishLocation: 'Container'
   
-  - stage: "DevInfra"
-    displayName: "DEV Deploy: Infra"
+  - stage: "UATInfra"
+    displayName: "UAT Deploy: Infra"
     dependsOn: Build
     jobs:
       - deployment: "DeployInfra"
         displayName: 'Deploy Infra'
         pool: Satyam
-        environment: Dev
+        environment: UAT
         strategy:
           runOnce:
             deploy:
@@ -67,14 +67,14 @@ stages:
                       
                       Get-ChildItem $(System.ArtifactsDirectory)/downloads
 
-  - stage: "DevApp"
-    displayName: "DEV Deploy: Weather App"
-    dependsOn: DevInfra
+  - stage: "UATApp"
+    displayName: "UAT Deploy: Weather App"
+    dependsOn: UATInfra
     jobs:
       - deployment: "DeployApp"
         displayName: 'Deploy App'
         pool: Satyam
-        environment: Dev
+        environment: UAT
         strategy:
           runOnce:
             deploy:
@@ -94,15 +94,15 @@ stages:
                       
                       Get-ChildItem $(System.ArtifactsDirectory)/downloads
 
-  - stage: "QaInfra"
-    displayName: "QA Deploy: Infra"
+  - stage: "PRODInfra"
+    displayName: "PROD Deploy: Infra"
     dependsOn: Build
     jobs:
     
       - deployment: "DeployInfra"
         displayName: 'Deploy Infra'
         pool: Satyam
-        environment: Qa
+        environment: PROD
         strategy:
           runOnce:
             deploy:
@@ -122,14 +122,14 @@ stages:
                       
                       Get-ChildItem $(System.ArtifactsDirectory)/downloads
       
-  - stage: "QaApp"
-    displayName: "QA Deploy: Weather App"
-    dependsOn: QaInfra
+  - stage: "PRODApp"
+    displayName: "PROD Deploy: Weather App"
+    dependsOn: PRODInfra
     jobs:
       - deployment: "DeployApp"
         displayName: 'Deploy App'
         pool: Satyam
-        environment: Qa
+        environment: PROD
         strategy:
           runOnce:
             deploy:
@@ -147,58 +147,4 @@ stages:
                     script: |
                       # Write your PowerShell commands here.
                       
-                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
-
-
-  - stage: "PerfInfra"
-    displayName: "Perf Deploy: Infra"
-    dependsOn: Build
-    jobs:
-      - deployment: "DeployInfra"
-        displayName: 'Deploy Infra'
-        pool: Satyam
-        environment: Perf
-        strategy:
-          runOnce:
-            deploy:
-              steps: 
-                - task: DownloadBuildArtifacts@1
-                  inputs:
-                    buildType: 'current'
-                    downloadType: 'single'
-                    artifactName: 'drop'
-                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
-                  
-                - task: PowerShell@2
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here.
-                      
-                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
-
-  - stage: "PerfApp"
-    displayName: "Perf Deploy: Weather App"
-    dependsOn: PerfInfra
-    jobs:
-      - deployment: "DeployApp"
-        displayName: 'Deploy App'
-        pool: Satyam
-        environment: Perf
-        strategy:
-          runOnce:
-            deploy:
-              steps: 
-                - task: DownloadBuildArtifacts@1
-                  inputs:
-                    buildType: 'current'
-                    downloadType: 'single'
-                    artifactName: 'drop'
-                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
-                  
-                - task: PowerShell@2
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here.
                       Get-ChildItem $(System.ArtifactsDirectory)/downloads
