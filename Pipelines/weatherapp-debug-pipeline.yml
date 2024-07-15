@@ -23,5 +23,44 @@ stages:
             inputs:
               SourceFolder: '/Pipelines/Infra/ARMTemplates'
               Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)/ARMTemplate'
-              
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/ARMInfra'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+
+
+  - stage: "Dev-Infra"
+    displayName: "Dev-Infra"
+    dependsOn: Build
+    jobs:
+      - deployment: "Build-Dev-Infra"
+        displayName: "Build-Dev-Infra"
+        pool: vishnupool
+        environment: Dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-VA'
+                    location: 'Central India'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/ARMInfra/vm/vm.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/ARMInfra/vm/parameters_dev.json'
+                    deploymentMode: 'Incremental'
+                
+                
