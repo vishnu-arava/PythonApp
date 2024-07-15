@@ -104,7 +104,7 @@ stages:
                     azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
-                    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+                    packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
 
                 - task: PowerShell@2
                   inputs:
