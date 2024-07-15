@@ -7,8 +7,8 @@ trigger:
 - none
 
 pool:
-  name: vishnupool
-  vmImage: vishnuagent
+  name: Satyam
+  vmImage: LAPTOP-RS36BMKA
 
 stages:
   - stage: "Build"
@@ -26,6 +26,14 @@ stages:
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/weatherapp.zip'
               replaceExistingArchive: true
           
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: 'source/WorldClimateApi'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/worldclimateapi.zip'
+              replaceExistingArchive: true
+
           - task: CopyFiles@2
             displayName: "Copy Infra files"
             inputs:
@@ -58,15 +66,20 @@ stages:
                     downloadType: 'single'
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
-                  
-                - task: PowerShell@2
+                    
+                - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here.
-                      
-                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
-
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'New Free Trial (kollichaitanya2024)'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-SATYAM'
+                    location: 'North Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/InfraArm/appservice/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/InfraArm/appservice/parameters-dev.json'
+                    deploymentMode: 'Incremental''
+                                  
   - stage: "DevApp"
     displayName: "DEV Deploy: Weather App"
     dependsOn: DevInfra
