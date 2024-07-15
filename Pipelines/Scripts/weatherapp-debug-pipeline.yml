@@ -15,6 +15,8 @@ parameters:
       - Qa
       - Uat
       - Prod
+variables:
+  -group: Credentials
 stages:
   - stage: build
     displayName: Build
@@ -23,21 +25,27 @@ stages:
         displayName: "Build Artifact"
         steps:
           - task: ArchiveFiles@2
-            displayName: "Archive Weather App"
+            displayName: Archive Source/WeatherApp
             inputs:
               rootFolderOrFile: 'Source/WeatherApp'
               includeRootFolder: false
               archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/App/weatherapp.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WeatherApp.zip'
               replaceExistingArchive: true
           - task: CopyFiles@2
-            displayName: "Copying Pipeline Scripts into artifact folder"
+            displayName: Copy ARM Templates to drop
             inputs:
-              SourceFolder: 'Pipelines/Scripits'
+              SourceFolder: 'Pipelines/Infra/ARMTemplates'
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)/ARMtemplates'
+          - task: CopyFiles@2
+            displayName: Copy Pwershell Scripts to drop
+            inputs:
+              SourceFolder: 'Pipelines/Scripts'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/PowershellScripts'
           - task: PublishBuildArtifacts@1
-            displayName: "Creating a drop folder for artifact"
+            displayName: "Publish Artifact: drop"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: 'drop'
@@ -59,39 +67,13 @@ stages:
                    downloadType: 'single'
                    artifactName: 'drop'
                    downloadPath: '$(System.ArtifactsDirectory)/download'
-               - task: PowerShell@2
-                 inputs:
-                   targetType: 'inline'
-                   script: |
-                     Get-ChildItem $(System.ArtifactsDirectory)/download
+               
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
     dependsOn: InfraDeployment
     jobs:
       - deployment: "DeployApp"
         displayName: "Deploy App"
-        environment: ${{ parameters.environment }}
-        strategy:
-          runOnce:
-            deploy:
-             steps:
-               - task: DownloadBuildArtifacts@1
-                 inputs:
-                   buildType: 'current'
-                   downloadType: 'single'
-                   artifactName: 'drop'
-                   downloadPath: '$(System.ArtifactsDirectory)/download'
-               - task: PowerShell@2
-                 inputs:
-                   targetType: 'inline'
-                   script: |
-                     Get-ChildItem $(System.ArtifactsDirectory)/download
-  - stage: "DevPost"
-    displayName: "Deploy : Post Deployment-${{ parameters.environment }}"
-    dependsOn: AppDeploy
-    jobs:
-      - deployment: "DeployPost"
-        displayName: "Deploy Post"
         environment: ${{ parameters.environment }}
         strategy:
           runOnce:
