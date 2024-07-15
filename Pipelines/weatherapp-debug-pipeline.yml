@@ -86,8 +86,8 @@ stages:
                     resourceGroupName: 'RG-SATYAM'
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/InfraArm/appservice/appservice.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/InfraArm/appservice/parameters-dev.json'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/downloads/InfraArm/appservice/parameters-dev.json'
                     deploymentMode: 'Incremental'
   
 
@@ -116,7 +116,7 @@ stages:
                     azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
-                    packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+                    packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
                   
                 - task: PowerShell@2
                   inputs:
