@@ -1,0 +1,22 @@
+{
+"parameters": {
+        "env": {
+            "value": "prod"
+        },
+        "kvName": {
+            "value": "vishnukeyvault58206@"
+        },
+        "dbSecretName": {
+            "value": "DataBaseName"
+        },
+        "dbSecretValue": {
+            "value": "sql-db-flask"
+        },
+        "tenentId": {
+            "value": "026b8468-803d-4300-8831-bef5b66f82cf"
+        },
+        "objectId": {
+            "value": "d54f52cd-98b1-4854-8154-9b18ffca2073"
+        }
+    }
+}

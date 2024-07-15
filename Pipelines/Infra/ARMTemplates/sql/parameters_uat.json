@@ -1,13 +1,13 @@
 {
     "parameters": {
         "env": {
-            "value": "va"
+            "value": "uat"
         },
         "sqlServerName": {
             "value": "sql-servr-vshn"
         },
         "sqlLocation": {
-            "value": "centralus"
+            "value": "westus"
         },
         "adminUsername": {
             "value": "vishnu"

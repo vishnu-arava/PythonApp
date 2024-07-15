@@ -1,0 +1,19 @@
+{
+    "parameters": {
+        "appServicePlanName":{
+            "value": "vishnuAppServicePlan_uat"
+        },
+        "appServiceName": {
+            "value": "vishnuAppService_uat"
+        },
+        "location": {
+            "value": "westus"
+        },
+        "sku": {
+            "value": "F1"
+        },
+        "linuxFxVersion": {
+            "value": "PYTHON|3.10"
+        }
+    }
+}

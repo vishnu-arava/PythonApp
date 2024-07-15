@@ -2,19 +2,19 @@
     "parameters":{
 
         "env":{
-            "value": "va"
+            "value": "dev"
          },
 
         "storageAccounts":{
             "value": [
             {
-                "stgname": "ueflasksstorage1va"
+                "stgname": "ueflasksstorage1dev"
             },
             {
-                "stgname": "ueflasksstorage2va"
+                "stgname": "ueflasksstorage2dev"
             },
             {
-                "stgname": "ueflasksstorage3va"
+                "stgname": "ueflasksstorage3dev"
             }
             ]
         },

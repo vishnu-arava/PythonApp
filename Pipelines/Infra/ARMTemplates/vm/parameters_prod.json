@@ -1,0 +1,37 @@
+{
+    "parameters": {
+        "env": {
+            "value": "prod"
+        },
+        "publicIPName": {
+            "value": "myipaddress"
+        },
+        "publicIPAllocationMethod": {
+            "value": "Dynamic"
+        },
+        "nsgName": {
+            "value": "vishnuVMnsg"
+        },
+        "vmName":{
+            "value": "vishnuVM"
+        },
+        "vmSize": {
+            "value": "Standard_B1s"
+        },
+        "vNet": {
+            "value": "vishnuVMvnet"
+        },
+        "vSubnet": {
+            "value": "vishnuVMsubnet"
+        },
+        "networkInterface": {
+            "value": "vishnuVMnic"
+        },
+        "adminUsername": {
+            "value": "vishnu"
+            }
+        },
+        "adminPassword": {
+            "value": "Vishnusahi58206@*"
+            }
+        }

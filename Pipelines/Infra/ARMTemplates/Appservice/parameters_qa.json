@@ -1,13 +1,13 @@
 {
     "parameters": {
         "appServicePlanName":{
-            "value": "vishnuAppServicePlan"
+            "value": "vishnuAppServicePlan_qa"
         },
         "appServiceName": {
-            "value": "vishnuAppService"
+            "value": "vishnuAppService_qa"
         },
         "location": {
-            "value": "canadacentral"
+            "value": "eastus2"
         },
         "sku": {
             "value": "F1"

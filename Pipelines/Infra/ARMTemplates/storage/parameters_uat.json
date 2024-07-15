@@ -1,0 +1,30 @@
+{
+    "parameters":{
+
+        "env":{
+            "value": "uat"
+         },
+
+        "storageAccounts":{
+            "value": [
+            {
+                "stgname": "ueflasksstorage1uat"
+            },
+            {
+                "stgname": "ueflasksstorage2uat"
+            },
+            {
+                "stgname": "ueflasksstorage3uat"
+            }
+            ]
+        },
+
+        "skuTier":{
+            "value": "Standard"
+        },
+
+        "skuName":{
+            "value": "Standard_LRS"
+        }   
+    }
+}
