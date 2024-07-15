@@ -38,4 +38,16 @@ stages:
           - script: |
               echo "hello world multiline"
             displayName: 'Run Script multiline'
-          
+  
+  - stage: Deploy
+    jobs:
+      - job: 'DeployInfra'
+        displayName: 'Build Weatherapp'
+        pool: Satyam
+        steps:
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'New Free Trial (kollichaitanya2024)'
+              scriptType: 'ps'
+              scriptLocation: 'inlineScript'
+              inlineScript: 'az group list'
