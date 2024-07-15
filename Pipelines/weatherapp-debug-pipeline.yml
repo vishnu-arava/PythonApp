@@ -45,7 +45,7 @@ stages:
     dependsOn: Build
     jobs:
       - job: "DeployInfra"
-        displayName: 'Build Weatherapp'
+        displayName: 'Deploy Infra'
         pool: Satyam
         steps: 
           - task: DownloadBuildArtifacts@1
@@ -87,7 +87,7 @@ stages:
     dependsOn: DEV
     jobs:
       - job: "DeployInfra"
-        displayName: 'Deploy Weatherapp'
+        displayName: 'Deploy Infra'
         pool: Satyam
         steps: 
           - task: DownloadBuildArtifacts@1
