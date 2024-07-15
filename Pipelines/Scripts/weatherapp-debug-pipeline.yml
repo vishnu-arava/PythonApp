@@ -93,6 +93,79 @@ stages:
                      Write-Host "##vso[task.setvariable variable=vmusername;]$vmusername"
                      Write-Host "Hostname: $vmname"
                      Write-Host "Username: $vmusername"
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: SQL 
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: 'NewFreeTrial2024'
+                   subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: 'RG-KVC'
+                   location: 'Central US'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/azureSql/azureSqlDb/azureSqlDb.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/azureSql/azureSqlDb/parameters_dev.json'
+                   overrideParameters: '-serverName "dk-weatherapp-sql-server" -dbName "dk-weatherapp-sql-db" -userName "dk-weatherapp-sql" -password $[variables.SqlDevPassword] -tlsVersion "1.2" -env "dev" -location "centralus"'
+                   deploymentMode: 'Incremental'
+                   deploymentOutputs: 'deploymentOutputs'
+               - task: PowerShell@2
+                 displayName: Get Sql Details
+                 inputs:
+                   targetType: 'inline'
+                   script: |
+                     $envsqldblink= '$(deploymentOutputs.sqldblink.value)'
+                     $envsqldbname= '$(deploymentOutputs.sqldbname.value)'
+                     $envsqldbusername= '$(deploymentOutputs.sqldbusername.value)'
+                     Write-Host "##vso[task.setvariable variable=envsqldblink;]$envsqldblink"
+                     Write-Host "##vso[task.setvariable variable=envsqldbname;]$envsqldbname"
+                     Write-Host "##vso[task.setvariable variable=envsqldbusername;]$envsqldbusername"
+                     Write-Host "Sql db link : $envsqldblink"
+                     Write-Host "Sql db name : $envsqldbname"
+                     Write-Host "Sql db username : $envsqldbusername"
+               - task: AzureCLI@2
+                 displayName: TenantId,Objectid and subscription Id 
+                 inputs:
+                   azureSubscription: 'NewFreeTrial2024'
+                   scriptType: 'ps'
+                   scriptLocation: 'inlineScript'
+                   inlineScript: |
+                     Write-Output "The tenant ID is: $env:tenantId"
+                     Write-Host "##vso[task.setvariable variable=tenantId;]$env:tenantId"
+                     $objectidadmin=az ad user list --query "[?contains(displayName, 'Kolli Chaitanya')].id" --output tsv
+                     Write-Host "##vso[task.setvariable variable=objectidadmin;]$objectidadmin"
+                     $subscriptionId = az account show --query id -o tsv
+                     Write-Host "##vso[task.setvariable variable=subscriptionId;]$subscriptionId"
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Key Vaults
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: 'NewFreeTrial2024'
+                   subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: 'RG-KVC'
+                   location: 'Central US'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/keyVault.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/parameters_dev.json'
+                   overrideParameters: '-keyvaultname "dk-weatherapp-core" -tenantId $(tenantId) -objectId $(objectidadmin) -spTenantId $(tenantId)'
+                   deploymentMode: 'Incremental'
+                   deploymentOutputs: 'deploymentOutputs'
+               - task: PowerShell@2
+                 displayName: Get Key Vaults Details
+                 inputs:
+                   targetType: 'inline'
+                   script: |
+                     $envkeyvaultname= '$(deploymentOutputs.keyVaultName.value)'
+                     Write-Host "##vso[task.setvariable variable=envkeyvaultname;]$envkeyvaultname"
+                     Write-Host "KeyVault name is: $envkeyvaultname"
+               - task: AzureCLI@2
+                 displayName: App Registration
+                 inputs:
+                   azureSubscription: 'NewFreeTrial2024'
+                   scriptType: 'ps'
+                   scriptLocation: 'scriptPath'
+                   scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
+                   arguments: '-appRegistrationName "dk-weatherapp-kv-link" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret" -keyVaultName $(envkeyvaultname) -resourceGroupName "RG-KVC" -tenantId $(tenantId) -subscriptionId $(subscriptionId)'
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
     dependsOn: InfraDeployment
