@@ -87,8 +87,8 @@ stages:
                     resourceGroupName: 'RG-SATYAM'
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/InfraArm/appservice/appservice.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/InfraArm/appservice/parameters-dev.json'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/parameters-dev.json'
                     deploymentMode: 'Incremental'
                 - task: PowerShell@2
                   inputs:
