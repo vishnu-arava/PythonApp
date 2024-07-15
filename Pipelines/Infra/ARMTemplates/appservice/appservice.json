@@ -1,0 +1,52 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServiceName": {
+            "type": "string",
+            "defaultValue": "webapp"
+        },
+        "env": {
+            "type": "string",
+            "defaultValue": "dev"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+     {
+        "name": "[concat(parameters('appServiceName'),'-asp',parameters('env'))]",
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2022-09-01",
+        "location": "[resourceGroup().location]",
+        "sku": {
+            "name": "F1",
+            "capacity": 1
+        },
+        "tags": {
+            "displayName": "[concat(parameters('appServiceName'),'-asp',parameters('env'))]"
+        },
+        "properties": {
+            "name": "[concat(parameters('appServiceName'),'-asp',parameters('env'))]"
+        }
+     },
+    {
+        "name": "[parameters('appServiceName')]",
+        "type": "Microsoft.Web/sites",
+        "apiVersion": "2022-09-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceName'),'-asp',parameters('env'))]": "Resource",
+            "displayName": "webApp1"
+        },
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', 'appServicePlan1')]"
+        ],
+        "properties": {
+            "name": "webApp1",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'appServicePlan1')]"
+        }
+    }
+    ],
+    "outputs": {}
+}
