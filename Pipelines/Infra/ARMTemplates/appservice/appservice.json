@@ -31,19 +31,19 @@
         }
      },
     {
-        "name": "[parameters('appServiceName')]",
+        "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
         "type": "Microsoft.Web/sites",
         "apiVersion": "2022-09-01",
         "location": "[resourceGroup().location]",
         "tags": {
             "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceName'),'-asp',parameters('env'))]": "Resource",
-            "displayName": "webApp1"
+            "displayName": "[concat(parameters('appServiceName'),'-',parameters('env'))]"
         },
         "dependsOn": [
             "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp',parameters('env')))]"
         ],
         "properties": {
-            "name": "webApp1",
+            "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp',parameters('env')))]"
         }
     }
