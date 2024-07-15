@@ -40,8 +40,8 @@ stages:
               ArtifactName: 'drop'
               publishLocation: 'Container'
   
-  - stage: "DEV"
-    displayName: "DEV Deploy"
+  - stage: "DevInfra"
+    displayName: "DEV Deploy: Infra"
     dependsOn: Build
     jobs:
       - job: "DeployInfra"
@@ -62,7 +62,11 @@ stages:
                 # Write your PowerShell commands here.
                 
                 Get-ChildItem $(System.ArtifactsDirectory)/downloads
-      
+
+  - stage: "DevApp"
+    displayName: "DEV Deploy: Weather App"
+    dependsOn: DevInfra
+    jobs:
       - job: "DeployApp"
         displayName: 'Deploy Weatherapp'
         pool: Satyam
@@ -82,8 +86,8 @@ stages:
                 
                 Get-ChildItem $(System.ArtifactsDirectory)/downloads
 
-  - stage: "QA"
-    displayName: "QA Deploy"
+  - stage: "QaInfra"
+    displayName: "QA Deploy: Infra"
     dependsOn: Build
     jobs:
       - job: "DeployInfra"
@@ -105,6 +109,10 @@ stages:
                 
                 Get-ChildItem $(System.ArtifactsDirectory)/downloads
       
+  - stage: "QaApp"
+    displayName: "QA Deploy: Weather App"
+    dependsOn: QaInfra
+    jobs:
       - job: "DeployApp"
         displayName: 'Deploy Weatherapp'
         pool: Satyam
