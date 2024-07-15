@@ -99,7 +99,7 @@ stages:
                 - task: AzureRmWebAppDeployment@4
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'New Free Trial (kollichaitanya2024)'
+                    azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
                     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
