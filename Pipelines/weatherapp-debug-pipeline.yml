@@ -62,5 +62,83 @@ stages:
                     csmFile: '$(System.ArtifactsDirectory)/downloads/ARMInfra/vm/vm.json'
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/ARMInfra/vm/parameters_dev.json'
                     deploymentMode: 'Incremental'
-                
+                    deploymentOutputs: 'deploymentOutputs'
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Convert the deployment outputs from JSON
+                      $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
+                      
+                      # Extract the public IP address from the outputs
+                      $vmusername = $outputs.vmusername.value
+                      $vmname = $outputs.vmname.value
+                      
+                      # Display the public IP address
+                      Write-Output "VM Administrator Name is: $vmusername"
+                      Write-Output "VM Name is: $vmname"
+                      
+                      # Set the public IP address as a pipeline variable
+                      Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
+                      Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+                - task: AzureCLI@2
+                  inputs:
+                    azureSubscription: 'vishnuSubscriptionServiceConnection'
+                    scriptType: 'ps'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      $publicIp = az vm show -d -g RG-VA -n $(vmname) --query "publicIps" -o tsv
+                      Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
+                      Write-Host "Fetched PublicIP is : $publicIp"
+                      Write-Host "Vm name is : $(vmname)"
+                    arguments: '-rgGroup RG-VA -vmName $(vmname)'
+                - task: AzureCLI@2
+                  inputs:
+                    azureSubscription: 'vishnuSubscriptionServiceConnection'
+                    scriptType: 'ps'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
+
+  - stage: "Dev-App"
+    displayName: "Dev-App"
+    dependsOn: Dev-Infra
+    jobs:
+      - deployment: "Dev-App: WeatherApp"
+        displayName: "Dev-App: WeatherApp"
+        pool: vishnupool
+        environment: Dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                # - task: CopyFilesOverSSH@0
+                #   inputs:
+                #     sshEndpoint: 'weatherappdev-vm-satyamcloud'
+                #     sourceFolder: '$(System.ArtifactsDirectory)/downloads/Source/WeatherApp'
+                #     contents: '**'
+                #     targetFolder: '/home/Weatherapp/'
+                #     readyTimeout: '20000'
+                # - task: SSH@0
+                #   inputs:
+                #     sshEndpoint: 'weatherappdev-vm-satyamcloud'
+                #     runOptions: 'inline'
+                #     inline: |
+                #       - task: SSH@0
+                #         inputs:
+                #           sshEndpoint: 'Weatherappssh'  # Replace with your SSH service connection
+                #           runOptions: 'inline'
+                #           inline: |
+                #             echo 'Vishnusahi58206@*' | sudo -S bash -c 'apt update -y && apt install python3 -y && apt install python3-pip -y && apt install zip -y && apt install python3-venv && apt install pkg-config && apt install libmysqlclient-dev'
+                #             cd /home/Weatherapp
+                #             unzip -o weatherapp.zip
+                #             cd weatherapp
+                #             pip install -r requirements.txt
+                #             nohup python3 app.py &
+                #     readyTimeout: '20000'
                 
