@@ -20,12 +20,20 @@ stages:
         steps: 
           - task: ArchiveFiles@2
             inputs:
+              rootFolderOrFile: 'source/WorldClimateApi'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/worldclimateapi.zip'
+              replaceExistingArchive: true
+          
+          - task: ArchiveFiles@2
+            inputs:
               rootFolderOrFile: 'source/weatherapp'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/weatherapp.zip'
               replaceExistingArchive: true
-          
+
           - task: CopyFiles@2
             displayName: "Copy Infra files"
             inputs:
@@ -58,7 +66,19 @@ stages:
                     downloadType: 'single'
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
-                  
+                
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'New Free Trial (kollichaitanya2024)'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-SATYAM'
+                    location: 'North Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/InfraArm/appservice/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/InfraArm/appservice/parameters-dev.json'
+                    deploymentMode: 'Incremental'
                 - task: PowerShell@2
                   inputs:
                     targetType: 'inline'
