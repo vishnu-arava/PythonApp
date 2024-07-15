@@ -39,6 +39,7 @@
         "apiVersion": "2022-09-01",
         "location": "[resourceGroup().location]",
         "kind": "app,Linux",
+        
         "tags": {
             "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceName'),'-asp',parameters('env'))]": "Resource",
             "displayName": "[concat(parameters('appServiceName'),'-',parameters('env'))]"
@@ -51,9 +52,9 @@
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp',parameters('env')))]",
             "siteConfig": {
                     "numberOfWorkers": 1,
-                    "linuxFxVersion": "PYTHON|3.10",
                     "alwaysOn": false
-                }
+                },
+            "linuxFxVersion": "PYTHON|3.10"
         }
     }
     ],
