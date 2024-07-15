@@ -84,7 +84,7 @@ stages:
 
   - stage: "QA"
     displayName: "QA Deploy"
-    dependsOn: DEV
+    dependsOn: Build
     jobs:
       - job: "DeployInfra"
         displayName: 'Deploy Infra'
