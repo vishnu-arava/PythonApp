@@ -18,13 +18,14 @@ stages:
         displayName: 'Build Weatherapp'
         pool: Satyam
         steps:
-          - script: echo "hello world"; exit 1
-            displayName: 'Run Script'
+          - bash: |
+              echo "Hello world"
+              exit 1
+            displayName: "Bash Script"
           
           - script: |
               echo "hello world multiline"
             displayName: 'Run Script multiline'
-            condition: always()
       
       - job: "TestWeatherapp"
         displayName: 'Test Weatherapp'
