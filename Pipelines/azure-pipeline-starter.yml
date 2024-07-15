@@ -16,6 +16,7 @@ stages:
     jobs:
       - job: "BuildWeatherapp"
         displayName: 'Build Weatherapp'
+        pool: Satyam
         steps:
           - script: echo "hello world"
             displayName: 'Run Script'
