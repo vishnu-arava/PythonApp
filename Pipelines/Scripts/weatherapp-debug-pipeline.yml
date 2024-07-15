@@ -68,6 +68,7 @@ stages:
                    artifactName: 'drop'
                    downloadPath: '$(System.ArtifactsDirectory)'
                - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Sonarqube vm
                  inputs:
                    deploymentScope: 'Resource Group'
                    azureResourceManagerConnection: 'NewFreeTrial2024'
