@@ -40,11 +40,11 @@
             "displayName": "webApp1"
         },
         "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms', 'appServicePlan1')]"
+            "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp',parameters('env')))]"
         ],
         "properties": {
             "name": "webApp1",
-            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'appServicePlan1')]"
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp',parameters('env')))]"
         }
     }
     ],
