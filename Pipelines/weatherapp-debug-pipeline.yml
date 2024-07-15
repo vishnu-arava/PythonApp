@@ -5,11 +5,23 @@ pool:
   name: vishnupool
   vmImage: vishnuagent
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage: "Build"
+    displayName: "Building WeatherApp"
+    jobs:
+      - job: "Build WeathetherApp"
+        displayName: "Build WeathetherApp"
+        pool: vishnupool
+        steps:
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '/Source/WeatherApp'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WeatherApp.zip'
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '/Pipelines/Infra/ARMTemplates'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/ARMTemplate'
+              
