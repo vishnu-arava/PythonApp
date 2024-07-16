@@ -1,7 +1,7 @@
 {
     "parameters": {
         "env": {
-            "value": "Qa"
+            "value": "QA"
         },
         "publicIPName": {
             "value": "myipaddress"
