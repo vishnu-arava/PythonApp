@@ -57,8 +57,10 @@ stages:
                 # Write your PowerShell commands here.
                 echo $(serviceConnection)
                 echo ${env:APIVERSION}
+                echo $(Build.BuildNumber)
+                echo $(Build.BuildId)
                 Write-Host "Hello World"
-
+          
           - task: CopyFiles@2
             displayName: "Copy Infra files"
             inputs:
