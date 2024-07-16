@@ -8,10 +8,8 @@ Param(
     [string]$pipelineId
 )
 
-# Base64 encode PAT
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$patToken"))
 
-# Get the latest run ID
 $runUrl = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineId/runs?api-version=6.0"
 Write-Host "Run URL: $runUrl"
 
@@ -24,7 +22,6 @@ try {
     exit 1
 }
 
-# Create the JSON body
 $body = @{
     variables = @{
         $variableName = @{
@@ -33,11 +30,9 @@ $body = @{
     }
 } | ConvertTo-Json
 
-# Define the API URL to update the variable
 $url = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineId/runs/$latestRunId"+"?api-version=6.0"
 Write-Host "Update URL: $url"
 
-# Make the API request to update the variable
 try {
     $response = Invoke-RestMethod -Uri $url -Method Put -Body $body -ContentType "application/json" -Headers @{
         Authorization = "Basic $base64AuthInfo"
