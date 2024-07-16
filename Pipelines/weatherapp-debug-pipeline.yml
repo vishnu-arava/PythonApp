@@ -17,6 +17,7 @@ parameters:
     default: dev
 
 variables:
+  - group: Credentials
   - name: appserviceName
     value: dk-weatherapp-web
 
@@ -43,6 +44,14 @@ stages:
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/worldclimateapi.zip'
               replaceExistingArchive: true
+          
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Write your PowerShell commands here.
+                echo $(testvalue)
+                Write-Host "Hello World"
 
           - task: CopyFiles@2
             displayName: "Copy Infra files"
