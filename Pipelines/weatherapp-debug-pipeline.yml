@@ -89,10 +89,10 @@ stages:
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: $(serviceConnection)
-                    subscriptionId: $(subscriptionId)
+                    azureResourceManagerConnection: '$[variables.serviceConnection]'
+                    subscriptionId: '$[variables.subscriptionId]'
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: $(resourceGroup)
+                    resourceGroupName: '$[variables.resourceGroup]'
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
