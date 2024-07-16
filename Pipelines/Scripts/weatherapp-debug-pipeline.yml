@@ -17,6 +17,8 @@ parameters:
       - Prod
 variables:
   - group: Credentials
+  - name: vmip
+    value: default
 stages:
   - stage: build
     displayName: Build
