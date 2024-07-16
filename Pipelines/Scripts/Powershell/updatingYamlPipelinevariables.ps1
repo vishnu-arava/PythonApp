@@ -20,7 +20,7 @@ $body = @{
     }
 } | ConvertTo-Json
 
-$url = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineId/runs/$latestRunId'+'?api-version=6.0"
+$url = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineId/runs/$latestRunId"+"?api-version=6.0"
 
 Write-Host $url
 
