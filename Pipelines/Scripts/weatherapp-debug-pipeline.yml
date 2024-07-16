@@ -196,11 +196,20 @@ stages:
                  inputs:
                    targetType: 'inline'
                    script: 'echo $(vmip)'
-               - task: PowerShell@2
-                 displayName: Updating Yaml Variable
+              #  - task: PowerShell@2
+              #    displayName: Updating Yaml Variable
+              #    inputs:
+              #      filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updatingYamlPipelinevariables.ps1'
+              #      arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineName "weatherapp-debug-pipeline" -variableName "vmip" -variableValue "NewValue" -patToken "at5imguzafuqfpchwzz6wbjnp7tkbdcdkglxccreuqwr2ht7fnzq" -pipelineId "63"'
+               
+               - task: AzureCLI@2
+                 displayName: Az cli to update Yaml Variables
                  inputs:
-                   filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updatingYamlPipelinevariables.ps1'
-                   arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineName "weatherapp-debug-pipeline" -variableName "vmip" -variableValue "NewValue" -patToken "at5imguzafuqfpchwzz6wbjnp7tkbdcdkglxccreuqwr2ht7fnzq" -pipelineId "63"'
+                   azureSubscription: 'NewFreeTrial2024'
+                   scriptType: 'ps'
+                   scriptLocation: 'scriptPath'
+                   scriptPath: '$(System.ArtifactsDirectory)/drop/Azcli/updatingYamlPipelineariables.ps1'
+                   arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineId "63" -variableName "vmip" -variableValue "192.168.1.1" -patToken "at5imguzafuqfpchwzz6wbjnp7tkbdcdkglxccreuqwr2ht7fnzq"'
                - task: PowerShell@2
                  displayName: After Update
                  inputs:
