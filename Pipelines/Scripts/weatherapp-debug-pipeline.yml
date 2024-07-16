@@ -68,8 +68,6 @@ stages:
                  inputs:
                    targetType: 'inline'
                    script: |
-                     echo "Vm password is : "$(SonarqubeVmPassword)
-                     echo "SQLpassword is : "$(SqlDevPassword)
                      echo "Test value to show is : "$(testvalue)
 
                - task: DownloadBuildArtifacts@1
