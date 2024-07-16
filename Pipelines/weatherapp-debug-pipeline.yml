@@ -17,7 +17,7 @@ parameters:
     default: dev
 
 variables:
-  - group: Credentials
+  - group: Infra-Dev
   - name: appserviceName
     value: dk-weatherapp-web
 
@@ -50,7 +50,7 @@ stages:
               targetType: 'inline'
               script: |
                 # Write your PowerShell commands here.
-                echo $(testvalue)
+                echo $(serviceConnection)
                 Write-Host "Hello World"
 
           - task: CopyFiles@2
@@ -89,10 +89,10 @@ stages:
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: '$[variables.serviceConnection]'
-                    subscriptionId: '$[variables.subscriptionId]'
+                    azureResourceManagerConnection: $(serviceConnection)
+                    subscriptionId: $(subscriptionId)
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: '$[variables.resourceGroup]'
+                    resourceGroupName: $(resourceGroup)
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
