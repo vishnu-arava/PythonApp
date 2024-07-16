@@ -27,7 +27,7 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2021-02-01",
-            "name": "[Parameters('appServicePlanName')]",
+            "name": "[concat(parameters('appServicePlanName'), ]",
             "location": "[parameters('location')]",
             "sku": {
                 "name": "[parameters('sku')]",
