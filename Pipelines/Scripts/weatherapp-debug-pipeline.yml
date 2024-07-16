@@ -196,3 +196,13 @@ stages:
                  inputs:
                    targetType: 'inline'
                    script: 'echo $(vmip)'
+               - task: PowerShell@2
+                 displayName: Updating Yaml Variable
+                 inputs:
+                   filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updatingYamlPipelinevariables.ps1'
+                   arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineName "weatherapp-debug-pipeline" -variableName "vmip" -variableValue "NewValue" -patToken "at5imguzafuqfpchwzz6wbjnp7tkbdcdkglxccreuqwr2ht7fnzq" -pipelineId "63"'
+               - task: PowerShell@2
+                 displayName: After Update
+                 inputs:
+                   targetType: 'inline'
+                   script: 'echo $(vmip)'
