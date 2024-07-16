@@ -56,6 +56,7 @@ stages:
               script: |
                 # Write your PowerShell commands here.
                 echo $(serviceConnection)
+                echo ${env:APIVERSION}
                 Write-Host "Hello World"
 
           - task: CopyFiles@2
