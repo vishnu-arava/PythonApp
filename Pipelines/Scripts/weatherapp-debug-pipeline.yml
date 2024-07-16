@@ -66,8 +66,8 @@ stages:
                  inputs:
                    targetType: 'inline'
                    script: |
-                     Write-Host "Vm password is : $(sonarQubePass)"
-                     Write-Host "SQLpassword is : $(sqlPass)"
+                     Write-Host "Vm password is : ${variables.SonarqubeVmPassword}"
+                     Write-Host "SQLpassword is : ${variables.SqlDevPassword}"
 
                - task: DownloadBuildArtifacts@1
                  inputs:
