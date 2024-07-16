@@ -29,9 +29,12 @@
         },
         "adminUsername": {
             "value": "vishnu"
-            }
         },
         "adminPassword": {
             "value": "Vishnusahi58206@*"
-            }
+        },
+        "vmLocation": {
+            "value": "eastus2"
         }
+    }
+}   
