@@ -1,10 +1,13 @@
 {
     "parameters": {
-        "appServicePlanName":{
-            "value": "vishnuAppServicePlan_dev"
+        "env": {
+            "value": "DEV"
+        },
+        "appServicePlanName": {
+            "value": "vishnuAppServicePlan"
         },
         "appServiceName": {
-            "value": "vishnuAppService_dev"
+            "value": "vishnuAppService"
         },
         "location": {
             "value": "canadacentral"
