@@ -59,6 +59,7 @@ stages:
                 echo ${env:APIVERSION}
                 echo $(Build.BuildNumber)
                 echo $(Build.BuildId)
+                echo $(Build.DefinitionName)_$(Build.DefinitionVersion)_$(Build.RequestedFor)_$(Build.BuildId)
                 Write-Host "Hello World"
           
           - task: CopyFiles@2
