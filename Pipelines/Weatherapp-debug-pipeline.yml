@@ -2,7 +2,8 @@ trigger:
 - none
 
 pool:
-  vmImage: ubuntu-latest
+  name: vishnupool
+  vmImage: vishnuagent
 
 stages:
   - stage: "Build"
@@ -13,13 +14,13 @@ stages:
         steps:
           - task: ArchiveFiles@2
             inputs:
-              rootFolderOrFile: '/Source/WeatherApp'
+              rootFolderOrFile: 'Source/WeatherApp'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WeatherApp.zip'
           - task: CopyFiles@2
             inputs:
-              SourceFolder: '/Pipelines/Infra/ARMTemplates'
+              SourceFolder: 'Pipelines/Infra/ARMTemplates'
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)/ARMInfra'
           - task: PublishBuildArtifacts@1
@@ -29,13 +30,13 @@ stages:
               publishLocation: 'Container'
 
 
-  - stage: "PreProdInfra"
-    displayName: "PreProd Infra"
+  - stage: "DevInfra"
+    displayName: "Dev Infra"
     dependsOn: Build
     jobs:
-      - deployment: "BuildPreProdInfra"
-        displayName: "Build PreProd Infra"
-        environment: PreProd
+      - deployment: "BuildDevInfra"
+        displayName: "Build Dev Infra"
+        environment: Dev
         strategy:
           runOnce:
             deploy:
@@ -96,13 +97,13 @@ stages:
                     scriptLocation: 'inlineScript'
                     inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
 
-  - stage: "PreProdApp"
-    displayName: "PreProd App"
-    dependsOn: PreProdInfra
+  - stage: "DevAppDeploy"
+    displayName: "Dev App Deploy"
+    dependsOn: DevInfra
     jobs:
-      - deployment: "PreProdApp"
-        displayName: "PreProd App: WeatherApp"
-        environment: PreProd
+      - deployment: "DevAppDeploy"
+        displayName: "Dev App: WeatherApp"
+        environment: Dev
         strategy:
           runOnce:
             deploy:
