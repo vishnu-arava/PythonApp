@@ -11,7 +11,7 @@ Param(
 function Authenticate {
     Write-Host "Authenticating to Azure DevOps..."
     az devops configure --defaults organization=https://dev.azure.com/$organizationName project=$projectName
-    az devops login --organization https://dev.azure.com/$organizationName
+    az devops login --organization https://dev.azure.com/$organizationName --token $patToken
 }
 
 # Function to update pipeline variable
