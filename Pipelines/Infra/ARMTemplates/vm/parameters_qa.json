@@ -1,7 +1,7 @@
 {
     "parameters": {
         "env": {
-            "value": "qa"
+            "value": "Qa"
         },
         "publicIPName": {
             "value": "myipaddress"
@@ -29,9 +29,12 @@
         },
         "adminUsername": {
             "value": "vishnu"
-            }
         },
         "adminPassword": {
             "value": "Vishnusahi58206@*"
-            }
+        },
+        "vmLocation": {
+            "value": "eastus2"
         }
+    }
+}   
