@@ -130,8 +130,8 @@ stages:
                    scriptType: 'ps'
                    scriptLocation: 'inlineScript'
                    inlineScript: |
-                     Write-Output "The tenant ID is: $env:tenantId"
-                     Write-Host "##vso[task.setvariable variable=tenantId;]$env:tenantId"
+                     Write-Output "The tenant ID is: ${env:tenantId}"
+                     Write-Host "##vso[task.setvariable variable=tenantId;]${env:tenantId}"
                      $objectidadmin=az ad user list --query "[?contains(displayName, 'Kolli Chaitanya')].id" --output tsv
                      Write-Host "##vso[task.setvariable variable=objectidadmin;]$objectidadmin"
                      $subscriptionId = az account show --query id -o tsv
