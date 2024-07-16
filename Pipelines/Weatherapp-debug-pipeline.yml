@@ -64,8 +64,8 @@ stages:
                     resourceGroupName: 'RG-VA'
                     location: 'Central US'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/ARMInfra/vm/vm.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/ARMInfra/vm/parameters_dev.json'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_dev.json'
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'deploymentOutputs'
                 - task: PowerShell@2
