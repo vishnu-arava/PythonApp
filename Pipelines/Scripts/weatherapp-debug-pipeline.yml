@@ -67,8 +67,7 @@ stages:
                  displayName: Showing Library Variabales
                  inputs:
                    targetType: 'inline'
-                   script: |
-                     echo "Test value to show is : "$(testvalue)
+                   script: 'echo $(testvalue)'
 
                - task: DownloadBuildArtifacts@1
                  inputs:
