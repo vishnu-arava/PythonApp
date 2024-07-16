@@ -407,9 +407,9 @@ stages:
     displayName: "PROD App Deploy"
     dependsOn: PRODInfra
     jobs:
-      - deployment: "QaAppDeploy"
-        displayName: "Qa App: WeatherApp"
-        environment: Qa
+      - deployment: "PRODAppDeploy"
+        displayName: "PROD App: WeatherApp"
+        environment: PROD
         strategy:
           runOnce:
             deploy:
