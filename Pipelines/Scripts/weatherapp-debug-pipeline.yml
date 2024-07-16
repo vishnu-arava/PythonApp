@@ -208,7 +208,7 @@ stages:
                    azureSubscription: 'NewFreeTrial2024'
                    scriptType: 'ps'
                    scriptLocation: 'scriptPath'
-                   scriptPath: '$(System.ArtifactsDirectory)/drop/Azcli/updatingYamlPipelineariables.ps1'
+                   scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/updatingYamlPipelineariables.ps1'
                    arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineId "63" -variableName "vmip" -variableValue "192.168.1.1" -patToken "at5imguzafuqfpchwzz6wbjnp7tkbdcdkglxccreuqwr2ht7fnzq"'
                - task: PowerShell@2
                  displayName: After Update
