@@ -1,7 +1,7 @@
 {
     "parameters": {
         "env": {
-            "value": "Prod"
+            "value": "PROD"
         },
         "publicIPName": {
             "value": "myipaddress"
