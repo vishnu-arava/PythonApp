@@ -61,6 +61,14 @@ stages:
           runOnce:
             deploy:
              steps:
+               - task: PowerShell@2
+                 displayName: Showing Library Variabales
+                 inputs:
+                   targetType: 'inline'
+                   script: |
+                     Write-Host "Vm password is : $[variables.SonarqubeVmPassword]"
+                     Write-Host "SQLpassword is : $[variables.SqlDevPassword]"
+
                - task: DownloadBuildArtifacts@1
                  inputs:
                    buildType: 'current'
