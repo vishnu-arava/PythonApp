@@ -64,14 +64,14 @@ stages:
                 echo $(Build.BuildUri)
                 Write-Host "Hello World"
           
-          - task: AzureCLI@2
-            inputs:
-              azureSubscription: 'NewFreeTrial2024'
-              scriptType: 'ps'
-              scriptLocation: 'scriptPath'
-              scriptPath: 'Pipelines/Scripts/Azcli/updatepipelinevars.ps1'
-              arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineId $(System.DefinitionId) -variableName "apiversion" -variableValue "1.0.4"'
-              addSpnToEnvironment: true
+          # - task: AzureCLI@2
+          #   inputs:
+          #     azureSubscription: 'NewFreeTrial2024'
+          #     scriptType: 'ps'
+          #     scriptLocation: 'scriptPath'
+          #     scriptPath: 'Pipelines/Scripts/Azcli/updatepipelinevars.ps1'
+          #     arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineId $(System.DefinitionId) -variableName "apiversion" -variableValue "1.0.4"'
+          #     addSpnToEnvironment: true
           - task: CopyFiles@2
             displayName: "Copy Infra files"
             inputs:
