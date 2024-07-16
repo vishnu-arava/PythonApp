@@ -136,6 +136,7 @@ stages:
                      Write-Host "##vso[task.setvariable variable=objectidadmin;]$objectidadmin"
                      $subscriptionId = az account show --query id -o tsv
                      Write-Host "##vso[task.setvariable variable=subscriptionId;]$subscriptionId"
+                   addSpnToEnvironment: true
                - task: AzureResourceManagerTemplateDeployment@3
                  displayName: Key Vaults
                  inputs:
@@ -148,7 +149,7 @@ stages:
                    templateLocation: 'Linked artifact'
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/keyVault.json'
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/parameters_dev.json'
-                   overrideParameters: '-keyvaultname "dk-weatherapp-core" -tenantId $(tenantId) -objectId $(objectidadmin) -spTenantId $(tenantId)'
+                   overrideParameters: '-keyvaultname "dk-weatherapp-kvc" -tenantId $(tenantId) -objectId $(objectidadmin) -spTenantId $(tenantId)'
                    deploymentMode: 'Incremental'
                    deploymentOutputs: 'deploymentOutputs'
                - task: PowerShell@2
