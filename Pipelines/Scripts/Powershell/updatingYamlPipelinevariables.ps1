@@ -22,6 +22,7 @@ $body = @{
 
 $url = "https://dev.azure.com/$organizationName/$projectName/_apis/pipelines/$pipelineId/runs/$latestRunId'+'?api-version=6.0"
 
+Write-Host $url
 
 $response = Invoke-RestMethod -Uri $url -Method Patch -Body $body -ContentType "application/json" -Headers @{
     Authorization = "Basic $base64AuthInfo"
