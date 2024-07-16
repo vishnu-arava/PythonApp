@@ -2,7 +2,11 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "appServicePlanName":{
+        "env": {
+            "type": "string",
+            "defaultValue": "va"
+        },
+        "appServicePlanName": {
             "type": "string",
             "defaultValue": "Default"
         },
@@ -27,7 +31,7 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('appServicePlanName'), ]",
+            "name": "[concat(parameters('appServicePlanName'), parameters('env'))]",
             "location": "[parameters('location')]",
             "sku": {
                 "name": "[parameters('sku')]",
@@ -41,13 +45,13 @@
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2021-02-01",
-            "name": "[parameters('appServiceName')]",
+            "name": "[concat(parameters('appServiceName'), parameters('env'))]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', Parameters('appServicePlanName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env'))]"
             ],
             "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env'))]",
                 "siteConfig": {
                     "linuxFxVersion": "[parameters('linuxFxVersion')]",
                     "minTlsVersion": "1.2",
