@@ -15,7 +15,7 @@
     "variables": {},
     "resources": [
      {
-        "name": "[concat(parameters('appServiceName'),'-asp',parameters('env'))]",
+        "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]",
         "type": "Microsoft.Web/serverfarms",
         "apiVersion": "2022-09-01",
         "location": "[resourceGroup().location]",
@@ -27,10 +27,10 @@
             "capacity": 1
         },
         "tags": {
-            "displayName": "[concat(parameters('appServiceName'),'-asp',parameters('env'))]"
+            "displayName": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]"
         },
         "properties": {
-            "name": "[concat(parameters('appServiceName'),'-asp',parameters('env'))]"
+            "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]"
         }
      },
     {
@@ -41,7 +41,7 @@
         "kind": "app,Linux",
         
         "tags": {
-            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceName'),'-asp',parameters('env'))]": "Resource",
+            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceName'),'-asp-',parameters('env'))]": "Resource",
             "displayName": "[concat(parameters('appServiceName'),'-',parameters('env'))]"
         },
         "dependsOn": [
@@ -49,7 +49,7 @@
         ],
         "properties": {
             "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
-            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp',parameters('env')))]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]",
             "siteConfig": {
                     "numberOfWorkers": 1,
                     "alwaysOn": false
