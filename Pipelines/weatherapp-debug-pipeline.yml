@@ -14,10 +14,15 @@ parameters:
   - name: env
     displayName: Environment to Deploy
     type: string
-    default: dev
+    default: Dev
+    values:
+      - Dev
+      - Qa
+      - Uat
+      - Prod
 
 variables:
-  - group: Infra-Dev
+  - group: 'Infra-${{ parameters.env }}'
   - name: appserviceName
     value: dk-weatherapp-web
 
