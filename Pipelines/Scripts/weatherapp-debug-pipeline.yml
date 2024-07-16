@@ -16,9 +16,7 @@ parameters:
       - Uat
       - Prod
 variables:
-  -group: Credentials
-  -name: sonarqubepass
-  value: $[variables.SonarqubeVmPassword]
+  - group: Credentials
 stages:
   - stage: build
     displayName: Build
