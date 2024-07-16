@@ -4,7 +4,7 @@
     "parameters": {
         "env": {
             "type": "string",
-            "defaultValue": "va"
+            "defaultValue": "test"
         },
         "appServicePlanName": {
             "type": "string",
