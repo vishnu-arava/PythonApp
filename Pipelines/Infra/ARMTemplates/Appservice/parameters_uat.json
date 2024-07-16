@@ -1,10 +1,13 @@
 {
     "parameters": {
+        "env": {
+            "value": "UAT"
+        },
         "appServicePlanName":{
-            "value": "vishnuAppServicePlan_uat"
+            "value": "vishnuAppServicePlan"
         },
         "appServiceName": {
-            "value": "vishnuAppService_uat"
+            "value": "vishnuAppService"
         },
         "location": {
             "value": "westus"
