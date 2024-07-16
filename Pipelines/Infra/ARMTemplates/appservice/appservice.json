@@ -45,7 +45,7 @@
             "displayName": "[concat(parameters('appServiceName'),'-',parameters('env'))]"
         },
         "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp',parameters('env')))]"
+            "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]"
         ],
         "properties": {
             "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
