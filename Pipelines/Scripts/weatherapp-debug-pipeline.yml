@@ -63,7 +63,6 @@ stages:
           runOnce:
             deploy:
              steps:
-
                - task: DownloadBuildArtifacts@1
                  inputs:
                    buildType: 'current'
@@ -192,3 +191,8 @@ stages:
                    targetType: 'inline'
                    script: |
                      Get-ChildItem $(System.ArtifactsDirectory)/drop
+               - task: PowerShell@2
+                 displayName: Test Powershell for variables
+                 inputs:
+                   targetType: 'inline'
+                   script: 'echo $(vmip)'
