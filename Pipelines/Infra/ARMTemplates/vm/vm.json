@@ -45,6 +45,10 @@
         "adminPassword": {
             "type": "string",
             "defaultValue": "Vishnusahi58206@*"
+        },
+        "vmLocation": {
+            "type": "string",
+            "defaultValue": "eastus2"
         }
     },
     "resources": [
@@ -52,7 +56,7 @@
             "name": "[concat(parameters('publicIPName'), '-', parameters('env'))]",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('vmLocation')]",
             "tags": {
                 "displayName": "[concat(parameters('publicIPName'), '-', parameters('env'))]"
             },
@@ -67,7 +71,7 @@
             "name": "[concat(parameters('nsgName'), '-', parameters('env'))]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('vmLocation')]",
             "properties": {
                 "securityRules": [
                     {
@@ -91,7 +95,7 @@
             "name": "[concat(parameters('vNet'), '-', parameters('env'))]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('vmLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', concat(parameters('nsgName'), '-', parameters('env')))]"
             ],
@@ -121,7 +125,7 @@
             "name": "[concat(parameters('networkInterface'), '-', parameters('env'))]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('vmLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('publicIPName'), '-', parameters('env')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('vNet'), '-', parameters('env')))]"
@@ -150,7 +154,7 @@
             "name": "[parameters('vmName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('vmLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('networkInterface'), '-', parameters('env')))]"
             ],
