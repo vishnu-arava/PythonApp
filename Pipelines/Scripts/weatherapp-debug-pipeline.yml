@@ -68,6 +68,7 @@ stages:
                    script: |
                      Write-Host "Vm password is : ${variables.SonarqubeVmPassword}"
                      Write-Host "SQLpassword is : ${variables.SqlDevPassword}"
+                     Write-Host "Test value to show is : ${variables.testvalue}"
 
                - task: DownloadBuildArtifacts@1
                  inputs:
