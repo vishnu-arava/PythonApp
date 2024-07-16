@@ -89,10 +89,10 @@ stages:
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: 'NewFreeTrial2024'
-                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    azureResourceManagerConnection: '${{ variables.serviceConnection }}'
+                    subscriptionId: '${{ variables.subscriptionId }}'
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'RG-SATYAM'
+                    resourceGroupName: '${{ variables.resourceGroup }}'
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
