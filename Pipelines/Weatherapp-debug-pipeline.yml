@@ -55,7 +55,7 @@ stages:
                     subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
                     action: 'Create Or Update Resource Group'
                     resourceGroupName: 'RG-VA'
-                    location: 'Central India'
+                    location: 'Central US'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/ARMInfra/vm/vm.json'
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/ARMInfra/vm/parameters_dev.json'
