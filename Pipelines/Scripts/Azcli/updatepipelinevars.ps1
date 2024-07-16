@@ -3,15 +3,14 @@ Param(
     [string]$projectName,
     [string]$pipelineId,
     [string]$variableName,
-    [string]$variableValue,
-    [string]$patToken
+    [string]$variableValue
 )
 
 # Function to authenticate to Azure DevOps
 function Authenticate {
     Write-Host "Authenticating to Azure DevOps..."
     az devops configure --defaults organization=https://dev.azure.com/$organizationName project=$projectName
-    az devops login --organization https://dev.azure.com/$organizationName --token $patToken
+    az devops login --organization https://dev.azure.com/$organizationName
 }
 
 # Function to update pipeline variable
