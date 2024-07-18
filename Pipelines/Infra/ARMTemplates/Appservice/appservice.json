@@ -16,7 +16,7 @@
         },
         "location": {
             "type": "string",
-            "defaultValue": "cDefault"
+            "defaultValue": "Default"
         },
         "sku": {
             "type": "string",
