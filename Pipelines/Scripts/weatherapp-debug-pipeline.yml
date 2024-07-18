@@ -15,6 +15,19 @@ parameters:
       - Qa
       - Uat
       - Prod
+  - name: resourcegroup
+    displayName: Resource group
+    type: string
+    default: RG-DEV
+    values:
+      - RG-DEV
+      - RG-QA
+      - RG-PERF
+      - RG-UAT
+      - RG-PROD
+      - RG-KVC
+      - RG-SATYAM
+      - RG-VA
 variables:
   - group: Credentials
   - name: vmip
@@ -76,7 +89,7 @@ stages:
                    azureResourceManagerConnection: 'NewFreeTrial2024'
                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
                    action: 'Create Or Update Resource Group'
-                   resourceGroupName: 'RG-KVC'
+                   resourceGroupName: ${{ parameters.resourcegroup }}
                    location: 'East US 2'
                    templateLocation: 'Linked artifact'
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/vm/vm.json'
@@ -102,7 +115,7 @@ stages:
                    azureResourceManagerConnection: 'NewFreeTrial2024'
                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
                    action: 'Create Or Update Resource Group'
-                   resourceGroupName: 'RG-KVC'
+                   resourceGroupName: ${{ parameters.resourcegroup }}
                    location: 'Central US'
                    templateLocation: 'Linked artifact'
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/azureSql/azureSqlDb/azureSqlDb.json'
@@ -145,7 +158,7 @@ stages:
                    azureResourceManagerConnection: 'NewFreeTrial2024'
                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
                    action: 'Create Or Update Resource Group'
-                   resourceGroupName: 'RG-KVC'
+                   resourceGroupName: ${{ parameters.resourcegroup }}
                    location: 'Central US'
                    templateLocation: 'Linked artifact'
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/keyVault.json'
@@ -168,7 +181,7 @@ stages:
                    scriptType: 'ps'
                    scriptLocation: 'scriptPath'
                    scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
-                   arguments: '-appRegistrationName "dk-weatherapp-kv-link" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret" -keyVaultName $(envkeyvaultname) -resourceGroupName "RG-KVC" -tenantId $(tenantId) -subscriptionId $(subscriptionId)'
+                   arguments: '-appRegistrationName "dk-weatherapp-kv-link" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId)'
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
     dependsOn: InfraDeployment
@@ -220,37 +233,3 @@ stages:
                  inputs:
                    targetType: 'inline'
                    script: 'echo $(testvalue)'
-      - deployment: "DeployTest1"
-        displayName: "Deploy Test 1"
-        environment: ${{ parameters.environment }}
-        dependsOn: DeployApp
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-              - task: PowerShell@2
-                inputs:
-                  targetType: 'inline'
-                  script: |
-                    # Write your PowerShell commands here.
-                    
-                    echo $(testvalue)
-    
-  - stage: "TestDeploy"
-    displayName: "Deploy : Test-${{ parameters.environment }}"
-    dependsOn: AppDeploy
-    jobs:
-      - deployment: "DeployTest"
-        displayName: "Deploy Test"
-        environment: ${{ parameters.environment }}
-        strategy:
-          runOnce:
-            deploy:
-             steps:
-               - task: PowerShell@2
-                 inputs:
-                   targetType: 'inline'
-                   script: |
-                     # Write your PowerShell commands here.
-                     
-                     echo $(testvalue)
