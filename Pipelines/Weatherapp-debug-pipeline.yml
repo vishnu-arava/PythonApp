@@ -55,19 +55,19 @@ stages:
                       # Write your PowerShell commands here.
                       
                       Get-ChildItem -Recurse $(System.ArtifactsDirectory)
-                - task: AzureResourceManagerTemplateDeployment@3
-                  inputs:
-                    deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
-                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
-                    action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'RG-VA'
-                    location: 'Central US'
-                    templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_dev.json'
-                    deploymentMode: 'Incremental'
-                    deploymentOutputs: 'deploymentOutputs'
+                # - task: AzureResourceManagerTemplateDeployment@3
+                #   inputs:
+                #     deploymentScope: 'Resource Group'
+                #     azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                #     subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                #     action: 'Create Or Update Resource Group'
+                #     resourceGroupName: 'RG-VA'
+                #     location: 'Central US'
+                #     templateLocation: 'Linked artifact'
+                #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
+                #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_dev.json'
+                #     deploymentMode: 'Incremental'
+                #     deploymentOutputs: 'deploymentOutputs'
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
@@ -219,6 +219,19 @@ stages:
                       # Write your PowerShell commands here.
                       
                       Get-ChildItem -Recurse $(System.ArtifactsDirectory)
+                # - task: AzureResourceManagerTemplateDeployment@3
+                #   inputs:
+                #     deploymentScope: 'Resource Group'
+                #     azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                #     subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                #     action: 'Create Or Update Resource Group'
+                #     resourceGroupName: 'RG-QA'
+                #     location: 'East US 2'
+                #     templateLocation: 'Linked artifact'
+                #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
+                #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_qa.json'
+                #     deploymentMode: 'Incremental'
+                #     deploymentOutputs: 'deploymentOutputs'
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
@@ -228,10 +241,9 @@ stages:
                     resourceGroupName: 'RG-QA'
                     location: 'East US 2'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_qa.json'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/storage/storage.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/storage/parameters_qa.json'
                     deploymentMode: 'Incremental'
-                    deploymentOutputs: 'deploymentOutputs'
                 # - task: PowerShell@2
                 #   inputs:
                 #     targetType: 'inline'
@@ -323,6 +335,18 @@ stages:
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_uat.json'
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'deploymentOutputs'
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-UAT'
+                    location: 'Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/sqlServerDb.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/parameters_uat.json'
+                    deploymentMode: 'Incremental'
                 # - task: PowerShell@2
                 #   inputs:
                 #     targetType: 'inline'
