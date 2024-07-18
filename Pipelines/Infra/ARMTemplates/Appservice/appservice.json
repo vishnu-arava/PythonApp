@@ -48,10 +48,10 @@
             "name": "[concat(parameters('appServiceName'), parameters('env'))]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env'))]"
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env')))]"
             ],
             "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env')))]",
                 "siteConfig": {
                     "linuxFxVersion": "[parameters('linuxFxVersion')]",
                     "minTlsVersion": "1.2",
