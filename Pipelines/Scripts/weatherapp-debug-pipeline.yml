@@ -195,23 +195,28 @@ stages:
                  displayName: Test Powershell for variables
                  inputs:
                    targetType: 'inline'
-                   script: 'echo $(vmip)'
+                   script: 'echo $(testvalue)'
               #  - task: PowerShell@2
               #    displayName: Updating Yaml Variable
               #    inputs:
               #      filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updatingYamlPipelinevariables.ps1'
               #      arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineName "weatherapp-debug-pipeline" -variableName "vmip" -variableValue "NewValue" -patToken "at5imguzafuqfpchwzz6wbjnp7tkbdcdkglxccreuqwr2ht7fnzq" -pipelineId "63"'
                
-               - task: AzureCLI@2
-                 displayName: Az cli to update Yaml Variables
+              #  - task: AzureCLI@2
+              #    displayName: Az cli to update Yaml Variables
+              #    inputs:
+              #      azureSubscription: 'NewFreeTrial2024'
+              #      scriptType: 'ps'
+              #      scriptLocation: 'scriptPath'
+              #      scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/updatingYamlPipelineariables.ps1'
+              #      arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineId "63" -variableName "vmip" -variableValue "192.168.1.1" -patToken "at5imguzafuqfpchwzz6wbjnp7tkbdcdkglxccreuqwr2ht7fnzq"'
+               - task: PowerShell@2
                  inputs:
-                   azureSubscription: 'NewFreeTrial2024'
-                   scriptType: 'ps'
-                   scriptLocation: 'scriptPath'
-                   scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/updatingYamlPipelineariables.ps1'
-                   arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -pipelineId "63" -variableName "vmip" -variableValue "192.168.1.1" -patToken "at5imguzafuqfpchwzz6wbjnp7tkbdcdkglxccreuqwr2ht7fnzq"'
+                   filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updating_libVariables.ps1'
+                   arguments: '-organizationName "venkatachaitanya095" -projectName "PythonProjects" -libVariableName "Credentials" -libVariableParameterName $(variabletoupdate) -patToken $(PAT) -valuetoUpdate "newValueinTestVariable"'
+               
                - task: PowerShell@2
                  displayName: After Update
                  inputs:
                    targetType: 'inline'
-                   script: 'echo $(vmip)'
+                   script: 'echo $(testvalue)'
