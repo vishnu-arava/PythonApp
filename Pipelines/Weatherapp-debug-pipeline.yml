@@ -68,41 +68,89 @@ stages:
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_dev.json'
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'deploymentOutputs'
-                - task: PowerShell@2
+                - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Convert the deployment outputs from JSON
-                      $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
-                      
-                      # Extract the public IP address from the outputs
-                      $vmusername = $outputs.vmusername.value
-                      $vmname = $outputs.vmname.value
-                      
-                      # Display the public IP address
-                      Write-Output "VM Administrator Name is: $vmusername"
-                      Write-Output "VM Name is: $vmname"
-                      
-                      # Set the public IP address as a pipeline variable
-                      Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
-                      Write-Host "##vso[task.setvariable variable=vmname]$vmname"
-                - task: AzureCLI@2
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-VA'
+                    location: 'Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
+                    deploymentMode: 'Incremental'
+                - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: |
-                      $publicIp = az vm show -d -g RG-VA -n $(vmname) --query "publicIps" -o tsv
-                      Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
-                      Write-Host "Fetched PublicIP is : $publicIp"
-                      Write-Host "Vm name is : $(vmname)"
-                    arguments: '-rgGroup RG-VA -vmName $(vmname)'
-                - task: AzureCLI@2
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-VA'
+                    location: 'Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/keyvaults/keyvault.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/keyvaults/parameters_dev.json'
+                    deploymentMode: 'Incremental'
+                - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-VA'
+                    location: 'Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/sqlServerDb.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/parameters_dev.json'
+                    deploymentMode: 'Incremental'
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-VA'
+                    location: 'Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/storage/storage.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/storage/parameters_dev.json'
+                    deploymentMode: 'Incremental'
+                # - task: PowerShell@2
+                #   inputs:
+                #     targetType: 'inline'
+                #     script: |
+                #       # Convert the deployment outputs from JSON
+                #       $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
+                      
+                #       # Extract the public IP address from the outputs
+                #       $vmusername = $outputs.vmusername.value
+                #       $vmname = $outputs.vmname.value
+                      
+                #       # Display the public IP address
+                #       Write-Output "VM Administrator Name is: $vmusername"
+                #       Write-Output "VM Name is: $vmname"
+                      
+                #       # Set the public IP address as a pipeline variable
+                #       Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
+                #       Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+                # - task: AzureCLI@2
+                #   inputs:
+                #     azureSubscription: 'vishnuSubscriptionServiceConnection'
+                #     scriptType: 'ps'
+                #     scriptLocation: 'inlineScript'
+                #     inlineScript: |
+                #       $publicIp = az vm show -d -g RG-VA -n $(vmname) --query "publicIps" -o tsv
+                #       Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
+                #       Write-Host "Fetched PublicIP is : $publicIp"
+                #       Write-Host "Vm name is : $(vmname)"
+                #     arguments: '-rgGroup RG-VA -vmName $(vmname)'
+                # - task: AzureCLI@2
+                #   inputs:
+                #     azureSubscription: 'vishnuSubscriptionServiceConnection'
+                #     scriptType: 'ps'
+                #     scriptLocation: 'inlineScript'
+                #     inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
 
   - stage: "DevAppDeploy"
     displayName: "Dev App Deploy"
@@ -184,41 +232,41 @@ stages:
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_qa.json'
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'deploymentOutputs'
-                - task: PowerShell@2
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Convert the deployment outputs from JSON
-                      $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
+                # - task: PowerShell@2
+                #   inputs:
+                #     targetType: 'inline'
+                #     script: |
+                #       # Convert the deployment outputs from JSON
+                #       $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
                       
-                      # Extract the public IP address from the outputs
-                      $vmusername = $outputs.vmusername.value
-                      $vmname = $outputs.vmname.value
+                #       # Extract the public IP address from the outputs
+                #       $vmusername = $outputs.vmusername.value
+                #       $vmname = $outputs.vmname.value
                       
-                      # Display the public IP address
-                      Write-Output "VM Administrator Name is: $vmusername"
-                      Write-Output "VM Name is: $vmname"
+                #       # Display the public IP address
+                #       Write-Output "VM Administrator Name is: $vmusername"
+                #       Write-Output "VM Name is: $vmname"
                       
-                      # Set the public IP address as a pipeline variable
-                      Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
-                      Write-Host "##vso[task.setvariable variable=vmname]$vmname"
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: |
-                      $publicIp = az vm show -d -g RG-QA -n $(vmname) --query "publicIps" -o tsv
-                      Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
-                      Write-Host "Fetched PublicIP is : $publicIp"
-                      Write-Host "Vm name is : $(vmname)"
-                    arguments: '-rgGroup RG-QA -vmName $(vmname)'
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
+                #       # Set the public IP address as a pipeline variable
+                #       Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
+                #       Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+                # - task: AzureCLI@2
+                #   inputs:
+                #     azureSubscription: 'vishnuSubscriptionServiceConnection'
+                #     scriptType: 'ps'
+                #     scriptLocation: 'inlineScript'
+                #     inlineScript: |
+                #       $publicIp = az vm show -d -g RG-QA -n $(vmname) --query "publicIps" -o tsv
+                #       Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
+                #       Write-Host "Fetched PublicIP is : $publicIp"
+                #       Write-Host "Vm name is : $(vmname)"
+                #     arguments: '-rgGroup RG-QA -vmName $(vmname)'
+                # - task: AzureCLI@2
+                #   inputs:
+                #     azureSubscription: 'vishnuSubscriptionServiceConnection'
+                #     scriptType: 'ps'
+                #     scriptLocation: 'inlineScript'
+                #     inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
                     
   - stage: "QaAppDeploy"
     displayName: "Qa App Deploy"
@@ -275,41 +323,41 @@ stages:
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_uat.json'
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'deploymentOutputs'
-                - task: PowerShell@2
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Convert the deployment outputs from JSON
-                      $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
+                # - task: PowerShell@2
+                #   inputs:
+                #     targetType: 'inline'
+                #     script: |
+                #       # Convert the deployment outputs from JSON
+                #       $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
                       
-                      # Extract the public IP address from the outputs
-                      $vmusername = $outputs.vmusername.value
-                      $vmname = $outputs.vmname.value
+                #       # Extract the public IP address from the outputs
+                #       $vmusername = $outputs.vmusername.value
+                #       $vmname = $outputs.vmname.value
                       
-                      # Display the public IP address
-                      Write-Output "VM Administrator Name is: $vmusername"
-                      Write-Output "VM Name is: $vmname"
+                #       # Display the public IP address
+                #       Write-Output "VM Administrator Name is: $vmusername"
+                #       Write-Output "VM Name is: $vmname"
                       
-                      # Set the public IP address as a pipeline variable
-                      Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
-                      Write-Host "##vso[task.setvariable variable=vmname]$vmname"
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: |
-                      $publicIp = az vm show -d -g RG-UAT -n $(vmname) --query "publicIps" -o tsv
-                      Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
-                      Write-Host "Fetched PublicIP is : $publicIp"
-                      Write-Host "Vm name is : $(vmname)"
-                    arguments: '-rgGroup RG-UAT -vmName $(vmname)'
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
+                #       # Set the public IP address as a pipeline variable
+                #       Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
+                #       Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+                # - task: AzureCLI@2
+                #   inputs:
+                #     azureSubscription: 'vishnuSubscriptionServiceConnection'
+                #     scriptType: 'ps'
+                #     scriptLocation: 'inlineScript'
+                #     inlineScript: |
+                #       $publicIp = az vm show -d -g RG-UAT -n $(vmname) --query "publicIps" -o tsv
+                #       Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
+                #       Write-Host "Fetched PublicIP is : $publicIp"
+                #       Write-Host "Vm name is : $(vmname)"
+                #     arguments: '-rgGroup RG-UAT -vmName $(vmname)'
+                # - task: AzureCLI@2
+                #   inputs:
+                #     azureSubscription: 'vishnuSubscriptionServiceConnection'
+                #     scriptType: 'ps'
+                #     scriptLocation: 'inlineScript'
+                #     inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
 
   - stage: "UATAppDeploy"
     displayName: "UAT App Deploy"
@@ -329,94 +377,94 @@ stages:
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
 
-  - stage: "PRODInfra"
-    displayName: "PROD Infra"
-    dependsOn: Build
-    jobs:
-      - deployment: "BuildPRODInfra"
-        displayName: "Build PROD Infra"
-        environment: PROD
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: DownloadBuildArtifacts@1
-                  inputs:
-                    buildType: 'current'
-                    downloadType: 'single'
-                    artifactName: 'drop'
-                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+  # - stage: "PRODInfra"
+  #   displayName: "PROD Infra"
+  #   dependsOn: Build
+  #   jobs:
+  #     - deployment: "BuildPRODInfra"
+  #       displayName: "Build PROD Infra"
+  #       environment: PROD
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - task: DownloadBuildArtifacts@1
+  #                 inputs:
+  #                   buildType: 'current'
+  #                   downloadType: 'single'
+  #                   artifactName: 'drop'
+  #                   downloadPath: '$(System.ArtifactsDirectory)/downloads'
                 
-                - task: PowerShell@2
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here.
+  #               - task: PowerShell@2
+  #                 inputs:
+  #                   targetType: 'inline'
+  #                   script: |
+  #                     # Write your PowerShell commands here.
                       
-                      Get-ChildItem -Recurse $(System.ArtifactsDirectory)
-                - task: AzureResourceManagerTemplateDeployment@3
-                  inputs:
-                    deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
-                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
-                    action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'RG-PROD'
-                    location: 'East US 2'
-                    templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_prod.json'
-                    deploymentMode: 'Incremental'
-                    deploymentOutputs: 'deploymentOutputs'
-                - task: PowerShell@2
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Convert the deployment outputs from JSON
-                      $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
+  #                     Get-ChildItem -Recurse $(System.ArtifactsDirectory)
+  #               - task: AzureResourceManagerTemplateDeployment@3
+  #                 inputs:
+  #                   deploymentScope: 'Resource Group'
+  #                   azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+  #                   subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+  #                   action: 'Create Or Update Resource Group'
+  #                   resourceGroupName: 'RG-PROD'
+  #                   location: 'East US 2'
+  #                   templateLocation: 'Linked artifact'
+  #                   csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
+  #                   csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_prod.json'
+  #                   deploymentMode: 'Incremental'
+  #                   deploymentOutputs: 'deploymentOutputs'
+  #               - task: PowerShell@2
+  #                 inputs:
+  #                   targetType: 'inline'
+  #                   script: |
+  #                     # Convert the deployment outputs from JSON
+  #                     $outputs = ConvertFrom-Json -InputObject '$(deploymentOutputs)'
                       
-                      # Extract the public IP address from the outputs
-                      $vmusername = $outputs.vmusername.value
-                      $vmname = $outputs.vmname.value
+  #                     # Extract the public IP address from the outputs
+  #                     $vmusername = $outputs.vmusername.value
+  #                     $vmname = $outputs.vmname.value
                       
-                      # Display the public IP address
-                      Write-Output "VM Administrator Name is: $vmusername"
-                      Write-Output "VM Name is: $vmname"
+  #                     # Display the public IP address
+  #                     Write-Output "VM Administrator Name is: $vmusername"
+  #                     Write-Output "VM Name is: $vmname"
                       
-                      # Set the public IP address as a pipeline variable
-                      Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
-                      Write-Host "##vso[task.setvariable variable=vmname]$vmname"
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: |
-                      $publicIp = az vm show -d -g RG-PROD -n $(vmname) --query "publicIps" -o tsv
-                      Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
-                      Write-Host "Fetched PublicIP is : $publicIp"
-                      Write-Host "Vm name is : $(vmname)"
-                    arguments: '-rgGroup RG-PROD -vmName $(vmname)'
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
+  #                     # Set the public IP address as a pipeline variable
+  #                     Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
+  #                     Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+  #               - task: AzureCLI@2
+  #                 inputs:
+  #                   azureSubscription: 'vishnuSubscriptionServiceConnection'
+  #                   scriptType: 'ps'
+  #                   scriptLocation: 'inlineScript'
+  #                   inlineScript: |
+  #                     $publicIp = az vm show -d -g RG-PROD -n $(vmname) --query "publicIps" -o tsv
+  #                     Write-Host "##vso[task.setvariable variable=varPublicIp;]$publicIp"
+  #                     Write-Host "Fetched PublicIP is : $publicIp"
+  #                     Write-Host "Vm name is : $(vmname)"
+  #                   arguments: '-rgGroup RG-PROD -vmName $(vmname)'
+  #               - task: AzureCLI@2
+  #                 inputs:
+  #                   azureSubscription: 'vishnuSubscriptionServiceConnection'
+  #                   scriptType: 'ps'
+  #                   scriptLocation: 'inlineScript'
+  #                   inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
                     
-  - stage: "PRODAppDeploy"
-    displayName: "PROD App Deploy"
-    dependsOn: PRODInfra
-    jobs:
-      - deployment: "PRODAppDeploy"
-        displayName: "PROD App: WeatherApp"
-        environment: PROD
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: DownloadBuildArtifacts@1
-                  inputs:
-                    buildType: 'current'
-                    downloadType: 'single'
-                    artifactName: 'drop'
-                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+  # - stage: "PRODAppDeploy"
+  #   displayName: "PROD App Deploy"
+  #   dependsOn: PRODInfra
+  #   jobs:
+  #     - deployment: "PRODAppDeploy"
+  #       displayName: "PROD App: WeatherApp"
+  #       environment: PROD
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - task: DownloadBuildArtifacts@1
+  #                 inputs:
+  #                   buildType: 'current'
+  #                   downloadType: 'single'
+  #                   artifactName: 'drop'
+  #                   downloadPath: '$(System.ArtifactsDirectory)/downloads'
