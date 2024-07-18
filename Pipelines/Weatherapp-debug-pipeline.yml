@@ -89,21 +89,21 @@ stages:
                     resourceGroupName: 'RG-VA'
                     location: 'Central US'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/keyvaults/keyvault.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/keyvaults/parameters_dev.json'
-                    deploymentMode: 'Incremental'
-                - task: AzureResourceManagerTemplateDeployment@3
-                  inputs:
-                    deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
-                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
-                    action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'RG-VA'
-                    location: 'Central US'
-                    templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/sqlServerDb.json'
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/parameters_dev.json'
                     deploymentMode: 'Incremental'
+                # - task: AzureResourceManagerTemplateDeployment@3
+                #   inputs:
+                #     deploymentScope: 'Resource Group'
+                #     azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                #     subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                #     action: 'Create Or Update Resource Group'
+                #     resourceGroupName: 'RG-VA'
+                #     location: 'Central US'
+                #     templateLocation: 'Linked artifact'
+                #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/keyvaults/keyvault.json'
+                #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/keyvaults/parameters_dev.json'
+                #     deploymentMode: 'Incremental'
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
