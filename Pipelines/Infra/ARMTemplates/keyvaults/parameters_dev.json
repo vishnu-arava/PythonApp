@@ -8,7 +8,7 @@
         },
         "DataBaseName": {
             "value": ""
-        }
+        },
         "dbSecretName": {
             "value": "DataBaseName"
         },
