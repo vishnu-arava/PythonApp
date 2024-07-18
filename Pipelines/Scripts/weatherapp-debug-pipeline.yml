@@ -9,10 +9,10 @@ parameters:
   - name: environment
     displayName: Environment Select
     type: string
-    default: Dev
+    default: dev
     values:
-      - Dev
-      - Qa
+      - dev
+      - qa
   - name: resourcegroup
     displayName: Resource group
     type: string
