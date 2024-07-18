@@ -1,0 +1,31 @@
+{
+    "parameters":{
+        "location":{
+            "value":"koreacentral"	
+        },
+        "skuServerFarmsName":{
+            "value":"F1"
+        },
+        "skuServerFarmsCapacity":{
+            "value":1
+        },
+        "serverFarmsKind":{
+            "value":"linux"	
+        },
+        "webAppName":{
+            "value":"dk-weatherapp-web1"
+        },
+        "webAppLinuxFxVersion":{
+            "value":"PYTHON|3.10"
+        },
+        "webAppMinTlsVersion":{
+            "value":"1.2"
+        },
+        "webAppFtpsState":{
+            "value":"FtpsOnly"
+        },
+        "env":{
+            "value":"uat"
+        }
+    }
+}

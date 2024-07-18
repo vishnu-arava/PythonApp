@@ -43,40 +43,43 @@
     "variables": {},
     "resources": [
         {
-            "name": "[concat(parameters('webAppName'),'-asp','-',parameters('env'))]",
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('webAppName'),'-asp','-', parameters('env'))]",
             "location": "[parameters('location')]",
             "sku": {
                 "name": "[parameters('skuServerFarmsName')]",
+                "tier": "Free",
                 "capacity": "[parameters('skuServerFarmsCapacity')]"
             },
             "tags": {
                 "displayName": "[concat(parameters('webAppName'),'-asp','-',parameters('env'))]"
             },
-            "kind": "[parameters('serverFarmsKind')]"
+            "kind": "[parameters('serverFarmsKind')]",
+            "properties": {
+                "reserved": true
+            }
         },
         {
-        "name": "[concat(parameters('webAppName'),'-',parameters('env'))]",
-        "type": "Microsoft.Web/sites",
-        "apiVersion": "2021-02-01",
-        "location": "[parameters('location')]",
-        "tags": {  
-            "[concat('hidden-related:', resourceGroup().id, concat('/providers/Microsoft.Web/serverfarms/',parameters('webAppName'),'-asp','-',parameters('env')))]": "Resource",
-            "displayName": "[concat(parameters('webAppName'),'-',parameters('env'))]"
-        },
-        "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms', concat(parameters('webAppName'),'-asp','-',parameters('env')))]"
-        ],
-        "properties": {
-            "name": "[concat(parameters('webAppName'),'-',parameters('env'))]",
-            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('webAppName'),'-asp','-',parameters('env')))]",
-            "linuxFxVersion": "[parameters('webAppLinuxFxVersion')]",
-            "siteConfig":{
-                "minTlsVersion": "[parameters('webAppMinTlsVersion')]",
-                "ftpsState": "[parameters('webAppFtpsState')]"
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('webAppName'), parameters('env'))]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('webAppName'),'-asp','-', parameters('env')))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('webAppName'),'-asp','-', parameters('env')))]",
+                "siteConfig": {
+                    "linuxFxVersion": "[parameters('webAppLinuxFxVersion')]",
+                    "minTlsVersion": "[parameters('webAppMinTlsVersion')]",
+                    "ftpsState": "[parameters('webAppFtpsState')]"
+                },
+                "httpsOnly": true
+            },
+            "identity": {
+                "type": "SystemAssigned"
             }
-        }
         }
     ],
     "outputs": {}
