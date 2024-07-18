@@ -8,15 +8,15 @@
         },
         "appServicePlanName": {
             "type": "string",
-            "defaultValue": "Default"
+            "defaultValue": "myappserviceplan"
         },
         "appServiceName": {
             "type": "string",
-            "defaultValue": "Default"
+            "defaultValue": "muappservice"
         },
         "location": {
             "type": "string",
-            "defaultValue": "Default"
+            "defaultValue": "mylocation"
         },
         "sku": {
             "type": "string",
@@ -24,7 +24,7 @@
         },
         "linuxFxVersion": {
             "type": "string",
-            "defaultValue": "Default"
+            "defaultValue": "python | 3.9"
         }
     },
     "resources": [
