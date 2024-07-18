@@ -6,6 +6,9 @@
         "kvName": {
             "value": "vishnukeyvault58206@"
         },
+        "DataBaseName": {
+            "value": ""
+        }
         "dbSecretName": {
             "value": "DataBaseName"
         },
