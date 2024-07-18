@@ -220,6 +220,20 @@ stages:
                  inputs:
                    targetType: 'inline'
                    script: 'echo $(testvalue)'
+      - deployment: "DeployTest1"
+        displayName: "Deploy Test 1"
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: PowerShell@2
+                inputs:
+                  targetType: 'inline'
+                  script: |
+                    # Write your PowerShell commands here.
+                    
+                    echo $(testvalue)
     
   - stage: "TestDeploy"
     displayName: "Deploy : Test-${{ parameters.environment }}"
