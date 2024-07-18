@@ -52,10 +52,9 @@
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]",
             "siteConfig": {
                     "numberOfWorkers": 1,
-                    "alwaysOn": false,
-                    "linuxFxVersion": "PYTHON|3.10"
-                }
-            
+                    "alwaysOn": false
+                },
+            "linuxFxVersion": "PYTHON|3.10"
         }
     }
     ],
