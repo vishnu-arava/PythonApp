@@ -13,8 +13,6 @@ parameters:
     values:
       - Dev
       - Qa
-      - Uat
-      - Prod
   - name: resourcegroup
     displayName: Resource group
     type: string
@@ -23,8 +21,6 @@ parameters:
       - RG-DEV
       - RG-QA
       - RG-PERF
-      - RG-UAT
-      - RG-PROD
       - RG-KVC
       - RG-SATYAM
       - RG-VA
