@@ -80,6 +80,7 @@ stages:
                    downloadPath: '$(System.ArtifactsDirectory)'
                - task: AzureResourceManagerTemplateDeployment@3
                  displayName: Sonarqube vm
+                 condition: eq('${{ parameters.environment }}','qa')
                  inputs:
                    deploymentScope: 'Resource Group'
                    azureResourceManagerConnection: 'NewFreeTrial2024'
@@ -95,6 +96,7 @@ stages:
                    deploymentOutputs: 'deploymentOutputs'
                - task: PowerShell@2
                  displayName: Get Sonarqube Details
+                 condition: eq('${{ parameters.environment }}','qa')
                  inputs:
                    targetType: 'inline'
                    script: |
