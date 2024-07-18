@@ -223,6 +223,7 @@ stages:
       - deployment: "DeployTest1"
         displayName: "Deploy Test 1"
         environment: ${{ parameters.environment }}
+        dependsOn: DeployApp
         strategy:
           runOnce:
             deploy:
