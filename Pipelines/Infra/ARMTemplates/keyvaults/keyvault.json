@@ -10,6 +10,10 @@
             "type": "string",
             "defaultValue": "vishnukeyvault005"
         },
+        "DataBaseName": {
+            "type": "string",
+            "defaultValue": "mydatabase"
+        },
         "dbSecretName": {
             "type": "string",
             "defaultValue": "mydbsecret"
