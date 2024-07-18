@@ -7,7 +7,7 @@
             "value": "vishnukeyvault58206@"
         },
         "DataBaseName": {
-            "value": ""
+            "value": "mydbdev"
         },
         "dbSecretName": {
             "value": "DataBaseName"
