@@ -41,17 +41,27 @@ def retrieve_secret(secret_name):
 load_dotenv()
 secret_name = "DataBaseServerLink"
 DataBaseServerLink = retrieve_secret(secret_name)
+print("Got DataBaseServerLink from key vault")
+
 secret_name = "DataBasePassword"
 DataBasePassword = retrieve_secret(secret_name)
+print("Got DataBasePassword from key vault")
+
 secret_name = "DataBaseUserName"
 DataBaseUserName = retrieve_secret(secret_name)
+print("Got DataBaseUserName from key vault")
+
 secret_name = "DataBaseName"
 DataBaseName = retrieve_secret(secret_name)
+print("Got DataBaseName from key vault")
+
 secret_name = "OpenWeatherApiKey"
 OpenWeatherApiKey = retrieve_secret(secret_name)
+print("Got OpenWeatherApiKey from key vault")
+
 secret_name = "GEODBApiKey"
 GEODBApiKey = retrieve_secret(secret_name)
-
+print("Got GEODBApiKey from key vault")
 
 app.config['SECRET_KEY'] = str(os.getenv("SECRET_KEY"))
 
