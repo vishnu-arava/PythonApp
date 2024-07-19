@@ -41,19 +41,19 @@ def retrieve_secret(secret_name):
 load_dotenv()
 secret_name = "DataBaseServerLink"
 DataBaseServerLink = retrieve_secret(secret_name)
-print("Got DataBaseServerLink from key vault")
+print("Got DataBaseServerLink from key vault:",DataBaseServerLink)
 
 secret_name = "DataBasePassword"
 DataBasePassword = retrieve_secret(secret_name)
-print("Got DataBasePassword from key vault")
+print("Got DataBasePassword from key vault",DataBasePassword)
 
 secret_name = "DataBaseUserName"
 DataBaseUserName = retrieve_secret(secret_name)
-print("Got DataBaseUserName from key vault")
+print("Got DataBaseUserName from key vault",DataBaseUserName)
 
 secret_name = "DataBaseName"
 DataBaseName = retrieve_secret(secret_name)
-print("Got DataBaseName from key vault")
+print("Got DataBaseName from key vault",DataBaseName)
 
 secret_name = "OpenWeatherApiKey"
 OpenWeatherApiKey = retrieve_secret(secret_name)
