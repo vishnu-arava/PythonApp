@@ -14,6 +14,38 @@
     "functions": [],
     "variables": {},
     "resources": [
+        {
+            "name": "[concat(parameters('appServiceName'),'-ws-',parameters('env'))]",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2021-06-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "sku": {
+                    "name": "pergb2018"
+                },
+                "features": {
+                    "searchVersion": 1
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2020-02-02",
+            "name": "[concat(parameters('appServiceName'),'-ai-',parameters('env'))]",
+            "location": "[resourceGroup().location]",
+            "kind": "web",
+            "dependsOn": [
+               "[resourceId('Microsoft.OperationalInsights/workspaces',concat(parameters('appServiceName'),'-ws-',parameters('env')))]"
+            ],
+            "properties": {
+                "Application_Type": "web",
+                "Flow_Type": "Bluefield",
+                "ImmediatePurgeDataOn30Days": true,
+                "RetentionInDays": 30,
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces',concat(parameters('appServiceName'),'-ws-',parameters('env')))]"
+            }
+      },
+
      {
         "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]",
         "type": "Microsoft.Web/serverfarms",
@@ -21,16 +53,18 @@
         "location": "[resourceGroup().location]",
         "kind": "linux",
         "sku": {
-            "name": "B1",
-            "tier": "Basic",
-            "size": "B1",
-            "capacity": 1
+            "name": "F1",
+            "tier": "Free"
         },
+        "dependsOn": [
+            "[resourceId('Microsoft.Insights/components', concat(parameters('appServiceName'),'-ai-',parameters('env')))]"
+        ],
         "tags": {
             "displayName": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]"
         },
         "properties": {
-            "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]"
+            "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]",
+            "reserved": true
         }
      },
     {
@@ -38,8 +72,6 @@
         "type": "Microsoft.Web/sites",
         "apiVersion": "2022-09-01",
         "location": "[resourceGroup().location]",
-        "kind": "app,Linux",
-        
         "tags": {
             "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceName'),'-asp-',parameters('env'))]": "Resource",
             "displayName": "[concat(parameters('appServiceName'),'-',parameters('env'))]"
@@ -52,9 +84,32 @@
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]",
             "siteConfig": {
                     "numberOfWorkers": 1,
-                    "alwaysOn": false
+                    "alwaysOn": false,
+                    "appSettings": [
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('appServiceName'),'-ai-',parameters('env'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('appServiceName'),'-ai-',parameters('env')), '2015-05-01').ConnectionString]"
+                        }
+                    ],
+                    "httpLoggingEnabled": false,
+                    "detailedErrorLoggingEnabled": false,
+                    "applicationLogs": {
+                        "azureBlobStorage": {
+                            "level": "Verbose",
+                            "retentionInDays": 15,
+                            "sasUrl": "https://dkweatherapp.blob.core.windows.net/applogs?sp=r&st=2024-07-18T15:51:27Z&se=2024-07-18T23:51:27Z&spr=https&sv=2022-11-02&sr=c&sig=j1V%2Ff2S7c6GhOYrFy8jKrQhMwe3oIP3dqy7ecKdwdc4%3D"
+                        },
+                        "fileSystem": {
+                            "level": "Verbose"
+                        }
+                    }
                 },
             "linuxFxVersion": "PYTHON|3.10"
+             
         }
     }
     ],
