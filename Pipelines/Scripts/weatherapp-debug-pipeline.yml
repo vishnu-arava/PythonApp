@@ -25,10 +25,8 @@ parameters:
       - RG-SATYAM
       - RG-VA
 variables:
-  - group: Credentials
   - group: WeatherApp-${{ parameters.environment }}
-  - name: vmip
-    value: default
+
 stages:
   - stage: build
     displayName: Build
@@ -84,8 +82,8 @@ stages:
                  condition: eq('${{ parameters.environment }}','qa')
                  inputs:
                    deploymentScope: 'Resource Group'
-                   azureResourceManagerConnection: 'NewFreeTrial2024'
-                   subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
                    action: 'Create Or Update Resource Group'
                    resourceGroupName: ${{ parameters.resourcegroup }}
                    location: 'East US 2'
@@ -111,15 +109,15 @@ stages:
                  displayName: SQL 
                  inputs:
                    deploymentScope: 'Resource Group'
-                   azureResourceManagerConnection: 'NewFreeTrial2024'
-                   subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
                    action: 'Create Or Update Resource Group'
                    resourceGroupName: ${{ parameters.resourcegroup }}
                    location: 'Central US'
                    templateLocation: 'Linked artifact'
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/azureSql/azureSqlDb/azureSqlDb.json'
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/azureSql/azureSqlDb/parameters_${{ parameters.environment }}.json'
-                   overrideParameters: '-serverName "dk-weatherapp-sql-server" -dbName "dk-weatherapp-sql-db" -userName "dk-weatherapp-sql" -password $(SqlDevPassword) -tlsVersion "1.2" -env "dev" -location "centralus"'
+                   overrideParameters: '-serverName $(sql-serverName) -dbName $(sql-dbName) -userName $(sql-dbUserName) -password $(SqlDevPassword) -tlsVersion "1.2" -env ${{ parameters.environment }} -location "centralus"'
                    deploymentMode: 'Incremental'
                    deploymentOutputs: 'deploymentOutputs'
                - task: PowerShell@2
@@ -139,7 +137,7 @@ stages:
                - task: AzureCLI@2
                  displayName: TenantId,Objectid and subscription Id 
                  inputs:
-                   azureSubscription: 'NewFreeTrial2024'
+                   azureSubscription: $(serviceConnection)
                    scriptType: 'ps'
                    scriptLocation: 'inlineScript'
                    inlineScript: |
@@ -154,8 +152,8 @@ stages:
                  displayName: Key Vaults
                  inputs:
                    deploymentScope: 'Resource Group'
-                   azureResourceManagerConnection: 'NewFreeTrial2024'
-                   subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
                    action: 'Create Or Update Resource Group'
                    resourceGroupName: ${{ parameters.resourcegroup }}
                    location: 'Central US'
@@ -176,7 +174,7 @@ stages:
                - task: AzureCLI@2
                  displayName: App Registration
                  inputs:
-                   azureSubscription: 'NewFreeTrial2024'
+                   azureSubscription: $(serviceConnection)
                    scriptType: 'ps'
                    scriptLocation: 'scriptPath'
                    scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
@@ -217,7 +215,7 @@ stages:
               #  - task: AzureCLI@2
               #    displayName: Az cli to update Yaml Variables
               #    inputs:
-              #      azureSubscription: 'NewFreeTrial2024'
+              #      azureSubscription: $(serviceConnection)
               #      scriptType: 'ps'
               #      scriptLocation: 'scriptPath'
               #      scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/updatingYamlPipelineariables.ps1'
