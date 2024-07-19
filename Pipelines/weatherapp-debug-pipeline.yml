@@ -191,13 +191,18 @@ stages:
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
                   
-                - task: PowerShell@2
+                - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here.
-                      
-                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: $(serviceConnection)
+                    subscriptionId: $(subscriptionId)
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: $(resourceGroup)
+                    location: 'North Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/parameters-qa.json'
+                    deploymentMode: 'Incremental'
       
   - stage: "QaApp"
     displayName: "QA Deploy: Weather App"
@@ -218,14 +223,15 @@ stages:
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
                   
-                - task: PowerShell@2
+                - task: AzureRmWebAppDeployment@4
                   inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here.
-                      
-                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
-
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'NewFreeTrial2024'
+                    appType: 'webAppLinux'
+                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
+                    packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
+                    StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
+  
 
   - stage: "PerfInfra"
     displayName: "Perf Deploy: Infra"
