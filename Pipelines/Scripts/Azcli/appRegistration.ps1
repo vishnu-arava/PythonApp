@@ -15,6 +15,8 @@ Write-Host "App service and service principle created successfully"
 [string]$scope = "/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 az role assignment create --role "Key Vault Secrets User" --assignee-object-id $appRegServicePrincipleObjectId --scope $scope --assignee-principal-type ServicePrincipal
 
+az keyvault set-policy --name $keyVaultName --object-id $objectId --key-permissions "Get,List"
+
 az keyvault secret list --vault-name $keyVaultName
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationClientSecret" --value $clientSecretValue
 Write-Host "AppRegistrationClientSecret Updated"
