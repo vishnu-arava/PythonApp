@@ -105,17 +105,7 @@
                         }
                     ],
                     "httpLoggingEnabled": false,
-                    "detailedErrorLoggingEnabled": false,
-                    "applicationLogs": {
-                        "azureBlobStorage": {
-                            "level": "Verbose",
-                            "retentionInDays": 15,
-                            "sasUrl": "https://dkweatherapp.blob.core.windows.net/applogs?sp=r&st=2024-07-18T15:51:27Z&se=2024-07-18T23:51:27Z&spr=https&sv=2022-11-02&sr=c&sig=j1V%2Ff2S7c6GhOYrFy8jKrQhMwe3oIP3dqy7ecKdwdc4%3D"
-                        },
-                        "fileSystem": {
-                            "level": "Verbose"
-                        }
-                    }
+                    "detailedErrorLoggingEnabled": false
                 }
              
         }
