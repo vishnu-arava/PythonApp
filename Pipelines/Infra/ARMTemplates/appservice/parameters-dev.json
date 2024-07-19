@@ -7,6 +7,9 @@
         },
         "env": {
             "value": "dev"
+        },
+        "location":{
+            "value": "northcentralus"
         }
     }
 }

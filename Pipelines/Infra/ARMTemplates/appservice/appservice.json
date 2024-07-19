@@ -9,6 +9,10 @@
         "env": {
             "type": "string",
             "defaultValue": "dev"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "eastus"
         }
     },
     "functions": [],
@@ -18,7 +22,7 @@
             "name": "[concat(parameters('appServiceName'),'-ws-',parameters('env'))]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2021-06-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "properties": {
                 "sku": {
                     "name": "pergb2018"
@@ -32,7 +36,7 @@
             "type": "Microsoft.Insights/components",
             "apiVersion": "2020-02-02",
             "name": "[concat(parameters('appServiceName'),'-ai-',parameters('env'))]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "kind": "web",
             "dependsOn": [
                "[resourceId('Microsoft.OperationalInsights/workspaces',concat(parameters('appServiceName'),'-ws-',parameters('env')))]"
@@ -50,7 +54,7 @@
         "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]",
         "type": "Microsoft.Web/serverfarms",
         "apiVersion": "2022-09-01",
-        "location": "[resourceGroup().location]",
+        "location": "[parameters('location')]",
         "kind": "linux",
         "sku": {
             "name": "S1",
@@ -71,7 +75,7 @@
         "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
         "type": "Microsoft.Web/sites",
         "apiVersion": "2022-09-01",
-        "location": "[resourceGroup().location]",
+        "location": "[parameters('location')]",
         "tags": {
             "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceName'),'-asp-',parameters('env'))]": "Resource",
             "displayName": "[concat(parameters('appServiceName'),'-',parameters('env'))]"

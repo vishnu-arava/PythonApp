@@ -7,6 +7,9 @@
         },
         "env": {
             "value": "uat"
+        },
+        "location":{
+            "value": "northcentralus"
         }
     }
 }
