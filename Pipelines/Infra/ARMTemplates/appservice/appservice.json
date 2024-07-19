@@ -53,8 +53,8 @@
         "location": "[resourceGroup().location]",
         "kind": "linux",
         "sku": {
-            "name": "F1",
-            "tier": "Free"
+            "name": "S2",
+            "tier": "Standard"
         },
         "dependsOn": [
             "[resourceId('Microsoft.Insights/components', concat(parameters('appServiceName'),'-ai-',parameters('env')))]"
@@ -94,6 +94,10 @@
                         {
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
                             "value": "[reference(concat('microsoft.insights/components/', parameters('appServiceName'),'-ai-',parameters('env')), '2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                            "value": "true"
                         }
                     ],
                     "httpLoggingEnabled": false,
