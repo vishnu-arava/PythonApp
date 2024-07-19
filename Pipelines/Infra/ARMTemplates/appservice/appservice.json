@@ -57,8 +57,8 @@
         "location": "[parameters('location')]",
         "kind": "linux",
         "sku": {
-            "name": "S1",
-            "tier": "Standard"
+            "name": "F1",
+            "tier": "Free"
         },
         "dependsOn": [
             "[resourceId('Microsoft.Insights/components', concat(parameters('appServiceName'),'-ai-',parameters('env')))]"
