@@ -87,7 +87,8 @@
             "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]",
             "siteConfig": {
-                    "numberOfWorkers": 1,
+                    "minTlsVersion": "1.2",
+                    "ftpsState": "FtpsOnly",
                     "linuxFxVersion": "PYTHON|3.10",
                     "alwaysOn": false,
                     "appSettings": [
