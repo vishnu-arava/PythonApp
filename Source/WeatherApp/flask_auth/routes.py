@@ -136,7 +136,7 @@ def register():
         email = form.email.data
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
-        user = User(username=form.username.data, email=form.email.data, password=password)
+        user = User(username=form.username.data, email=email, password=password)
         mysql.session.add(user)
         mysql.session.commit()
 
@@ -177,7 +177,7 @@ def dashboard():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    app.logger.info(f'the user has logged out')
+    app.logger.info('the user has logged out')
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
