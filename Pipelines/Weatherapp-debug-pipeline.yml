@@ -5,6 +5,9 @@ pool:
   name: vishnupool
   vmImage: vishnuagent
 
+variables:
+    - group: MyVarGroup
+
 stages:
   - stage: "Build"
     displayName: "Building WeatherApp"
@@ -31,8 +34,6 @@ stages:
 
 
   - stage: "DevInfra"
-    variables:
-    - group: MyVarGroup
     displayName: "Dev Infra"
     dependsOn: Build
     jobs:
