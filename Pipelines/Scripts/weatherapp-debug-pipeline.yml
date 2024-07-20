@@ -26,7 +26,8 @@ parameters:
       - RG-VA
 variables:
   - group: WeatherApp-${{ parameters.environment }}
-
+  - name: dblink
+    value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
   - stage: build
     displayName: Build
@@ -176,7 +177,7 @@ stages:
                        },
                        {
                          "secretName":"DataBaseServerLink",
-                         "secretValue":"$(sql-serverName)-${{ parameters.environment }}.database.windows.net"
+                         "secretValue":$(dblink)
                        },
                        {
                          "secretName":"DataBaseUserName",
