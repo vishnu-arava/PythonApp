@@ -2,9 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "appServiceName": {
-            "type": "string",
-            "defaultValue": "webapp"
+        "appServiceNames": {
+            "type": "array"
         },
         "env": {
             "type": "string",
@@ -13,13 +12,17 @@
         "location": {
             "type": "string",
             "defaultValue": "eastus"
+        },
+        "analyticsWS": {
+            "type": "string",
+            "defaultValue": "workspace"
         }
     },
     "functions": [],
     "variables": {},
     "resources": [
         {
-            "name": "[concat(parameters('appServiceName'),'-ws-',parameters('env'))]",
+            "name": "[concat(parameters('analyticsWS'),'-',parameters('env'))]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2021-06-01",
             "location": "[parameters('location')]",
@@ -35,23 +38,27 @@
         {
             "type": "Microsoft.Insights/components",
             "apiVersion": "2020-02-02",
-            "name": "[concat(parameters('appServiceName'),'-ai-',parameters('env'))]",
+            "name": "[concat(parameters('appServiceNames')[copyIndex()].appName,'-ai-',parameters('env'))]",
             "location": "[parameters('location')]",
             "kind": "web",
             "dependsOn": [
-               "[resourceId('Microsoft.OperationalInsights/workspaces',concat(parameters('appServiceName'),'-ws-',parameters('env')))]"
+               "[resourceId('Microsoft.OperationalInsights/workspaces',concat(parameters('analyticsWS'),'-',parameters('env')))]"
             ],
             "properties": {
                 "Application_Type": "web",
                 "Flow_Type": "Bluefield",
                 "ImmediatePurgeDataOn30Days": true,
                 "RetentionInDays": 30,
-                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces',concat(parameters('appServiceName'),'-ws-',parameters('env')))]"
-            }
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces',concat(parameters('analyticsWS'),'-',parameters('env')))]"
+            },
+            "copy": {
+				"name": "appcopy",
+				"count": "[length(parameters('appServiceNames'))]"
+	        }
       },
 
      {
-        "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]",
+        "name": "[concat(parameters('appServiceNames')[copyIndex()].appName,'-asp-',parameters('env'))]",
         "type": "Microsoft.Web/serverfarms",
         "apiVersion": "2022-09-01",
         "location": "[parameters('location')]",
@@ -61,31 +68,35 @@
             "tier": "Free"
         },
         "dependsOn": [
-            "[resourceId('Microsoft.Insights/components', concat(parameters('appServiceName'),'-ai-',parameters('env')))]"
+            "[resourceId('Microsoft.Insights/components', concat(parameters('appServiceNames')[copyIndex()].appName,'-ai-',parameters('env')))]"
         ],
         "tags": {
-            "displayName": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]"
+            "displayName": "[concat(parameters('appServiceNames')[copyIndex()].appName,'-asp-',parameters('env'))]"
         },
         "properties": {
-            "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]",
+            "name": "[concat(parameters('appServiceNames')[copyIndex()].appName,'-asp-',parameters('env'))]",
             "reserved": true
-        }
+        },
+        "copy": {
+				"name": "appcopy",
+				"count": "[length(parameters('appServiceNames'))]"
+	    }
      },
     {
-        "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
+        "name": "[concat(parameters('appServiceNames')[copyIndex()].appName,'-',parameters('env'))]",
         "type": "Microsoft.Web/sites",
         "apiVersion": "2022-09-01",
         "location": "[parameters('location')]",
         "tags": {
-            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceName'),'-asp-',parameters('env'))]": "Resource",
-            "displayName": "[concat(parameters('appServiceName'),'-',parameters('env'))]"
+            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appServiceNames')[copyIndex()].appName,'-asp-',parameters('env'))]": "Resource",
+            "displayName": "[concat(parameters('appServiceNames')[copyIndex()].appName,'-',parameters('env'))]"
         },
         "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]"
+            "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceNames')[copyIndex()].appName,'-asp-',parameters('env')))]"
         ],
         "properties": {
-            "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
-            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]",
+            "name": "[concat(parameters('appServiceNames')[copyIndex()].appName,'-',parameters('env'))]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceNames')[copyIndex()].appName,'-asp-',parameters('env')))]",
             "siteConfig": {
                     "minTlsVersion": "1.2",
                     "linuxFxVersion": "PYTHON|3.10",
@@ -93,11 +104,11 @@
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(concat('microsoft.insights/components/', parameters('appServiceName'),'-ai-',parameters('env'))).InstrumentationKey]"
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('appServiceNames')[copyIndex()].appName,'-ai-',parameters('env'))).InstrumentationKey]"
                         },
                         {
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', parameters('appServiceName'),'-ai-',parameters('env')), '2015-05-01').ConnectionString]"
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('appServiceNames')[copyIndex()].appName,'-ai-',parameters('env')), '2015-05-01').ConnectionString]"
                         },
                         {
                             "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
@@ -108,7 +119,11 @@
                     "detailedErrorLoggingEnabled": false
                 }
              
-        }
+        },
+        "copy": {
+				"name": "appcopy",
+				"count": "[length(parameters('appServiceNames'))]"
+	    }
     }
     ],
     "outputs": {}

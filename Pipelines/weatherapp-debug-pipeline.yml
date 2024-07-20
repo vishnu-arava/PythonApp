@@ -155,6 +155,7 @@ stages:
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
                 
                 - task: AzureRmWebAppDeployment@4
+                  displayName: "Deploy WeatherApp Web"
                   inputs:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'NewFreeTrial2024'
@@ -163,14 +164,16 @@ stages:
                     packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
                     StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
                   
-                - task: PowerShell@2
+                - task: AzureRmWebAppDeployment@4
+                  displayName: "Deploy WeatherApp API"
                   inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here.
-                      
-                      Get-ChildItem $(System.ArtifactsDirectory)/downloads
-
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'NewFreeTrial2024'
+                    appType: 'webAppLinux'
+                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
+                    packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
+                    StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;python3 run.py'
+  
   - stage: "QaInfra"
     displayName: "QA Deploy: Infra"
     dependsOn: Build
@@ -224,6 +227,7 @@ stages:
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
                   
                 - task: AzureRmWebAppDeployment@4
+                  displayName: "Deploy WeatherApp Web"
                   inputs:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'NewFreeTrial2024'
@@ -231,7 +235,16 @@ stages:
                     WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
                     StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
-  
+                
+                - task: AzureRmWebAppDeployment@4
+                  displayName: "Deploy WeatherApp API"
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'NewFreeTrial2024'
+                    appType: 'webAppLinux'
+                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
+                    packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
+                    StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;python3 run.py'
 
   - stage: "PerfInfra"
     displayName: "Perf Deploy: Infra"
