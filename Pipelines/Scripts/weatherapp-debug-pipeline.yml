@@ -166,7 +166,7 @@ stages:
                      -objectId $(objectidadmin)
                      -spTenantId $(tenantId)
                      -env ${{ parameters.environment }}
-                     -secrets '[
+                     -secrets "[
                        {'secretName':'DataBaseName','secretValue':$(sql-dbName)},
                        {'secretName':'DataBasePassword','secretValue':$(sql-dbPassword)},
                        {'secretName':'DataBaseServerLink','secretValue':'$(sql-serverName)-${{ parameters.environment }}.database.windows.net'},
@@ -177,7 +177,7 @@ stages:
                        {'secretName':'AppRegistrationClientId','secretValue':'default'},
                        {'secretName':'AppRegistrationClientSecret','secretValue':'default'},
                        {'secretName':'AppRegistrationTenantId','secretValue':'default'}
-                     ]'
+                     ]"
 
                    deploymentMode: 'Incremental'
                    deploymentOutputs: 'deploymentOutputs'
