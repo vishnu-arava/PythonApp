@@ -94,7 +94,8 @@ stages:
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/sqlServerDb.json'
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/parameters_dev.json'
                     deploymentMode: 'Incremental'
-                    additionalParameters: -adminPassword $(adminPassword)
+                    overrideParameters: |
+                      - adminPassword $(adminPassword)
                 # - task: AzureResourceManagerTemplateDeployment@3
                 #   inputs:
                 #     deploymentScope: 'Resource Group'
