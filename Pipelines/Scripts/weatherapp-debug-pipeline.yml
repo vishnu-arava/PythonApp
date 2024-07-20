@@ -184,7 +184,7 @@ stages:
                    scriptType: 'ps'
                    scriptLocation: 'scriptPath'
                    scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
-                   arguments: '-appRegistrationName "dk-weatherapp-kv-link" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId)'
+                   arguments: '-appRegistrationName "dk-weatherapp-kv-link" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName) -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
     dependsOn: InfraDeployment
