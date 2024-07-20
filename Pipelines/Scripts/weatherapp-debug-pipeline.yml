@@ -152,10 +152,10 @@ stages:
                  displayName: Key Vaults
                  inputs:
                    deploymentScope: 'Resource Group'
-                   azureResourceManagerConnection: $(serviceConnection)
-                   subscriptionId: $(subscriptionId)
+                   azureResourceManagerConnection: '$(serviceConnection)'
+                   subscriptionId: '$(subscriptionId)'
                    action: 'Create Or Update Resource Group'
-                   resourceGroupName: ${{ parameters.resourcegroup }}
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
                    location: 'Central US'
                    templateLocation: 'Linked artifact'
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/keyVault.json'
@@ -166,19 +166,7 @@ stages:
                      -objectId $(objectidadmin)
                      -spTenantId $(tenantId)
                      -env ${{ parameters.environment }}
-                     -secrets "[
-                       {'secretName':'DataBaseName','secretValue':$(sql-dbName)},
-                       {'secretName':'DataBasePassword','secretValue':$(sql-dbPassword)},
-                       {'secretName':'DataBaseServerLink','secretValue':'$(sql-serverName)-${{ parameters.environment }}.database.windows.net'},
-                       {'secretName':'DataBaseUserName','secretValue':$(sql-dbUserName)},
-                       {'secretName':'GEODBApiKey','secretValue':'03b7c4734dmsha8ae33637250f48p11c63fjsn48372cbe71f6'},
-                       {'secretName':'OpenWeatherApiKey','secretValue':'48a90ac42caa09f90dcaeee4096b9e53'},
-                       {'secretName':'PAT-Powershell','secretValue':'default'},
-                       {'secretName':'AppRegistrationClientId','secretValue':'default'},
-                       {'secretName':'AppRegistrationClientSecret','secretValue':'default'},
-                       {'secretName':'AppRegistrationTenantId','secretValue':'default'}
-                     ]"
-
+                     -secrets "[{'secretName':'DataBaseName','secretValue':$(sql-dbName)},{'secretName':'DataBasePassword','secretValue':$(sql-dbPassword)},{'secretName':'DataBaseServerLink','secretValue':'$(sql-serverName)-${{ parameters.environment }}.database.windows.net'},{'secretName':'DataBaseUserName','secretValue':$(sql-dbUserName)},{'secretName':'GEODBApiKey','secretValue':'03b7c4734dmsha8ae33637250f48p11c63fjsn48372cbe71f6'},{'secretName':'OpenWeatherApiKey','secretValue':'48a90ac42caa09f90dcaeee4096b9e53'},{'secretName':'PAT-Powershell','secretValue':$(PAT-powershell)},{'secretName':'AppRegistrationClientId','secretValue':'default'},{'secretName':'AppRegistrationClientSecret','secretValue':'default'},'secretName':'AppRegistrationTenantId','secretValue':'default'}]"
                    deploymentMode: 'Incremental'
                    deploymentOutputs: 'deploymentOutputs'
                - task: PowerShell@2
