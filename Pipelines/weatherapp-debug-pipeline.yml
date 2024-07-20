@@ -23,8 +23,10 @@ parameters:
 
 variables:
   - group: 'Infra-${{ parameters.env }}'
-  - name: appserviceName
+  - name: appserviceNameWeb
     value: dk-weatherapp-web
+  - name: appserviceNameApi
+    value: dk-weatherapp-api
 
 stages:
   - stage: "Build"
@@ -160,7 +162,7 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
-                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
+                    WebAppName: '${{ variables.appserviceNameWeb }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
                     StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
                   
@@ -170,9 +172,9 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
-                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
+                    WebAppName: '${{ variables.appserviceNameApi }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
-                    StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;python3 run.py'
+                    StartupCommand: 'apt-get install python3-pip -y;pip install flask;python3 run.py'
   
   - stage: "QaInfra"
     displayName: "QA Deploy: Infra"
@@ -232,7 +234,7 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
-                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
+                    WebAppName: '${{ variables.appserviceNameWeb }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
                     StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
                 
@@ -242,9 +244,9 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'NewFreeTrial2024'
                     appType: 'webAppLinux'
-                    WebAppName: '${{ variables.appserviceName }}-${{ parameters.env }}'
+                    WebAppName: '${{ variables.appserviceNameApi }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
-                    StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;python3 run.py'
+                    StartupCommand: 'apt-get install python3-pip -y;pip install flask;python3 run.py'
 
   - stage: "PerfInfra"
     displayName: "Perf Deploy: Infra"
