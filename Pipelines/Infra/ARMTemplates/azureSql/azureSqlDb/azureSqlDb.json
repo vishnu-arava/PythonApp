@@ -43,7 +43,7 @@
         "displayName": "[concat(parameters('serverName'),'-',parameters('env'))]"
     },
     "properties": {
-        "administratorLogin": "[concat(parameters('userName'),'-',parameters('env'))]",
+        "administratorLogin": "[parameters('userName')]",
         "administratorLoginPassword": "[parameters('password')]",
         "minimalTlsVersion": "[parameters('tlsVersion')]"
     },
@@ -93,7 +93,7 @@
         },
         "sqldbusername": {
             "type": "string",
-            "value": "[concat(parameters('userName'),'-',parameters('env'))]"
+            "value": "[parameters('userName')]"
         },
         "sqlpass": {
             "type": "string",
