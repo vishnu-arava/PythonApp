@@ -13,7 +13,7 @@
             "value":[
                 {
                     "secretName":"DataBaseName",
-                    "secretValue":"dk-weatherapp-sql-db-dev"
+                    "secretValue":"default"
                 },
                 {
                     "secretName":"DataBasePassword",
@@ -21,11 +21,11 @@
                 },
                 {
                     "secretName":"DataBaseServerLink",
-                    "secretValue":"dk-weatherapp-sql-server-dev.database.windows.net"
+                    "secretValue":"default"
                 },
                 {
                     "secretName":"DataBaseUserName",
-                    "secretValue":"dk-weatherapp-sql-db-dev"
+                    "secretValue":"default"
                 },
                 {
                     "secretName":"GEODBApiKey",

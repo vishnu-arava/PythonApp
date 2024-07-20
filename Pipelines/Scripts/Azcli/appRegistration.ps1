@@ -4,7 +4,12 @@ param(
     [string]$keyVaultName,
     [string]$resourceGroupName,
     [string]$tenantId,
-    [string]$subscriptionId
+    [string]$subscriptionId,
+    [string]$dbName,
+    [string]$dbPassword,
+    [string]$dbServerLink,
+    [string]$dbUserName,
+    [string]$patPowershell
 )
 [string]$appId=az ad app create --display-name $appRegistrationName --query appId --output tsv
 [string]$objectId=az ad app show --id $appId --query id --output tsv
@@ -19,10 +24,11 @@ az keyvault set-policy --name $keyVaultName --object-id $appRegServicePrincipleO
 
 az keyvault secret list --vault-name $keyVaultName
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationClientSecret" --value $clientSecretValue
-Write-Host "AppRegistrationClientSecret Updated"
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationTenantId" --value $tenantId
-Write-Host "AppRegistrationTenantId Updated"
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationClientId" --value $appId
-Write-Host "AppRegistrationClientId Updated"
-
+az keyvault secret set --vault-name $keyVaultName --name "DataBaseName" --value $dbName
+az keyvault secret set --vault-name $keyVaultName --name "DataBasePassword" --value $dbPassword
+az keyvault secret set --vault-name $keyVaultName --name "DataBaseServerLink" --value $dbServerLink
+az keyvault secret set --vault-name $keyVaultName --name "DataBaseUserName" --value $dbUserName
+az keyvault secret set --vault-name $keyVaultName --name "PAT-Powershell" --value $patPowershell
 Write-Host "Key Vault values updated"
