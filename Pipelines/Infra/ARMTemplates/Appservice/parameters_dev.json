@@ -18,6 +18,16 @@
             }
 
         },
+        "AppInsightName": {
+            "value": [
+                {
+                    "appinsight1": "vishnu-insight-1"
+                },
+                {
+                    "appinsight2": "vishnu-insight-2"
+                }
+            ]
+        },
         "location": {
             "value": "canadacentral"
         },
