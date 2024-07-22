@@ -30,7 +30,7 @@
             "type": "string",
             "defaultValue": "vishnu-weather-workspace"
         },
-        "AppInsightName": {
+        "AppInsightNames": {
             "type": "string",
             "defaultValue": "vishnu-insight-weather"
         }
