@@ -12,7 +12,7 @@
         },
         "appServiceName": {
             "type": "string",
-            "defaultValue": "muappservice"
+            "defaultValue": "myappservice"
         },
         "location": {
             "type": "string",
