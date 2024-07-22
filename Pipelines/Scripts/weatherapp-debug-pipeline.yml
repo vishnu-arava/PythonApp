@@ -30,8 +30,8 @@ variables:
     value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
   - name: appservicenames
     value: |
-      - appName: $(weatherappAppServiceName)
-      - appName: $(weatherappWorldCLimateApiAppServiceName)
+      - "appName":$(weatherappAppServiceName)
+      - "appName":$(weatherappWorldCLimateApiAppServiceName)
 stages:
   - stage: build
     displayName: Build
