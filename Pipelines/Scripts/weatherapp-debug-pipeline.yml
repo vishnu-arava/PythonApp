@@ -199,10 +199,9 @@ stages:
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/appService.json'
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/parameters_${{ parameters.environment }}.json'
                    overrideParameters: >
-                      -appServiceName '[
-                         {"appName":"$(weatherappAppServiceName)"},
-                         {"appName":"$(weatherappWorldCLimateApiAppServiceName)"}
-                      ]'
+                    -appServiceName:
+                       - $(weatherappAppServiceName)
+                       - $(weatherappWorldCLimateApiAppServiceName)
                    deploymentMode: 'Incremental'
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
