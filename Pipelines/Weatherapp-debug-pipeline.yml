@@ -111,7 +111,7 @@ stages:
                         --resource-group $(resourceGroupName) \
                         --name $(appServiceName) \
                         --settings APPINSIGHTS_INSTRUMENTATIONKEY=$INSTRUMENTATION_KEY
-                    arguments: '-appServiceName "vishnuAppServiceDEV" -logAnalyticsWorkspaceName "vishnu-logs-workspace-dev" -appInsightsName "vishnu-insights-dev" -location "canadacentral" -resourceGroupName "RG-VA"'  
+                    arguments: '-appServiceName "vishnuAppServiceDEV" -logAnalyticsWorkspaceName "vishnu-logs-workspace-dev" -appInsightsName "vishnu-insights-dev" -location "canadacentral" -resourceGroupName "RG-VA"'
 
                 # - task: AzureResourceManagerTemplateDeployment@3
                 #   inputs:
