@@ -68,6 +68,10 @@
             "RetentionInDays": 30,
             "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces'), parameters('workspaceName')]"
         }
+        "copy": {
+            "name": "insight",
+            "count": "[length(parameters('AppInsights'))]"
+        }
     },
 
     {
