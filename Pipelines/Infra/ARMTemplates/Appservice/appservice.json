@@ -39,23 +39,26 @@
     "resources": [
 
     {
-      "type": "Microsoft.OperationalInsights/workspaces",
-      "apiVersion": "2021-12-01-preview",
-      "name": "[parameters('workspaceName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "sku": {
-          "name": "pergb2018"
-          }
-        },
-        "retentionInDays": 30
+        "type": "Microsoft.OperationalInsights/workspaces",
+        "apiVersion": "2021-12-01-preview",
+        "name": "[parameters('workspaceName')]",
+        "location": "[parameters('location')]",
+        "properties": {
+            "sku": {
+            "name": "pergb2018"
+            }
+            },
+            "retentionInDays": 30
     },
 
     {
         "type": "Microsoft.Insights/components",
         "apiVersion": "2020-02-02",
-        "name": "",
+        "name": "[concat(parameters('AppInsightName'), parameters('env'))]",
         "location": "[parameters('location')]",
+        "depensOn": [
+            "[resourceId('Microsoft.OperationalInsights/workspaces'), parameters('workspaceName')]"
+        ],
         "kind": "string",
         "etag": "string",
         "properties": {
@@ -63,45 +66,50 @@
             "Flow_Type": "Bluefield",
             "ImmediatePurgeDataOn30Days": true,
             "RetentionInDays": 30,
-            "WorkspaceResourceId": "string"
+            "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces'), parameters('workspaceName')]"
         }
     },
 
     {
 
-            "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('appServicePlanName'), parameters('env'))]",
-            "location": "[parameters('location')]",
-            "sku": {
-                "name": "[parameters('sku')]",
-                "tier": "Free"
-            },
-            "kind": "linux",
-            "properties": {
-                "reserved": true
-            }
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2021-02-01",
+        "name": "[concat(parameters('appServicePlanName'), parameters('env'))]",
+        "location": "[parameters('location')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Insights/components'), concat(parameters('AppInsightName'), parameters('env'))]"
+        ],
+        "sku": {
+            "name": "[parameters('sku')]",
+            "tier": "Free"
+        },
+        "kind": "linux",
+        "properties": {
+            "reserved": true
+        }
     },
     {
-            "type": "Microsoft.Web/sites",
-            "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('appServiceNames'), parameters('env'))]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env')))]"
-            ],
-            "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env')))]",
-                "siteConfig": {
-                    "linuxFxVersion": "[parameters('linuxFxVersion')]",
-                    "minTlsVersion": "1.2",
-                    "ftpsState": "FtpsOnly"
-                },
-                "httpsOnly": true
+        "type": "Microsoft.Web/sites",
+        "apiVersion": "2021-02-01",
+        "name": "[concat(parameters('appServiceNames')[copyIndex()].appname, '-', parameters('env'))]",
+        "location": "[parameters('location')]",
+        
+        "properties": {
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env')))]",
+            "siteConfig": {
+                "linuxFxVersion": "[parameters('linuxFxVersion')]",
+                "minTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly"
             },
-            "identity": {
-                "type": "SystemAssigned"
-            }
+            "httpsOnly": true
+        },
+        "identity": {
+            "type": "SystemAssigned"
+        }
+        "copy": {
+            "name": "appsname",
+            "count": "[length(parameters('appServiceNames'))]"
+        }
     }
 
     ]
