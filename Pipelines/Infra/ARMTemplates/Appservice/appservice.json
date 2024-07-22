@@ -70,7 +70,7 @@
         }
         "copy": {
             "name": "insight",
-            "count": "[length(parameters('AppInsights'))]"
+            "count": "[length(parameters('AppInsightNames'))]"
         }
     },
 
