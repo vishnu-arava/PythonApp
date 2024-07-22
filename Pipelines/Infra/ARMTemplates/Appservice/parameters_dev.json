@@ -18,7 +18,7 @@
             }
 
         },
-        "AppInsightName": {
+        "AppInsightNames": {
             "value": [
                 {
                     "appinsight1": "vishnu-insight-1"
