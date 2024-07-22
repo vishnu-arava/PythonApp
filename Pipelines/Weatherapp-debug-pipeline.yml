@@ -58,31 +58,6 @@ stages:
                       # Write your PowerShell commands here.
                       
                       Get-ChildItem -Recurse $(System.ArtifactsDirectory)
-                # - task: AzureResourceManagerTemplateDeployment@3
-                #   inputs:
-                #     deploymentScope: 'Resource Group'
-                #     azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
-                #     subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
-                #     action: 'Create Or Update Resource Group'
-                #     resourceGroupName: 'RG-VA'
-                #     location: 'Central US'
-                #     templateLocation: 'Linked artifact'
-                #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
-                #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_dev.json'
-                #     deploymentMode: 'Incremental'
-                #     deploymentOutputs: 'deploymentOutputs'
-                # - task: AzureResourceManagerTemplateDeployment@3
-                #   inputs:
-                #     deploymentScope: 'Resource Group'
-                #     azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
-                #     subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
-                #     action: 'Create Or Update Resource Group'
-                #     resourceGroupName: 'RG-VA'
-                #     location: 'Central US'
-                #     templateLocation: 'Linked artifact'
-                #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
-                #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
-                #     deploymentMode: 'Incremental'
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
@@ -92,11 +67,71 @@ stages:
                     resourceGroupName: 'RG-VA'
                     location: 'Central US'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/sqlServerDb.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/parameters_dev.json'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_dev.json'
                     deploymentMode: 'Incremental'
-                    overrideParameters: |
-                      - adminPassword $(adminPassword)
+                    deploymentOutputs: 'deploymentOutputs'
+                
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-VA'
+                    location: 'Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
+                    deploymentMode: 'Incremental'
+                - task: AzureCLI@2
+                  inputs:
+                    azureSubscription: 'vishnuSubscriptionServiceConnection'
+                    scriptType: 'ps'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      az monitor log-analytics workspace create \
+                        --resource-group $(resourceGroupName) \
+                        --workspace-name $(logAnalyticsWorkspaceName) \
+                        --location $(location)
+                    arguments: '-resourceGroupName "RG-VA" -logAnalyticsWorkspaceName "VishnuLog58206Workspace" -location "westus2"'
+                - task: AzureCLI@2
+                  inputs:
+                    azureSubscription: 'vishnuSubscriptionServiceConnection'
+                    scriptType: 'ps'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      WORKSPACE_ID=$(az monitor log-analytics workspace show --resource-group $(resourceGroupName) --workspace-name $(logAnalyticsWorkspaceName) --query id --output tsv)
+                      az monitor app-insights component create \
+                        --app $(appInsightsName) \
+                        --location $(location) \
+                        --resource-group $(resourceGroupName) \
+                        --workspace-resource-id $WORKSPACE_ID
+                      arguments: '-appInsightsName "VishnuInsights" -location "westus2" -resourceGroupName "RG-VA"'
+                      # Get Instrumentation Key
+                      INSTRUMENTATION_KEY=$(az monitor app-insights component show --app $(appInsightsName) --resource-group $(resourceGroupName) --query instrumentationKey --output tsv)
+                      # Configure App Service to use Application Insights
+                      az webapp config appsettings set \
+                        --resource-group $(resourceGroupName) \
+                        --name $(appServiceName) \
+                        --settings APPINSIGHTS_INSTRUMENTATIONKEY=$INSTRUMENTATION_KEY
+
+
+                # - task: AzureResourceManagerTemplateDeployment@3
+                #   inputs:
+                #     deploymentScope: 'Resource Group'
+                #     azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                #     subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                #     action: 'Create Or Update Resource Group'
+                #     resourceGroupName: 'RG-VA'
+                #     location: 'Central US'
+                #     templateLocation: 'Linked artifact'
+                #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/sqlServerDb.json'
+                #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/parameters_dev.json'
+                #     deploymentMode: 'Incremental'
+                #     overrideParameters: |
+                #       - adminPassword $(adminPassword)
+
                 # - task: AzureResourceManagerTemplateDeployment@3
                 #   inputs:
                 #     deploymentScope: 'Resource Group'
@@ -109,6 +144,7 @@ stages:
                 #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/keyvaults/keyvault.json'
                 #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/keyvaults/parameters_dev.json'
                 #     deploymentMode: 'Incremental'
+
                 # - task: AzureResourceManagerTemplateDeployment@3
                 #   inputs:
                 #     deploymentScope: 'Resource Group'
@@ -121,6 +157,7 @@ stages:
                 #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/storage/storage.json'
                 #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/storage/parameters_dev.json'
                 #     deploymentMode: 'Incremental'
+
                 # - task: PowerShell@2
                 #   inputs:
                 #     targetType: 'inline'
@@ -139,6 +176,7 @@ stages:
                 #       # Set the public IP address as a pipeline variable
                 #       Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
                 #       Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+
                 # - task: AzureCLI@2
                 #   inputs:
                 #     azureSubscription: 'vishnuSubscriptionServiceConnection'
@@ -150,6 +188,7 @@ stages:
                 #       Write-Host "Fetched PublicIP is : $publicIp"
                 #       Write-Host "Vm name is : $(vmname)"
                 #     arguments: '-rgGroup RG-VA -vmName $(vmname)'
+                
                 # - task: AzureCLI@2
                 #   inputs:
                 #     azureSubscription: 'vishnuSubscriptionServiceConnection'
@@ -181,6 +220,7 @@ stages:
                 #     contents: '**'
                 #     targetFolder: '/home/Weatherapp/'
                 #     readyTimeout: '20000'
+
                 # - task: SSH@0
                 #   inputs:
                 #     sshEndpoint: 'weatherappdev-vm-satyamcloud'
@@ -249,6 +289,7 @@ stages:
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/storage/storage.json'
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/storage/parameters_qa.json'
                     deploymentMode: 'Incremental'
+                    
                 # - task: PowerShell@2
                 #   inputs:
                 #     targetType: 'inline'
@@ -267,6 +308,7 @@ stages:
                 #       # Set the public IP address as a pipeline variable
                 #       Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
                 #       Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+
                 # - task: AzureCLI@2
                 #   inputs:
                 #     azureSubscription: 'vishnuSubscriptionServiceConnection'
@@ -278,6 +320,7 @@ stages:
                 #       Write-Host "Fetched PublicIP is : $publicIp"
                 #       Write-Host "Vm name is : $(vmname)"
                 #     arguments: '-rgGroup RG-QA -vmName $(vmname)'
+
                 # - task: AzureCLI@2
                 #   inputs:
                 #     azureSubscription: 'vishnuSubscriptionServiceConnection'
@@ -302,6 +345,7 @@ stages:
                     downloadType: 'single'
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
+
   - stage: "UATInfra"
     displayName: "UAT Infra"
     dependsOn: Build
@@ -352,6 +396,7 @@ stages:
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/sqlServerDb.json'
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/sql/parameters_uat.json'
                     deploymentMode: 'Incremental'
+
                 # - task: PowerShell@2
                 #   inputs:
                 #     targetType: 'inline'
@@ -370,6 +415,7 @@ stages:
                 #       # Set the public IP address as a pipeline variable
                 #       Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
                 #       Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+
                 # - task: AzureCLI@2
                 #   inputs:
                 #     azureSubscription: 'vishnuSubscriptionServiceConnection'
@@ -381,6 +427,7 @@ stages:
                 #       Write-Host "Fetched PublicIP is : $publicIp"
                 #       Write-Host "Vm name is : $(vmname)"
                 #     arguments: '-rgGroup RG-UAT -vmName $(vmname)'
+                
                 # - task: AzureCLI@2
                 #   inputs:
                 #     azureSubscription: 'vishnuSubscriptionServiceConnection'
@@ -431,6 +478,7 @@ stages:
   #                     # Write your PowerShell commands here.
                       
   #                     Get-ChildItem -Recurse $(System.ArtifactsDirectory)
+
   #               - task: AzureResourceManagerTemplateDeployment@3
   #                 inputs:
   #                   deploymentScope: 'Resource Group'
@@ -444,6 +492,7 @@ stages:
   #                   csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_prod.json'
   #                   deploymentMode: 'Incremental'
   #                   deploymentOutputs: 'deploymentOutputs'
+
   #               - task: PowerShell@2
   #                 inputs:
   #                   targetType: 'inline'
@@ -462,6 +511,7 @@ stages:
   #                     # Set the public IP address as a pipeline variable
   #                     Write-Host "##vso[task.setvariable variable=vmusername]$vmusername"
   #                     Write-Host "##vso[task.setvariable variable=vmname]$vmname"
+
   #               - task: AzureCLI@2
   #                 inputs:
   #                   azureSubscription: 'vishnuSubscriptionServiceConnection'
@@ -473,6 +523,7 @@ stages:
   #                     Write-Host "Fetched PublicIP is : $publicIp"
   #                     Write-Host "Vm name is : $(vmname)"
   #                   arguments: '-rgGroup RG-PROD -vmName $(vmname)'
+
   #               - task: AzureCLI@2
   #                 inputs:
   #                   azureSubscription: 'vishnuSubscriptionServiceConnection'
