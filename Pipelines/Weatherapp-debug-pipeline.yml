@@ -94,7 +94,7 @@ stages:
                         --resource-group $(resourceGroupName) \
                         --workspace-name $(logAnalyticsWorkspaceName) \
                         --location $(location)
-                    arguments: '-resourceGroupName "RG-VA" -logAnalyticsWorkspaceName "VishnuLog58206Workspace" -location "westus2"'
+                      arguments: '-resourceGroupName "RG-VA" -logAnalyticsWorkspaceName "VishnuLog58206Workspace" -location "westus2"'
                 - task: AzureCLI@2
                   inputs:
                     azureSubscription: 'vishnuSubscriptionServiceConnection'
@@ -108,8 +108,10 @@ stages:
                         --resource-group $(resourceGroupName) \
                         --workspace-resource-id $WORKSPACE_ID
                       arguments: '-appInsightsName "VishnuInsights" -location "westus2" -resourceGroupName "RG-VA"'
+
                       # Get Instrumentation Key
                       INSTRUMENTATION_KEY=$(az monitor app-insights component show --app $(appInsightsName) --resource-group $(resourceGroupName) --query instrumentationKey --output tsv)
+
                       # Configure App Service to use Application Insights
                       az webapp config appsettings set \
                         --resource-group $(resourceGroupName) \
@@ -188,7 +190,7 @@ stages:
                 #       Write-Host "Fetched PublicIP is : $publicIp"
                 #       Write-Host "Vm name is : $(vmname)"
                 #     arguments: '-rgGroup RG-VA -vmName $(vmname)'
-                
+
                 # - task: AzureCLI@2
                 #   inputs:
                 #     azureSubscription: 'vishnuSubscriptionServiceConnection'
