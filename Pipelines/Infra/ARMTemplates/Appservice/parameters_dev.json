@@ -6,8 +6,17 @@
         "appServicePlanName": {
             "value": "vishnuAppServicePlan"
         },
-        "appServiceName": {
-            "value": "vishnuAppService"
+        "appServiceNames": {
+            "value": [
+                {
+                    "appname" : "vishnuappservice582"
+                },
+                {
+                    "appname" : "vishnuappservice58206"
+                }
+            ]
+            }
+
         },
         "location": {
             "value": "canadacentral"
