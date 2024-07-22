@@ -21,10 +21,10 @@
         "AppInsightNames": {
             "value": [
                 {
-                    "appinsight1": "vishnu-insight-1"
+                    "appinsight": "vishnu-insight-1"
                 },
                 {
-                    "appinsight2": "vishnu-insight-2"
+                    "appinsight": "vishnu-insight-2"
                 }
             ]
         },
