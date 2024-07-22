@@ -90,27 +90,40 @@ stages:
                     scriptType: 'ps'
                     scriptLocation: 'inlineScript'
                     inlineScript: |
+                      $resourceGroupName = "$(resourceGroupName)"
+                      $logAnalyticsWorkspaceName = "$(logAnalyticsWorkspaceName)"
+                      $location = "$(location)"
+                      $appServiceName = "$(appServiceName)"
+                      $appInsightsName = "$(appInsightsName)"
+
                       az monitor log-analytics workspace create `
-                        --resource-group $(resourceGroupName) `
-                        --workspace-name $(logAnalyticsWorkspaceName) `
-                        --location $(location)
+                        --resource-group $resourceGroupName `
+                        --workspace-name $logAnalyticsWorkspaceName `
+                        --location $location
 
                       # Create Application Insights resource linked to the Log Analytics Workspace
-                      WORKSPACE_ID=$(az monitor log-analytics workspace show --resource-group $(resourceGroupName) --workspace-name $(logAnalyticsWorkspaceName) --query id --output tsv)
+                      $workspaceId = az monitor log-analytics workspace show `
+                        --resource-group $resourceGroupName `
+                        --workspace-name $logAnalyticsWorkspaceName `
+                        --query id --output tsv
+
                       az monitor app-insights component create `
-                        --app $(appInsightsName) `
-                        --location $(location) `
-                        --resource-group $(resourceGroupName) `
-                        --workspace $WORKSPACE_ID
+                        --app $appInsightsName `
+                        --location $location `
+                        --resource-group $resourceGroupName `
+                        --workspace $workspaceId
 
                       # Get Instrumentation Key
-                      INSTRUMENTATION_KEY=$(az monitor app-insights component show --app $(appInsightsName) --resource-group $(resourceGroupName) --query instrumentationKey --output tsv)
+                      $instrumentationKey = az monitor app-insights component show `
+                        --app $appInsightsName `
+                        --resource-group $resourceGroupName `
+                        --query instrumentationKey --output tsv
 
                       # Configure App Service to use Application Insights
                       az webapp config appsettings set `
-                        --resource-group $(resourceGroupName) `
-                        --name $(appServiceName) `
-                        --settings APPINSIGHTS_INSTRUMENTATIONKEY=$INSTRUMENTATION_KEY
+                        --resource-group $resourceGroupName `
+                        --name $appServiceName `
+                        --settings APPINSIGHTS_INSTRUMENTATIONKEY=$instrumentationKey
                     arguments: '-appServiceName "vishnuAppServiceDEV" -logAnalyticsWorkspaceName "vishnu-logs-workspace-dev" -appInsightsName "vishnu-insights-dev" -location "canadacentral" -resourceGroupName "RG-VA"'
 
                 # - task: AzureResourceManagerTemplateDeployment@3
