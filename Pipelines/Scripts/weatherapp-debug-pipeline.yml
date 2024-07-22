@@ -29,7 +29,7 @@ variables:
   - name: dblink
     value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
   - name: appservicenames
-    value: >
+    value: |
       [
         {"appName":"$(weatherappAppServiceName)"},
         {"appName":"$(weatherappWorldCLimateApiAppServiceName)"}
