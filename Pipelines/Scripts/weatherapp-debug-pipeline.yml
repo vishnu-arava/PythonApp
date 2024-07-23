@@ -230,5 +230,4 @@ stages:
                    appType: 'webAppLinux'
                    WebAppName: $(weatherappAppServiceName)-${{ parameters.environment }}
                    packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
-                   RuntimeStack: 'PYTHON|3.11'
                    StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;tar -xvzf output.tar.gz;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 run.py'
