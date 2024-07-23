@@ -14,6 +14,11 @@ parameters:
       - dev
       - qa
       - perf
+  - name: appservicenames
+    type: object
+    default:
+      - appName: $(weatherappAppServiceName)
+      - appName: $(weatherappWorldCLimateApiAppServiceName)
   - name: resourcegroup
     displayName: Resource group
     type: string
@@ -28,12 +33,6 @@ variables:
   - group: WeatherApp-${{ parameters.environment }}
   - name: dblink
     value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
-  - name: appservicenames
-    value: |
-      [
-        {"appName":"$(weatherappAppServiceName)"},
-        {"appName":"$(weatherappWorldCLimateApiAppServiceName)"}
-      ]
 stages:
   - stage: build
     displayName: Build
