@@ -6,13 +6,21 @@
             "type": "string",
             "defaultValue": "test"
         },
-        "appServicePlanNames": {
+        "workspaceName": {
             "type": "string",
-            "defaultValue": "vishnu-app-serviceplan"
+            "defaultValue": "vishnu-weather-workspace"
+        },
+        "AppInsightNames": {
+            "type": "array",
+            "defaultValue": ["vishnu-insight-weather"]
+        },
+        "appServicePlanNames": {
+            "type": "array",
+            "defaultValue": ["vishnu-app-serviceplan"]
         },
         "appServiceNames": {
-            "type": "string",
-            "defaultValue": "myappservice"
+            "type": "array",
+            "defaultValue": ["myappservice"]
         },
         "location": {
             "type": "string",
@@ -24,16 +32,9 @@
         },
         "linuxFxVersion": {
             "type": "string",
-            "defaultValue": "python | 3.9"
-        },
-        "workspaceName": {
-            "type": "string",
-            "defaultValue": "vishnu-weather-workspace"
-        },
-        "AppInsightNames": {
-            "type": "string",
-            "defaultValue": "vishnu-insight-weather"
+            "defaultValue": "python | 3.10"
         }
+
     },
     
     "resources": [
@@ -45,10 +46,10 @@
         "location": "[parameters('location')]",
         "properties": {
             "sku": {
-            "name": "pergb2018"
-            }
+                "name": "pergb2018"
             },
             "retentionInDays": 30
+        }
     },
 
     {
@@ -56,18 +57,17 @@
         "apiVersion": "2020-02-02",
         "name": "[concat(parameters('AppInsightNames')[copyIndex()].appinsight, parameters('env'))]",
         "location": "[parameters('location')]",
-        "depensOn": [
-            "[resourceId('Microsoft.OperationalInsights/workspaces'), parameters('workspaceName')]"
+        "kind": "web",
+        "dependsOn": [
+            "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
         ],
-        "kind": "string",
-        "etag": "string",
         "properties": {
-            "Application_Type": "string",
+            "Application_Type": "web",
             "Flow_Type": "Bluefield",
             "ImmediatePurgeDataOn30Days": true,
             "RetentionInDays": 30,
-            "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces'), parameters('workspaceName')]"
-        }
+            "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
+        },
         "copy": {
             "name": "insight",
             "count": "[length(parameters('AppInsightNames'))]"
@@ -75,13 +75,12 @@
     },
 
     {
-
         "type": "Microsoft.Web/serverfarms",
         "apiVersion": "2021-02-01",
         "name": "[concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, parameters('env'))]",
         "location": "[parameters('location')]",
         "dependsOn": [
-            "[resourceId('Microsoft.Insights/components'), concat(parameters('AppInsightNames'),[copyIndex()].appinsight, parameters('env'))]"
+            "[resourceId('Microsoft.Insights/components', concat(parameters('AppInsightNames')[copyIndex()].appinsight, parameters('env')))]"
         ],
         "tags": {
             "displayName": "[concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, parameters('env'))]"
@@ -104,26 +103,46 @@
     {
         "type": "Microsoft.Web/sites",
         "apiVersion": "2021-02-01",
-        "name": "[concat(parameters('appServiceNames')[copyIndex()].appname, '-', parameters('env'))]",
+        "name": "[concat(parameters('appServiceNames')[copyIndex()].appsitename, '-', parameters('env'))]",
         "location": "[parameters('location')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, parameters('env')))]"
+        ],
         
         "properties": {
-            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanName'), parameters('env')))]",
+            "name": "[concat(parameters('appServiceNames')[copyIndex()].appsitename, '-', parameters('env'))]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, parameters('env')))]",
             "siteConfig": {
                 "linuxFxVersion": "[parameters('linuxFxVersion')]",
                 "minTlsVersion": "1.2",
-                "ftpsState": "FtpsOnly"
-            },
-            "httpsOnly": true
-        },
-        "identity": {
-            "type": "SystemAssigned"
-        }
+                "ftpsState": "FtpsOnly",
+                "appSettings": [
+                    {
+                        "name": "APPINSIGHTS_INSTRUMENTATIONKEY",  
+                        "value": "[reference(concat('Microsoft.Insights/components', concat(parameters('AppInsightNames')[copyIndex()].appinsight, parameters('env')))).InstrumentationKey]"
+                    },
+                    {  
+                        "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",  
+                        "value": "[reference(concat('Microsoft.Insights/components', concat(parameters('AppInsightNames')[copyIndex()].appinsight, parameters('env'))), '2015-05-01').ConnectionString]"
+                    },
+                    {
+                        "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                        "value": "true"
+                    }
+
+                ],
+                "httpsOnly": true,
+                "identity": {
+                    "type": "SystemAssigned"
+                },
         "copy": {
             "name": "appsname",
             "count": "[length(parameters('appServiceNames'))]"
         }
+     }
+    
     }
-
-    ]
+   }
+    
+  ]
 }
