@@ -247,4 +247,4 @@ stages:
                    appType: 'webAppLinux'
                    WebAppName: $(weatherappWorldCLimateApiAppServiceName)-${{ parameters.environment }}
                    packageForLinux: '$(System.ArtifactsDirectory)/**/WorldClimateApi.zip'
-                   StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;tar -xvzf output.tar.gz;source antenv/bin/activate;pip install flask;pip install requests'
+                   StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;tar -xvzf output.tar.gz;source antenv/bin/activate;pip install flask;pip install requests;python3 run.py'
