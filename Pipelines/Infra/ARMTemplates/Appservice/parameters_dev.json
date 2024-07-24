@@ -12,10 +12,10 @@
         "AppInsightNames": {
             "value": [
                 {
-                    "appinsight": "vishnu-insight-1"
+                    "appinsight": "weather-insight-web"
                 },
                 {
-                    "appinsight": "vishnu-insight-2"
+                    "appinsight": "weather-insight-api"
                 }
             ]
         },
@@ -23,10 +23,10 @@
         "appServicePlanNames": {
             "value": [
                 {
-                    "appserviceplan" : "vishnuserviceplan1"
+                    "appserviceplan" : "weather-appplan-web"
                 },
                 {
-                    "appserviceplan" : "vishnuserviceplan2"
+                    "appserviceplan" : "weather-appplan-api"
                 }
             ]   
         },
@@ -34,10 +34,10 @@
         "appServiceNames": {
             "value": [
                 {
-                    "appsitename" : "vishnuappservice582"
+                    "appsitename" : "weather-webapp"
                 },
                 {
-                    "appsitename" : "vishnuappservice58206"
+                    "appsitename" : "weather-apiapp"
                 }
             ]
         },
