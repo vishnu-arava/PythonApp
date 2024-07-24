@@ -5,6 +5,17 @@
             "value": "DEV"
         },
 
+        "appServicePlanNames": {
+            "value": [
+                {
+                    "appserviceplan" : "vishnuserviceplan1"
+                },
+                {
+                    "appserviceplan" : "vishnuserviceplan2"
+                }
+            ]   
+        },
+
         "appServiceNames": {
             "value": [
                 {
@@ -25,17 +36,6 @@
                     "appinsight": "vishnu-insight-2"
                 }
             ]
-        },
-
-        "appServicePlanNames": {
-            "value": [
-                {
-                    "appserviceplan" : "vishnuserviceplan1"
-                },
-                {
-                    "appserviceplan" : "vishnuserviceplan2"
-                }
-            ]   
         },
 
         "location": {
