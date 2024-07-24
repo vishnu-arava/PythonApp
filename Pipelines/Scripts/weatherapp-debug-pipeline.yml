@@ -14,11 +14,7 @@ parameters:
       - dev
       - qa
       - perf
-  # - name: appservicenames
-  #   type: object
-  #   default:
-  #     - appName: $(weatherappAppServiceName)
-  #     - appName: $(weatherappWorldCLimateApiAppServiceName)
+
   - name: resourcegroup
     displayName: Resource group
     type: string
