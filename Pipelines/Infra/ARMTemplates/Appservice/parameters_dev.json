@@ -5,6 +5,21 @@
             "value": "DEV"
         },
 
+        "workspaceName": {
+            "value": "vishnu-weather-workspace"
+        },
+
+        "AppInsightNames": {
+            "value": [
+                {
+                    "appinsight": "vishnu-insight-1"
+                },
+                {
+                    "appinsight": "vishnu-insight-2"
+                }
+            ]
+        },
+
         "appServicePlanNames": {
             "value": [
                 {
@@ -23,17 +38,6 @@
                 },
                 {
                     "appname" : "vishnuappservice58206"
-                }
-            ]
-        },
-
-        "AppInsightNames": {
-            "value": [
-                {
-                    "appinsight": "vishnu-insight-1"
-                },
-                {
-                    "appinsight": "vishnu-insight-2"
                 }
             ]
         },
