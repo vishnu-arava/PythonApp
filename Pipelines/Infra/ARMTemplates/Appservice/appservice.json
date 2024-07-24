@@ -6,9 +6,9 @@
             "type": "string",
             "defaultValue": "test"
         },
-        "appServicePlanName": {
+        "appServicePlanNames": {
             "type": "string",
-            "defaultValue": "myappserviceplan"
+            "defaultValue": "vishnu-app-serviceplan"
         },
         "appServiceNames": {
             "type": "string",
@@ -33,10 +33,6 @@
         "AppInsightNames": {
             "type": "string",
             "defaultValue": "vishnu-insight-weather"
-        },
-        "appServicePlanNames": {
-            "type": "string",
-            "defaultValue": "vishnu-app-serviceplan"
         }
     },
     
