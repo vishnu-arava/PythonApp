@@ -2,7 +2,7 @@
     "parameters": {
 
         "env": {
-            "value": "DEV"
+            "value": "dev"
         },
 
         "workspaceName": {
