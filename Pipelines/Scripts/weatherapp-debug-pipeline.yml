@@ -48,6 +48,14 @@ stages:
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WeatherApp.zip'
               replaceExistingArchive: true
+          - task: ArchiveFiles@2
+            displayName: Archive Source/WorldClimateApi
+            inputs:
+              rootFolderOrFile: 'Source/WorldClimateApi'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WorldClimateApi.zip'
+              replaceExistingArchive: true
           - task: CopyFiles@2
             displayName: Copy ARM Templates to drop
             inputs:
