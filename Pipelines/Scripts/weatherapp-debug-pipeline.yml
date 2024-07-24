@@ -2,8 +2,8 @@ trigger:
 - none
 
 pool:
-  name: Default
-  vmImage: chaitanya
+  name: Satyam
+  vmImage: LAPTOP-RS36BMKA
 
 parameters:
   - name: environment
