@@ -51,13 +51,26 @@ stages:
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
                 
-                - task: PowerShell@2
+                - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here.
-                      
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
+                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-VA'
+                    location: 'South Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/parameters_dev.json'
+                    deploymentMode: 'Incremental'
+                
+                # - task: PowerShell@2
+                #   inputs:
+                #     targetType: 'inline'
+                #     script: |
+                #       # Write your PowerShell commands here
                 #       Get-ChildItem -Recurse $(System.ArtifactsDirectory)
+
                 # - task: AzureResourceManagerTemplateDeployment@3
                 #   inputs:
                 #     deploymentScope: 'Resource Group'
@@ -84,30 +97,30 @@ stages:
                 #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
                 #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/parameters_dev.json'
                 #     deploymentMode: 'Incremental'
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    scriptType: 'ps'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: |
-                      $resourceGroupName = "$(resourceGroupName)",
-                      $logAnalyticsWorkspaceName = "$(logAnalyticsWorkspaceName)",
-                      $location = "$(location)",
-                      $appServiceName = "$(appServiceName)",
-                      $appInsightsName = "$(appInsightsName)"
-                      az monitor log-analytics workspace create --resource-group $resourceGroupName --workspace-name $logAnalyticsWorkspaceName --location $location
+                # - task: AzureCLI@2
+                #   inputs:
+                #     azureSubscription: 'vishnuSubscriptionServiceConnection'
+                #     scriptType: 'ps'
+                #     scriptLocation: 'inlineScript'
+                #     inlineScript: |
+                #       $resourceGroupName = "$(resourceGroupName)",
+                #       $logAnalyticsWorkspaceName = "$(logAnalyticsWorkspaceName)",
+                #       $location = "$(location)",
+                #       $appServiceName = "$(appServiceName)",
+                #       $appInsightsName = "$(appInsightsName)"
+                #       az monitor log-analytics workspace create --resource-group $resourceGroupName --workspace-name $logAnalyticsWorkspaceName --location $location
 
-                      # Create Application Insights resource linked to the Log Analytics Workspace
-                      $workspaceId = az monitor log-analytics workspace show --resource-group $resourceGroupName --workspace-name $logAnalyticsWorkspaceName --query id --output tsv
+                #       # Create Application Insights resource linked to the Log Analytics Workspace
+                #       $workspaceId = az monitor log-analytics workspace show --resource-group $resourceGroupName --workspace-name $logAnalyticsWorkspaceName --query id --output tsv
 
-                      az monitor app-insights component create --app $appInsightsName --location $location --resource-group $resourceGroupName --workspace $workspaceId
+                #       az monitor app-insights component create --app $appInsightsName --location $location --resource-group $resourceGroupName --workspace $workspaceId
 
-                      # Get Instrumentation Key
-                      $instrumentationKey = az monitor app-insights component show --app $appInsightsName --resource-group $resourceGroupName --query instrumentationKey --output tsv
+                #       # Get Instrumentation Key
+                #       $instrumentationKey = az monitor app-insights component show --app $appInsightsName --resource-group $resourceGroupName --query instrumentationKey --output tsv
 
-                      # Configure App Service to use Application Insights
-                      az webapp config appsettings set --resource-group $resourceGroupName --name $appServiceName --settings APPINSIGHTS_INSTRUMENTATIONKEY=$instrumentationKey
-                    arguments: '-appServiceName "vishnuAppServiceDEV" -logAnalyticsWorkspaceName "vishnu-logs-workspace-dev" -appInsightsName "vishnu-insights-dev" -location "canadacentral" -resourceGroupName "RG-VA"'
+                #       # Configure App Service to use Application Insights
+                #       az webapp config appsettings set --resource-group $resourceGroupName --name $appServiceName --settings APPINSIGHTS_INSTRUMENTATIONKEY=$instrumentationKey
+                #     arguments: '-appServiceName "vishnuAppServiceDEV" -logAnalyticsWorkspaceName "vishnu-logs-workspace-dev" -appInsightsName "vishnu-insights-dev" -location "canadacentral" -resourceGroupName "RG-VA"'
 
                 # - task: AzureResourceManagerTemplateDeployment@3
                 #   inputs:
