@@ -1,20 +1,55 @@
 {
     "parameters": {
+
         "env": {
-            "value": "UAT"
+            "value": "uat"
         },
-        "appServicePlanName":{
-            "value": "vishnuAppServicePlan"
+
+        "workspaceName": {
+            "value": "vishnu-weather-workspace"
         },
-        "appServiceName": {
-            "value": "vishnuAppService"
+
+        "AppInsightNames": {
+            "value": [
+                {
+                    "appinsight": "weather-insight-web"
+                },
+                {
+                    "appinsight": "weather-insight-api"
+                }
+            ]
         },
+
+        "appServicePlanNames": {
+            "value": [
+                {
+                    "appserviceplan" : "weather-appplan-web"
+                },
+                {
+                    "appserviceplan" : "weather-appplan-api"
+                }
+            ]   
+        },
+
+        "appServiceNames": {
+            "value": [
+                {
+                    "appsitename" : "weather-webapp"
+                },
+                {
+                    "appsitename" : "weather-apiapp"
+                }
+            ]
+        },
+
         "location": {
             "value": "westus"
         },
+
         "sku": {
             "value": "F1"
         },
+        
         "linuxFxVersion": {
             "value": "PYTHON|3.10"
         }
