@@ -33,6 +33,10 @@
         "AppInsightNames": {
             "type": "string",
             "defaultValue": "vishnu-insight-weather"
+        },
+        "appServicePlanNames": {
+            "type": "string",
+            "defaultValue": "vishnu-app-serviceplan"
         }
     },
     
@@ -54,7 +58,7 @@
     {
         "type": "Microsoft.Insights/components",
         "apiVersion": "2020-02-02",
-        "name": "[concat(parameters('AppInsightNames'),[copyIndex()].appinsight, parameters('env'))]",
+        "name": "[concat(parameters('AppInsightNames')[copyIndex()].appinsight, parameters('env'))]",
         "location": "[parameters('location')]",
         "depensOn": [
             "[resourceId('Microsoft.OperationalInsights/workspaces'), parameters('workspaceName')]"
@@ -78,20 +82,29 @@
 
         "type": "Microsoft.Web/serverfarms",
         "apiVersion": "2021-02-01",
-        "name": "[concat(parameters('appServicePlanName'), parameters('env'))]",
+        "name": "[concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, parameters('env'))]",
         "location": "[parameters('location')]",
         "dependsOn": [
-            "[resourceId('Microsoft.Insights/components'), concat(parameters('AppInsightName'), parameters('env'))]"
+            "[resourceId('Microsoft.Insights/components'), concat(parameters('AppInsightNames'),[copyIndex()].appinsight, parameters('env'))]"
         ],
+        "tags": {
+            "displayName": "[concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, parameters('env'))]"
+        },
         "sku": {
             "name": "[parameters('sku')]",
             "tier": "Free"
         },
         "kind": "linux",
         "properties": {
+            "name": "[concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, parameters('env'))]",
             "reserved": true
+        },
+        "copy": {
+            "name": "planname",
+            "count": "[length(parameters('appServicePlanNames'))]"
         }
     },
+
     {
         "type": "Microsoft.Web/sites",
         "apiVersion": "2021-02-01",
