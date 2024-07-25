@@ -8,6 +8,21 @@ pool:
 variables:
   - group: MyVarGroup
 
+parameters:  
+  - name: vishnupool
+    type: string
+    default: $(soemagent)
+    values:
+      - $(soemagent)
+      
+  - name: environment
+    type: string
+    default: dev
+    values:
+      - dev
+      - qa
+      - uat
+      - prod
 stages:
   - stage: "Build"
     displayName: "Building WeatherApp"
