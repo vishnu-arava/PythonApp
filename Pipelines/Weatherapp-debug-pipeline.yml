@@ -11,9 +11,9 @@ variables:
 parameters:  
   # - name: vishnupool
   #   type: string
-  #   default: $(soemagent)
+  #   default: vishnuagent
   #   values:
-  #     - $(soemagent)
+  #     - vishnuagent
       
   - name: environment
     type: string
