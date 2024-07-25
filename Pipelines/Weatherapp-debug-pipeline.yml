@@ -9,11 +9,11 @@ variables:
   - group: MyVarGroup
 
 parameters:  
-  - name: vishnupool
-    type: string
-    default: $(soemagent)
-    values:
-      - $(soemagent)
+  # - name: vishnupool
+  #   type: string
+  #   default: $(soemagent)
+  #   values:
+  #     - $(soemagent)
       
   - name: environment
     type: string
