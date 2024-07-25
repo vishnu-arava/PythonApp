@@ -5,24 +5,35 @@ pool:
   name: vishnupool
   vmImage: vishnuagent
 
+parameters:
+    - name: environment
+      type: string
+      default: dev
+      values:
+        - dev
+        - qa
+        - uat
+        - prod
+
+    - name: resourcegroup
+      type: string
+      default: DEV
+      values:
+        - VA
+        - DEV
+        - QA
+        - UAT
+        - PROD
+
+    - name: vishnupool
+      type: string
+      default: vishnuagent
+      values:
+        - vishnuagent
+
 variables:
   - group: MyVarGroup
-
-parameters:  
-  # - name: vishnupool
-  #   type: string
-  #   default: vishnuagent
-  #   values:
-  #     - vishnuagent
-      
-  - name: environment
-    type: string
-    default: dev
-    values:
-      - dev
-      - qa
-      - uat
-      - prod
+  
 stages:
   - stage: "Build"
     displayName: "Building WeatherApp"
@@ -240,7 +251,8 @@ stages:
                     azureSubscription: 'vishnuSubscriptionServiceConnection'
                     appType: 'webApp'
                     WebAppName: 'weather-webapp-dev'
-                    packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+                    packageForLinux: '$(System.ArtifactsDirectory)/**/WeatherApp.zip'
+                    StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
                 # - task: CopyFilesOverSSH@0
                 #   inputs:
                 #     sshEndpoint: 'weatherappdev-vm-satyamcloud'
