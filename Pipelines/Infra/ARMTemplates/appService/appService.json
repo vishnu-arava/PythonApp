@@ -33,6 +33,14 @@
         "appServiceLinuxFxVVersion": {
             "type": "string",
             "defaultValue": "PYTHON|3.10"
+        },
+        "skuName": {
+            "type": "string",
+            "defaultValue": "F1"
+        },
+        "skuTier": {
+            "type": "string",
+            "defaultValue": "Free"
         }
     },
     "functions": [],
@@ -82,9 +90,9 @@
             "apiVersion": "2022-09-01",
             "location": "[parameters('location')]",
             "sku": {
-                "name": "F1",
+                "name": "[parameters('skuName')]",
                 "capacity": 1,
-                "tier": "Free"
+                "tier": "[parameters('skuTier')]"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/components',concat(parameters('appServiceName')[copyIndex()].appName,'-ai-',parameters('env')))]"

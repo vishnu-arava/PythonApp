@@ -27,6 +27,12 @@
         },
         "appServiceLinuxFxVVersion": {
             "value": "PYTHON|3.10"
+        },
+        "skuName": {
+            "value": "F1"
+        },
+        "skuTier": {
+            "value": "Free"
         }
     }
 }
