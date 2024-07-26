@@ -102,8 +102,8 @@ stages:
                     resourceGroupName: $(resourceGroup)
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/parameters-uat.json'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appserviceSatyam/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appserviceSatyam/parameters-uat.json'
                     deploymentMode: 'Incremental'
 
   - stage: "UATApp"
@@ -181,8 +181,8 @@ stages:
                     resourceGroupName: $(resourceGroup)
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/parameters-prod.json'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appserviceSatyam/appservice.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appserviceSatyam/parameters-prod.json'
                     deploymentMode: 'Incremental'
 
   - stage: "PRODApp"
