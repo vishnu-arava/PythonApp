@@ -137,7 +137,7 @@ stages:
                     deploymentMode: 'Incremental'
   
 
-  - stage: "DevApp"
+  - stage: "DevWebApp"
     displayName: "DEV Deploy: Weather App"
     dependsOn: DevInfra
     jobs:
@@ -166,6 +166,25 @@ stages:
                     packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
                     StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
                   
+- stage: "DevWebAPI"
+    displayName: "DEV Deploy: Weather API"
+    dependsOn: DevInfra
+    jobs:
+      - deployment: "DeployAPI"
+        displayName: 'Deploy API'
+        pool: Satyam
+        environment: Dev
+        strategy:
+          runOnce:
+            deploy:
+              steps: 
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                               
                 - task: AzureRmWebAppDeployment@4
                   displayName: "Deploy WeatherApp API"
                   inputs:
@@ -175,7 +194,7 @@ stages:
                     WebAppName: '${{ variables.appserviceNameApi }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
                     StartupCommand: 'apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;pip install flask;pip install requests;python3 run.py'
-  
+ 
   - stage: "QaInfra"
     displayName: "QA Deploy: Infra"
     dependsOn: Build
