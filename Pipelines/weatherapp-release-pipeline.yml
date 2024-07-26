@@ -208,7 +208,7 @@ stages:
                   displayName: "Deploy WeatherApp Web"
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'NewFreeTrial2024'
+                    azureSubscription: $(serviceConnection)
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceNameWeb }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
@@ -218,7 +218,7 @@ stages:
                   displayName: "Deploy WeatherApp API"
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'NewFreeTrial2024'
+                    azureSubscription: $(serviceConnection)
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceNameApi }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
