@@ -88,7 +88,7 @@
             },
             "sku": {
                 "name": "[parameters('sku')]",
-                "tier": "Free"
+                "tier": "Premium"
             },
             "kind": "linux",
             "properties": {
