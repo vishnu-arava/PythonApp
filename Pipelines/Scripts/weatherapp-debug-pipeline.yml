@@ -193,7 +193,7 @@ stages:
                    scriptType: 'ps'
                    scriptLocation: 'scriptPath'
                    scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
-                   arguments: '-appRegistrationName "dk-weatherapp-kv-link" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
+                   arguments: '-appRegistrationName "dk-weatherapp-kv-link-${{ parameters.environment }}" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret-${{ parameters.environment }}" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
                
                - task: AzureResourceManagerTemplateDeployment@3
                  displayName: App Services
@@ -262,7 +262,7 @@ stages:
                     appType: 'webAppLinux'
                     WebAppName: $(weatherappWorldCLimateApiAppServiceName)-${{ parameters.environment }}
                     packageForLinux: '$(System.ArtifactsDirectory)/**/WorldClimateApi.zip'
-                    StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;pip install flask;pip install requests;python3 run.py'
+                    StartupCommand: 'pip install flask;pip install requests;python3 app.py'
 
   - stage: "PostDeploymnet"
     displayName: "Deploy : PostDeployment-${{ parameters.environment }}"
