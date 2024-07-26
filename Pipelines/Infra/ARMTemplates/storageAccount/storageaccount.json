@@ -5,7 +5,11 @@
     "parameters": {
         "storageAccountNames":{
             "type":"array",
-            "defaultValue":["weatherappaccdef"]
+            "defaultValue":[
+                {
+                    "stgname":"storageaccount"
+                }
+            ]
         },
         "skuName":{
             "type":"string",
@@ -28,11 +32,11 @@
     "variables": {},
     "resources": [
         {
-        "name": "[concat(parameters('storageAccountNames'),parameters('env'))[copyIndex()].stgname]",
+        "name": "[concat(parameters('storageAccountNames')[copyIndex()].stgname,parameters('env'))]",
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2023-01-01",
         "tags": {
-            "displayName": "[concat(parameters('storageAccountNames'),parameters('env'))[copyIndex()].stgname]"
+            "displayName": "[concat(parameters('storageAccountNames')[copyIndex()].stgname,parameters('env'))]"
         },
         "location": "[parameters('location')]",
         "kind": "StorageV2",

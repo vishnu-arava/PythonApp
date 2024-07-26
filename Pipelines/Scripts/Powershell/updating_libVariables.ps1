@@ -80,7 +80,7 @@ try {
     Invoke-RestMethod -Uri $uri -Method Put -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo); "Content-Type"="application/json"} -Body $json
 
     Write-Host "Variable group updated successfully with value: $valuetoUpdate"
-    pipelineVariablesUpdate
+    #pipelineVariablesUpdate
     exit 0
 }
 catch {

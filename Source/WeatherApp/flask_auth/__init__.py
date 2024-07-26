@@ -41,17 +41,27 @@ def retrieve_secret(secret_name):
 load_dotenv()
 secret_name = "DataBaseServerLink"
 DataBaseServerLink = retrieve_secret(secret_name)
+print(f"Got DataBaseServerLink from key vault:{DataBaseServerLink}")
+
 secret_name = "DataBasePassword"
 DataBasePassword = retrieve_secret(secret_name)
+print(f"Got DataBasePassword from key vault:{DataBasePassword}")
+
 secret_name = "DataBaseUserName"
 DataBaseUserName = retrieve_secret(secret_name)
+print(f"Got DataBaseUserName from key vault:{DataBaseUserName}")
+
 secret_name = "DataBaseName"
 DataBaseName = retrieve_secret(secret_name)
+print(f"Got DataBaseName from key vault:{DataBaseName}")
+
 secret_name = "OpenWeatherApiKey"
 OpenWeatherApiKey = retrieve_secret(secret_name)
+print(f"Got OpenWeatherApiKey from key vault:{OpenWeatherApiKey}")
+
 secret_name = "GEODBApiKey"
 GEODBApiKey = retrieve_secret(secret_name)
-
+print(f"Got GEODBApiKey from key vault:{GEODBApiKey}")
 
 app.config['SECRET_KEY'] = str(os.getenv("SECRET_KEY"))
 
@@ -65,7 +75,13 @@ driver = 'ODBC Driver 17 for SQL Server'
 params = urllib.parse.quote_plus(
     f'DRIVER={{{driver}}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
 )
+print(f"Server: {server}")
+print(f"Database: {database}")
+print(f"Username: {username}")
+print(f'Paramsis :{params}')
 connection_string = f'mssql+pyodbc:///?odbc_connect={params}'
+
+print(f'Connectionstring is :{connection_string}')
 # Configure the SQLAlchemy part of the app instance
 app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

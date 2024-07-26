@@ -8,3 +8,4 @@ instance/*.db
 app.log
 model.pkl
 **/Logs
+**/*antenv
