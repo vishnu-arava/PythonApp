@@ -22,10 +22,10 @@
             "value": "dk-weatherapp-workspace"
         },
         "skuName": {
-            "value": "P2v3"
+            "value": "P1v3"
         },
         "skuTier": {
-            "value": "PremiumV2"
+            "value": "Premium"
         }
     }
 }
