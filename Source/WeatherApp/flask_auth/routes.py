@@ -136,7 +136,7 @@ def register():
         email = form.email.data
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
-        user = User(username=form.username.data, email=form.email.data, password=password)
+        user = User(username=form.username.data, email=email, password=password)
         mysql.session.add(user)
         mysql.session.commit()
 
@@ -177,7 +177,7 @@ def dashboard():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    app.logger.info(f'the user has logged out')
+    app.logger.info('the user has logged out')
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
@@ -321,7 +321,7 @@ def totalWeatherReport():
         if countryname == '':
             countryname = 'india'
         print(countryname)
-        worldclimateapiurl = "https://dk-weatherapp-api-dev.azurewebsites.net/country"
+        worldclimateapiurl = "https://worldclimateapi-dev.azurewebsites.net/country"
         params = {
             'countryname':countryname,
             'apikey':'48a90ac42caa09f90dcaeee4096b9e53'
@@ -336,6 +336,6 @@ def totalWeatherReport():
         print(type(totalstates))
         print("states data is :",totalStatesData)
         print(type(totalStatesData))
-        return render_template('weatherReport.html')
+        return render_template('weatherReport.html',statesdata=totalStatesData)
     except:
         return render_template('weatherReport.html')
