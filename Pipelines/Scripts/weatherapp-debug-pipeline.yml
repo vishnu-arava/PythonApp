@@ -207,6 +207,7 @@ stages:
                    templateLocation: 'Linked artifact'
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/appService.json'
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/parameters_${{ parameters.environment }}.json'
+                   overrideParameters: -skuName "P0V3" -skuTier "Premium"
                    deploymentMode: 'Incremental'
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
