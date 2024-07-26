@@ -35,6 +35,7 @@ stages:
         pool: Satyam
         steps:
           - task: ArchiveFiles@2
+            displayName: "Weatherapp web Archive"
             inputs:
               rootFolderOrFile: 'source/weatherapp'
               includeRootFolder: false
@@ -43,19 +44,12 @@ stages:
               replaceExistingArchive: true
           
           - task: ArchiveFiles@2
+            displayName: "Weatherapp API Archive"
             inputs:
               rootFolderOrFile: 'source/WorldClimateApi'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/worldclimateapi.zip'
-              replaceExistingArchive: true
-
-          - task: ArchiveFiles@2
-            inputs:
-              rootFolderOrFile: 'source/weatherapp'
-              includeRootFolder: false
-              archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/weatherapp.zip'
               replaceExistingArchive: true
           
           - task: CopyFiles@2
