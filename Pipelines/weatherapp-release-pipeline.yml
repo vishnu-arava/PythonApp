@@ -14,10 +14,10 @@ parameters:
   - name: env
     displayName: Environment to Deploy
     type: string
-    default: Uat
+    default: uat
     values:
-      - Uat
-      - Prod
+      - uat
+      - prod
 
 variables:
   - group: 'Infra-${{ parameters.env }}'
