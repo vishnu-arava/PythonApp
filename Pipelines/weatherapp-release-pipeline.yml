@@ -103,7 +103,7 @@ stages:
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/parameters-dev.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/parameters-uat.json'
                     deploymentMode: 'Incremental'
 
   - stage: "UATApp"
@@ -182,7 +182,7 @@ stages:
                     location: 'North Central US'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/appservice.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/parameters-dev.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/InfraArm/appservice/parameters-prod.json'
                     deploymentMode: 'Incremental'
 
   - stage: "PRODApp"
