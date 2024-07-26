@@ -16,6 +16,14 @@
         "analyticsWS": {
             "type": "string",
             "defaultValue": "workspace"
+        },
+        "skuName": {
+            "type": "string",
+            "defaultValue": "f1"
+        },
+        "skuTier": {
+            "type": "string",
+            "defaultValue": "Free"
         }
     },
     "functions": [],
@@ -64,8 +72,8 @@
         "location": "[parameters('location')]",
         "kind": "linux",
         "sku": {
-            "name": "F1",
-            "tier": "Free"
+            "name": "[parameters('skuName')]",
+            "tier": "[parameters('skuTier')]"
         },
         "dependsOn": [
             "[resourceId('Microsoft.Insights/components', concat(parameters('appServiceNames')[copyIndex()].appName,'-ai-',parameters('env')))]"

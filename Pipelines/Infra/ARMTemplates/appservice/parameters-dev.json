@@ -20,6 +20,12 @@
         },
         "analyticsWS":{
             "value": "dk-weatherapp-workspace"
+        },
+        "skuName": {
+            "value": "F1"
+        },
+        "skuTier": {
+            "value": "Free"
         }
     }
 }
