@@ -16,7 +16,7 @@
             "value": "prod"
         },
         "location":{
-            "value": "northcentralus"
+            "value": "southindia"
         },
         "analyticsWS":{
             "value": "dk-weatherapp-workspace"

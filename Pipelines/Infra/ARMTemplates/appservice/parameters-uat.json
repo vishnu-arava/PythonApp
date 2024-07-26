@@ -16,7 +16,7 @@
             "value": "uat"
         },
         "location":{
-            "value": "northcentralus"
+            "value": "southindia"
         },
         "analyticsWS":{
             "value": "dk-weatherapp-workspace"
