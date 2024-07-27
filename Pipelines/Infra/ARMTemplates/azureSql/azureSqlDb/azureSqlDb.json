@@ -43,7 +43,7 @@
         "displayName": "[concat(parameters('serverName'),'-',parameters('env'))]"
     },
     "properties": {
-        "administratorLogin": "[concat(parameters('userName'),'-',parameters('env'))]",
+        "administratorLogin": "[parameters('userName')]",
         "administratorLoginPassword": "[parameters('password')]",
         "minimalTlsVersion": "[parameters('tlsVersion')]"
     },
@@ -82,5 +82,22 @@
     }
 }
     ],
-    "outputs": {}
+    "outputs": {
+        "sqldblink": {
+            "type": "string",
+            "value": "[concat(parameters('serverName'),'.database.windows.net')]"
+        },
+        "sqldbname":{
+            "type": "string",
+            "value": "[concat(parameters('dbName'),'-',parameters('env'))]"
+        },
+        "sqldbusername": {
+            "type": "string",
+            "value": "[parameters('userName')]"
+        },
+        "sqlpass": {
+            "type": "string",
+            "value": "[parameters('password')]"
+        }
+    }
 }
