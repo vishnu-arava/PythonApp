@@ -135,6 +135,12 @@ def register():
         username = form.username.data
         email = form.email.data
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already taken. Please choose a different one.', 'danger')
+            app.logger.warning(f'Attempt to register with an existing username: {username}')
+            return render_template('register.html', form=form)
 
         user = User(username=form.username.data, email=email, password=password)
         mysql.session.add(user)
