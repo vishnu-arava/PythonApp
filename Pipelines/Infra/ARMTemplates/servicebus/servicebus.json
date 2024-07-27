@@ -1,0 +1,83 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "centralus"
+    }
+  },
+  "functions": [],
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2021-11-01",
+      "name": "servicebususingarm-kvc",
+      "type": "Microsoft.ServiceBus/Namespaces",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard"
+      }
+    },
+    {
+      "name": "servicebususingarm-kvc/testqueue1",
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-11-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', 'servicebususingarm-kvc')]"
+      ],
+      "properties": {
+        "lockDuration": "PT5M",
+        "maxSizeInMegabytes": 1024,
+        "requiresDuplicateDetection": false,
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P14D",
+        "deadLetteringOnMessageExpiration": false,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": 10,
+        "autoDeleteOnIdle": "P14D",
+        "enablePartitioning": false,
+        "enableExpress": false
+      }
+    },
+    {
+        "name": "servicebususingarm-kvc/testtopic2-kvc",
+        "type":"Microsoft.ServiceBus/namespaces/topics",
+        "apiVersion": "2021-11-01",
+        "dependsOn": [
+            "[resourceId('Microsoft.ServiceBus/namespaces', 'servicebususingarm-kvc')]"
+        ],
+        "properties": {
+            "enableBatchedOperations": false,
+            "enableExpress": false,
+            "enablePartitioning": false,
+            "maxSizeInMegabytes": 1024,
+            "requiresDuplicateDetection": false,
+            "status": "Active",
+            "supportOrdering": false
+        }
+    },
+    {
+        "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+        "apiVersion": "2023-01-01-preview",
+        "name": "servicebususingarm-kvc/testtopic2-kvc/subarm",
+        "properties": {
+        // "clientAffineProperties": {
+        //     "clientId": "string",
+        //     "isDurable": "bool",
+        //     "isShared": "bool"
+        // },
+        "deadLetteringOnFilterEvaluationExceptions": false,
+        "deadLetteringOnMessageExpiration": false,
+        "enableBatchedOperations": false,
+        "forwardDeadLetteredMessagesTo": "testqueue1/testtopic2-kvc",
+        "forwardTo": "testqueue1/testtopic2-kvc",
+        "isClientAffine": false,
+        "maxDeliveryCount": 10,
+        "requiresSession": false,
+        "status": "Active"
+    }
+    }
+  ],
+  "outputs": {}
+}
