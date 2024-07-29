@@ -85,7 +85,7 @@ def get_cities():
         "X-RapidAPI-Key": GEODB_API_KEY,
         "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
     }
-    response = requests.get(url, headers=headers, params={"limit": 10})
+    response = requests.get(url, headers=headers, params={"limit": 1000})
     data = response.json()
     cities = [city['name'] for city in data['data']]
     return cities
@@ -117,20 +117,15 @@ def get_city_weather(city_name):
         return None
 
 def get_matching_cities(query):
-    # List of cities (you might want to fetch this from a database or external API)
     cities = ["Hyderabad", "London", "New York", "Los Angeles", "Paris", "Tokyo", "Sydney"]
-
-    # Filter cities based on the query
     matching_cities = [city for city in cities if query.lower() in city.lower()]
 
     return matching_cities
-
 
 @app.route('/')
 def home():
     app.logger.info('Loading the home page')
     return render_template('home.html')
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -141,7 +136,7 @@ def register():
         email = form.email.data
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
-        user = User(username=form.username.data, email=form.email.data, password=password)
+        user = User(username=form.username.data, email=email, password=password)
         mysql.session.add(user)
         mysql.session.commit()
 
@@ -182,11 +177,9 @@ def dashboard():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    app.logger.info(f'the user has logged out')
+    app.logger.info('the user has logged out')
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
-
-
 
 @app.route('/weather_search',methods=['POST','GET'])
 def weather():
@@ -249,16 +242,14 @@ def weather():
             'weather_code':''
         }])
     return render_template('weather_search.html', maindata=weekly_weather_list)
+
 @app.route('/weather', methods=['GET'])
 def weather_data():
     day = request.args.get('day')
     city = request.args.get('city', 'hyderabad')  # Default to 'hyderabad' if no city is provided
-
     if not day:
         return jsonify({'error': 'No day provided'}), 400
-
-    app.logger.info(f'Received request for weather data for day: {day} in city: {city}')  # Debugging information
-
+    app.logger.info(f'Received request for weather data for day: {day} in city: {city}')
     weather_data = get_city_weather(city)
     dict = weather_data['daily']
     for i in range(0, len(dict['time'])):
@@ -278,21 +269,20 @@ def weather_data():
                 'windirection': str(dict['winddirection_10m_dominant'][i]),
                 'weather_code': str(weather_description_code[str(dict['weathercode'][i])])
             }
-            app.logger.info(f'Returning data: {result}')  # Debugging information
+            app.logger.info(f'Returning data: {result}')
             return jsonify(result)
     return jsonify({'error': 'Weather data for the requested day not found'}), 404
 
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form['query']
-    # Assuming you have a function get_matching_cities(query) that returns a list of matching cities
     matching_cities = get_matching_cities(query)
-    # Return the list of matching cities as JSON
     return jsonify(matching_cities)
 
 @app.route('/weather_predict')
 def predic_page():
     return render_template("weather_predict.html")
+
 @app.route('/predict',methods=['POST','GET'])
 def predict():
    if not os.path.isfile('model.pkl'):
@@ -322,3 +312,30 @@ def predict():
                return render_template('weather_predict.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output))
            else:
                return render_template('weather_predict.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output))
+           
+@app.route('/totalWeatherReport',methods=['POST','GET'])
+def totalWeatherReport():
+    if request.method == 'POST':
+        countryname = request.form['country']
+    try:
+        if countryname == '':
+            countryname = 'india'
+        print(countryname)
+        worldclimateapiurl = "https://worldclimateapi-dev.azurewebsites.net/country"
+        params = {
+            'countryname':countryname,
+            'apikey':'48a90ac42caa09f90dcaeee4096b9e53'
+        }
+        response = requests.get(worldclimateapiurl,params=params)
+        statesData = response.json()
+        data = json.loads(statesData)
+        print(statesData)
+        totalstates=data['count']
+        totalStatesData=data['value']
+        print("Total states :",totalstates)
+        print(type(totalstates))
+        print("states data is :",totalStatesData)
+        print(type(totalStatesData))
+        return render_template('weatherReport.html',statesdata=totalStatesData)
+    except:
+        return render_template('weatherReport.html')

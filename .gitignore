@@ -1,1 +1,11 @@
-venv/
+instance/*.db
+**/__pycache__/*
+**/instance/*.db
+**/requirements.txt
+**/*venv
+**/antenv
+**/.idea
+app.log
+model.pkl
+**/Logs
+**/*antenv

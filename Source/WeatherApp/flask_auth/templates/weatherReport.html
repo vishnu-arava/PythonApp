@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}weatherReport{% endblock %}
+
+{% block main_content %}
+<!-- No container here -->
+{% endblock %}
+
+{% block additional_content %}
+<br>
+<br>
+<br>
+<br>
+<div class="row">
+<form method="post" class="col-md-6 col-md-offset-3">
+    <div class="input-group">
+    <input type="text" class="form-control" name="country" placeholder="Search" id="country-input">
+        <input type="hidden" name="selected_country" id="selected-country" value="">
+    <div class="input-group-btn">
+        <button class="btn btn-primary" type="submit">
+        <i class="glyphicon glyphicon-search"></i>
+        </button>
+    </div>
+    </div>
+</form>
+</div>
+{% if statesdata %}
+<div class="wr-horizontal-container" id="wr-horizontal-container">
+    <div class="wr-scrolling-content" id="wr-scrolling-content">
+        {% for state in statesdata %}
+        <div class="wr-scrolling-container">
+            <div class="wr-top-text">{{ state['statename'] }}</div>
+            <div class="wr-grid">
+                <div class="wr-grid-item">
+                    <img src="https://via.placeholder.com/150" alt="IMG">
+                    <div>{{ state['temperaturemax'] }}</div>
+                </div>
+                <div class="wr-grid-item">
+                    <img src="https://via.placeholder.com/150" alt="IMG">
+                    <div>{{ state['humidity'] }}</div>
+                </div>
+                <div class="wr-grid-item">
+                    <img src="https://via.placeholder.com/150" alt="IMG">
+                    <div>{{ state['windspeed'] }}</div>
+                </div>
+                <div class="wr-grid-item">
+                    <img src="https://via.placeholder.com/150" alt="IMG">
+                    <div>{{ state['weatherdescription'] }}</div>
+                </div>
+            </div>
+            <button class="wr-scroll-button">FORECAST</button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const scrollingContent = document.getElementById('wr-horizontal-container');
+        let currentIndex = 0;
+        const numberOfItems = document.querySelectorAll('.wr-scrolling-container').length;
+        let scrollInterval;
+
+        function startScrolling() {
+            scrollInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % numberOfItems;
+                const scrollAmount = currentIndex * (250 + 20); // Adjust according to container width (250px) + gap (20px)
+                scrollingContent.scrollLeft = scrollAmount;
+            }, 2000); // Adjust scrolling speed as needed
+        }
+
+        startScrolling();
+
+        scrollingContent.addEventListener('mouseenter', function() {
+            clearInterval(scrollInterval); // Stop the scrolling interval
+        });
+
+        scrollingContent.addEventListener('mouseleave', function() {
+            startScrolling(); // Start scrolling again
+        });
+    });
+</script>
+{% endblock %}
