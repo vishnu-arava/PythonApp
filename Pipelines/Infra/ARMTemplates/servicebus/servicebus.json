@@ -8,7 +8,7 @@
     },
     "servicebusName": {
       "type": "string",
-      "defaultValue": "servicebususingarm-kvc"
+      "defaultValue": "defaultsbname"
     },
     "servicePrincipalId": {
       "type": "string",
@@ -112,17 +112,20 @@
     {
         "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
         "apiVersion": "2022-10-01-preview",
-        "name": "[concat(concat(parameters('servicebusName'),'-',parameters('env')),'/',parameters('topicNames')[copyIndex()].name,'/',parameters('subscriptionName'))]",
+        "name": "[concat(concat(parameters('servicebusName'),'-',parameters('env')),'/',parameters('topicNames')[copyIndex('subscriptionCopy')].name,'/',parameters('subscriptionName'))]",
         "copy": {
-          "name": "topicCopy",
+          "name": "subscriptionCopy",
           "count": "[length(parameters('topicNames'))]"
         },
+        "dependsOn": [
+          "[resourceId('Microsoft.ServiceBus/namespaces/topics', concat(parameters('servicebusName'), '-', parameters('env')), parameters('topicNames')[copyIndex('subscriptionCopy')].name)]"
+        ],
         "properties": {
             "deadLetteringOnFilterEvaluationExceptions": false,
             "deadLetteringOnMessageExpiration": false,
             "enableBatchedOperations": false,
-            "forwardDeadLetteredMessagesTo": "[concat(parameters('queueName'),'/',parameters('topicNames')[copyIndex()].name)]",
-            "forwardTo": "[concat(parameters('queueName'),'/',parameters('topicNames')[copyIndex()].name)]",
+            "forwardDeadLetteredMessagesTo": "[concat(parameters('queueName'),'/',parameters('topicNames')[copyIndex('subscriptionCopy')].name)]",
+            "forwardTo": "[concat(parameters('queueName'),'/',parameters('topicNames')[copyIndex('subscriptionCopy')].name)]",
             "isClientAffine": false,
             "maxDeliveryCount": 10,
             "requiresSession": false,
