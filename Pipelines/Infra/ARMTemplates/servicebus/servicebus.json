@@ -1,0 +1,137 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "centralus"
+    },
+    "servicebusName": {
+      "type": "string",
+      "defaultValue": "defaultsbname"
+    },
+    "servicePrincipalId": {
+      "type": "string",
+      "defaultValue": "08600c03-44d9-4c0e-a4e9-28eb79a17119"
+    },
+    "queueName": {
+      "type": "string",
+      "defaultValue": "defaultqueue"
+    },
+    "maxDeliveryCount": {
+      "type": "int",
+      "defaultValue":10
+    },
+    "topicNames": {
+      "type": "array",
+      "defaultValue": [{
+        "name":"defaultTopic"
+      }]
+    },
+    "subscriptionName": {
+      "type": "string",
+      "defaultValue": "sub1"
+    },
+    "env": {
+      "type": "string",
+      "defaultValue": "sandbox"
+    },
+    "skuName": {
+      "type": "string",
+      "defaultValue": "Standard"
+    }
+  },
+  "functions": [],
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.ServiceBus/Namespaces",
+      "apiVersion": "2021-11-01",
+      "name": "[concat(parameters('servicebusName'),'-',parameters('env'))]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('skuName')]"
+      },
+      "properties": {
+        "alternateName": "[concat(parameters('servicebusName'),'-',parameters('env'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(resourceGroup().id,parameters('servicebusName'), parameters('servicePrincipalId'), 'sender')]",
+      "dependsOn": ["[resourceId('Microsoft.ServiceBus/Namespaces', concat(parameters('servicebusName'),'-',parameters('env')))]"],
+      "properties": {
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39')]",
+        "principalId": "[parameters('servicePrincipalId')]",
+        "principalType": "ServicePrincipal"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-11-01",
+      "name": "[concat(concat(parameters('servicebusName'),'-',parameters('env')),'/',parameters('queueName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', concat(parameters('servicebusName'),'-',parameters('env')))]"
+      ],
+      "properties": {
+        "lockDuration": "PT5M",
+        "maxSizeInMegabytes": 1024,
+        "requiresDuplicateDetection": false,
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P14D",
+        "deadLetteringOnMessageExpiration": false,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": "[parameters('maxDeliveryCount')]",
+        "autoDeleteOnIdle": "P14D",
+        "enablePartitioning": false,
+        "enableExpress": false
+      }
+    },
+    {
+        "type":"Microsoft.ServiceBus/namespaces/topics",
+        "apiVersion": "2021-11-01",
+        "name": "[concat(concat(parameters('servicebusName'),'-',parameters('env')),'/',parameters('topicNames')[copyIndex()].name)]",
+        "copy": {
+          "name": "topicCopy",
+          "count": "[length(parameters('topicNames'))]"
+        },
+        "dependsOn": [
+            "[resourceId('Microsoft.ServiceBus/namespaces', concat(parameters('servicebusName'),'-',parameters('env')))]"
+        ],
+        "properties": {
+            "enableBatchedOperations": false,
+            "enableExpress": false,
+            "enablePartitioning": false,
+            "maxSizeInMegabytes": 1024,
+            "requiresDuplicateDetection": false,
+            "status": "Active",
+            "supportOrdering": false
+        }
+    },
+    {
+        "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+        "apiVersion": "2022-10-01-preview",
+        "name": "[concat(concat(parameters('servicebusName'),'-',parameters('env')),'/',parameters('topicNames')[copyIndex('subscriptionCopy')].name,'/',parameters('subscriptionName'))]",
+        "copy": {
+          "name": "subscriptionCopy",
+          "count": "[length(parameters('topicNames'))]"
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.ServiceBus/namespaces/topics', concat(parameters('servicebusName'), '-', parameters('env')), parameters('topicNames')[copyIndex('subscriptionCopy')].name)]"
+        ],
+        "properties": {
+            "deadLetteringOnFilterEvaluationExceptions": false,
+            "deadLetteringOnMessageExpiration": false,
+            "enableBatchedOperations": false,
+            "forwardDeadLetteredMessagesTo": "[concat(parameters('queueName'),'/',parameters('topicNames')[copyIndex('subscriptionCopy')].name)]",
+            "forwardTo": "[concat(parameters('queueName'),'/',parameters('topicNames')[copyIndex('subscriptionCopy')].name)]",
+            "isClientAffine": false,
+            "maxDeliveryCount": 10,
+            "requiresSession": false,
+            "status": "Active"
+        }
+    }
+  ],
+  "outputs": {}
+}
