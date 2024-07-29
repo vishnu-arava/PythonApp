@@ -32,7 +32,7 @@
             "value":"weatherappSubscription"
         },
         "env":{
-            "value":"dev"
+            "value":"perf"
         },
         "skuName": {
             "value":"Standard"
