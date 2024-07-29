@@ -47,6 +47,12 @@ stages:
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WeatherApp.zip'
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: 'Source/WorldClimateApi'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WorldClimateApi.zip'
           - task: CopyFiles@2
             inputs:
               SourceFolder: 'Pipelines/Infra/ARMTemplates'
