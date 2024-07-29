@@ -33,6 +33,11 @@ stages:
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)/InfraArm'
           
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'build'
+              projects: '**/*.csproj'
+              
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifacts"
             inputs:
