@@ -1,8 +1,9 @@
 from flask import render_template, redirect, url_for, flash, session,jsonify
 import requests
-from flask_auth import mysql, bcrypt, app 
+from flask_auth import mysql, bcrypt, app, servicebus_client, queue_name, servicebus_namespace 
 from flask_auth import GEODBApiKey as GEODB_API_KEY, OpenWeatherApiKey as api_key_OW
 from flask_auth.forms import RegistrationForm, LoginForm
+from azure.servicebus import ServiceBusMessage
 import urllib.request
 from flask import (request)
 import json
@@ -121,6 +122,23 @@ def get_matching_cities(query):
     matching_cities = [city for city in cities if query.lower() in city.lower()]
 
     return matching_cities
+def global_user(username):
+    global usernameloggedin
+    usernameloggedin = username
+    return(0)
+
+def servicebus_send_message(data):
+
+    try:
+        message_body=data
+        message=ServiceBusMessage(message_body)
+
+        with servicebus_client.get_queue_sender(queue_name) as sender:
+            sender.send_messages(message)
+        app.logger.info(f"Message sent to servicebus:{servicebus_namespace} with queue:{queue_name}")
+    except Exception as e:
+        app.logger.error(f"Message not sent to servicebus:{servicebus_namespace} with queue:{queue_name}")
+
 
 @app.route('/')
 def home():
@@ -160,7 +178,7 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-
+        global_user(username)
         user = User.query.filter_by(username=form.username.data).first()
      
         if user and bcrypt.check_password_hash(user.password, password):
@@ -247,6 +265,14 @@ def weather():
             'windirection':'',
             'weather_code':''
         }])
+    queuemessage={
+        "username": usernameloggedin,
+        "feature":"weather search",
+        "cityName":city
+    },
+    json_message=json.dumps(queuemessage, indent=4)
+    print(json_message)
+    servicebus_send_message(json_message)
     return render_template('weather_search.html', maindata=weekly_weather_list)
 
 @app.route('/weather', methods=['GET'])
