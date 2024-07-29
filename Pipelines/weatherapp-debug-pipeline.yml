@@ -193,7 +193,7 @@ stages:
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceNameApi }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
-                    StartupCommand: 'apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;pip install flask;pip install requests;python3 app.py'
+                    StartupCommand: 'pip install flask;pip install requests;python3 app.py'
 
   - stage: "QaInfra"
     displayName: "QA Deploy: Infra"
