@@ -321,7 +321,7 @@ def totalWeatherReport():
         if countryname == '':
             countryname = 'india'
         print(countryname)
-        worldclimateapiurl = "https://worldclimateapi-dev.azurewebsites.net/country"
+        worldclimateapiurl = "https://dk-weatherapp-api-dev.azurewebsites.net/country"
         params = {
             'countryname':countryname,
             'apikey':'48a90ac42caa09f90dcaeee4096b9e53'
