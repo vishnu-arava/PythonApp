@@ -255,7 +255,7 @@ stages:
                   inputs:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'vishnuSubscriptionServiceConnection'
-                    appType: 'webApp'
+                    appType: 'webAppLinux'
                     WebAppName: 'weather-webapp-vish-dev'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/WeatherApp.zip'
                     StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
@@ -277,15 +277,17 @@ stages:
                     downloadType: 'single'
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
-                
+        
                 - task: AzureRmWebAppDeployment@4
                   inputs:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'vishnuSubscriptionServiceConnection'
                     appType: 'webAppLinux'
-                    WebAppName: 'weather-webapp-vish-dev'
+                    WebAppName: 'weather-apiapp-vish-dev'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/WorldClimateApi.zip'
+                    RuntimeStack: 'PYTHON|3.10'
                     StartupCommand: 'pip install flask;pip install requests;python3 app.py'
+
                 # - task: CopyFilesOverSSH@0
                 #   inputs:
                 #     sshEndpoint: 'weatherappdev-vm-satyamcloud'
