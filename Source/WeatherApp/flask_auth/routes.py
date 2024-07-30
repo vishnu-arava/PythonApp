@@ -17,6 +17,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
+import threading
 
 # Create a logger for the app
 app_logger = logging.getLogger('app_logger')
@@ -268,11 +269,13 @@ def weather():
     queuemessage={
         "username": usernameloggedin,
         "feature":"weather search",
-        "cityName":city
+        "cityName":city,
+        "data":weekly_weather_list
     },
     json_message=json.dumps(queuemessage, indent=4)
     print(json_message)
-    servicebus_send_message(json_message)
+    thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+    thread.start()
     return render_template('weather_search.html', maindata=weekly_weather_list)
 
 @app.route('/weather', methods=['GET'])
@@ -302,6 +305,18 @@ def weather_data():
                 'weather_code': str(weather_description_code[str(dict['weathercode'][i])])
             }
             app.logger.info(f'Returning data: {result}')
+            queuemessage={
+                "username": usernameloggedin,
+                "feature":"weather search",
+                "cityName":city,
+                "day":day,
+                "data":result
+            },
+            print(queuemessage)
+            json_message=json.dumps(queuemessage, indent=4)
+            print(json_message[0])
+            thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+            thread.start()
             return jsonify(result)
     return jsonify({'error': 'Weather data for the requested day not found'}), 404
 
@@ -335,15 +350,46 @@ def predict():
        if request.form.values():
            int_features=[int(x) for x in request.form.values() if x.strip()]
            final=[np.array(int_features)]
-           if not int_features or (len(int_features)<2):
+           if not int_features or (len(int_features)<=2):
                return render_template('weather_predict.html', pred='Enter Valid Details')
            prediction=model.predict_proba(final)
            positive_probability = prediction[0][1] * 100
            output = '{:.2f}%'.format(positive_probability)
+           print(int_features)
            if output>str(70):
-               return render_template('weather_predict.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output))
+               queuemessage={
+                   "username":usernameloggedin,
+                   "feature":"weather predict",
+                   "data":{
+                       "Temperature":int_features[0],
+                       "Oxygen":int_features[1],
+                       "Humidity":int_features[2]
+                   },
+                   "prediction":f"You are in danger zone.Probability of fire occurance is {output}"
+               }
+               print(queuemessage)
+               json_message=json.dumps(queuemessage, indent=4)
+               print(json_message)
+               thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+               thread.start()
+               return render_template('weather_predict.html',pred='You are in danger zone.\nProbability of fire occuring is {}'.format(output))
            else:
-               return render_template('weather_predict.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output))
+               queuemessage={
+                   "username":usernameloggedin,
+                   "feature":"weather predict",
+                   "data":{
+                       "Temperature":int_features[0],
+                       "Oxygen":int_features[1],
+                       "Humidity":int_features[2]
+                   },
+                   "prediction":"You are in Safe zone."
+               }
+               print(queuemessage)
+               json_message=json.dumps(queuemessage, indent=4)
+               print(json_message)
+               thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+               thread.start()
+               return render_template('weather_predict.html',pred='You are in safe zone.')
            
 @app.route('/totalWeatherReport',methods=['POST','GET'])
 def totalWeatherReport():
@@ -368,6 +414,16 @@ def totalWeatherReport():
         print(type(totalstates))
         print("states data is :",totalStatesData)
         print(type(totalStatesData))
+        queuemessage={
+            "username":usernameloggedin,
+            "feature":"weather Report",
+            "countryname":countryname,
+            "data":totalStatesData,
+        }
+        json_message=json.dumps(queuemessage, indent=4)
+        print(json_message)
+        thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+        thread.start()
         return render_template('weatherReport.html',statesdata=totalStatesData)
-    except:
+    except Exception as e:
         return render_template('weatherReport.html')
