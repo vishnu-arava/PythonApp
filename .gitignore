@@ -9,3 +9,4 @@ app.log
 model.pkl
 **/Logs
 **/*antenv
+**/hourlylogs
