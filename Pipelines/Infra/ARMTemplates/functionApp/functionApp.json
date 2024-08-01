@@ -1,87 +1,141 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {},
-    "functions": [],
-    "variables": {},
-    "resources": [
-{
-    "name": "storageaccount1",
-    "type": "Microsoft.Storage/storageAccounts",
-    "apiVersion": "2023-04-01",
-    "tags": {
-        "displayName": "storageaccount1"
-    },
-    "location": "[resourceGroup().location]",
-    "kind": "StorageV2",
-    "sku": {
-        "name": "Premium_LRS",
-        "tier": "Premium"
-    }
-},
-{
-    "name": "appInsights1",
-    "type": "Microsoft.Insights/components",
-    "apiVersion": "2020-02-02",
-    "location": "Central US",
-    "kind": "web",
-    "tags": {
-        "displayName": "appInsights1 Component for webApp1"
-    },
-    "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', 'webApp1')]"
-    ],
-    "properties": {
-        "applicationId": "webApp1",
-        "application_Type": "web"
-    }
-},
- {
-    "name": "functionName",
-    "type": "Microsoft.Web/sites",
-    "apiVersion": "2023-01-01",
-    "location": "[resourceGroup().location]",
-    "kind": "functionapp",
-    "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', 'serverFarmName')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', 'storageAccountName')]"
-    ],
-    "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'serverFarmName')]",
-        "siteConfig": {
-            "appSettings": [
-                {
-                    "name": "AzureWebJobsDashboard",
-                    "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', 'storageAccountName', ';AccountKey=', listKeys('storageAccountID','2015-05-01-preview').key1)]"
-                },
-                {
-                    "name": "AzureWebJobsStorage",
-                    "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', 'storageAccountName', ';AccountKey=', listKeys('storageAccountID','2015-05-01-preview').key1)]"
-                },
-                {
-                    "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                    "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', 'storageAccountName', ';AccountKey=', listKeys('storageAccountID','2015-05-01-preview').key1)]"
-                },
-                {
-                    "name": "WEBSITE_CONTENTSHARE",
-                    "value": "[toLower('functionName')]"
-                },
-                {
-                    "name": "FUNCTIONS_EXTENSION_VERSION",
-                    "value": "~2"
-                },
-                {
-                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                    "value": "[reference(resourceId('microsoft.insights/components/', 'applicationInsightsName'), '2015-05-01').InstrumentationKey]"
-                },
-                {
-                    "name": "FUNCTIONS_WORKER_RUNTIME",
-                    "value": "dotnet"
-                }
-            ]
+    "parameters": {
+        "storageaccountName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "env": {
+            "type": "string",
+            "defaultValue": "sandbox"
+        },
+        "skuNameStg": {
+            "type": "string"
+        },
+        "skuTierStg": {
+            "type": "string"
+        },
+        "minimumTlsVersionStg": {
+            "type": "string"
+        },
+        "functionappName": {
+            "type": "string"
+        },
+        "workspaceName": {
+            "type": "string"
+        },
+        "skuNameServerfarms": {
+            "type": "string"
+        },
+        "skuTierServerfarms": {
+            "type": "string"
         }
-    }
- }
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('storageaccountName'), parameters('env'))]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2023-04-01",
+            "location": "[parameters('location')]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "[parameters('skuNameStg')]",
+                "tier": "[parameters('skuTierStg')]"
+            },
+            "properties": {
+                "minimumTlsVersion": "[parameters('minimumTlsVersionStg')]"
+            },
+            "tags": {
+                "displayName": "[concat(parameters('storageaccountName'), parameters('env'))]"
+            }
+        },
+        {
+            "name": "[concat(parameters('functionappName'), '-ai-', parameters('env'))]",
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2020-02-02",
+            "location": "[parameters('location')]",
+            "kind": "web",
+            "properties": {
+                "application_Type": "web",
+                "Flow_Type": "Bluefield",
+                "ImmediatePurgeDataOn30Days": true,
+                "RetentionInDays": 30,
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('workspaceName'), '-', parameters('env')))]"
+            },
+            "tags": {
+                "displayName": "[concat(parameters('functionappName'), '-ai-', parameters('env'))]"
+            }
+        },
+        {
+            "name": "[concat(parameters('functionappName'), '-asp-', parameters('env'))]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-09-01",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('skuNameServerfarms')]",
+                "tier": "[parameters('skuTierServerfarms')]",
+                "capacity": 1
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', concat(parameters('functionappName'), '-ai-', parameters('env')))]"
+            ],
+            "properties": {
+                "name": "[concat(parameters('functionappName'), '-asp-', parameters('env'))]",
+                "reserved": true
+            },
+            "tags": {
+                "displayName": "[concat(parameters('functionappName'), '-asp-', parameters('env'))]"
+            }
+        },
+        {
+            "name": "[concat(parameters('functionappName'), '-', parameters('env'))]",
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2023-01-01",
+            "location": "[parameters('location')]",
+            "kind": "functionapp",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('functionappName'), '-asp-', parameters('env')))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('storageaccountName'), parameters('env')))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('functionappName'), '-asp-', parameters('env')))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsDashboard",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', concat(parameters('storageaccountName'), parameters('env')), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', concat(parameters('storageaccountName'), parameters('env'))), '2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', concat(parameters('storageaccountName'), parameters('env')), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', concat(parameters('storageaccountName'), parameters('env'))), '2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', concat(parameters('storageaccountName'), parameters('env')), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', concat(parameters('storageaccountName'), parameters('env'))), '2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(concat(parameters('functionappName'), '-', parameters('env')))]"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~2"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', concat(parameters('functionappName'), '-ai-', parameters('env'))), '2020-02-02').InstrumentationKey]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "python"
+                        }
+                    ]
+                }
+            }
+        }
     ],
     "outputs": {}
 }

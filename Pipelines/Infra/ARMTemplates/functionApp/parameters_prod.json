@@ -7,7 +7,7 @@
             "value":"southindia"
         },
         "env":{
-            "value":"dev"
+            "value":"prod"
         },
         "skuNameStg":{
             "value":"Standard_LRS"
