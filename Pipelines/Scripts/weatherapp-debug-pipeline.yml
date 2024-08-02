@@ -194,14 +194,6 @@ stages:
                    scriptLocation: 'scriptPath'
                    scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
                    arguments: '-appRegistrationName "dk-weatherapp-kv-link-${{ parameters.environment }}" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret-${{ parameters.environment }}" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
-               
-              #  - task: PowerShell@2
-              #    inputs:
-              #      targetType: 'inline'
-              #      script: |
-              #        # Write your PowerShell commands here.
-                     
-              #        Write-Host "Object id is :"$(appRegSpObjectId)
                      
                - task: PowerShell@2
                  displayName: Updating App Registration Service Principal Object Id into Library variable group
@@ -221,6 +213,35 @@ stages:
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/appService.json'
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/parameters_${{ parameters.environment }}.json'
                    overrideParameters: -skuName "P0V3" -skuTier "Premium"
+                   deploymentMode: 'Incremental'
+                   
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Service Bus
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
+                   location: 'Central US'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/servicebus/servicebus.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/servicebus/parameters_${{ parameters.environment }}.json'
+                   overrideParameters: -servicePrincipalId $(appRegistrationSpObjectId) 
+                   deploymentMode: 'Incremental'
+                  
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Function App
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
+                   location: 'South India'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/functionApp.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/parameters_${{ parameters.environment }}.json'
                    deploymentMode: 'Incremental'
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
