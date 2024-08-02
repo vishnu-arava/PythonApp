@@ -7,8 +7,7 @@ trigger:
 - none
 
 pool:
-  name: Satyam
-  vmImage: LAPTOP-RS36BMKA
+  vmImage: windows-latest
 
 parameters:
   - name: env
