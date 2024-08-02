@@ -195,6 +195,10 @@ stages:
                    scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
                    arguments: '-appRegistrationName "dk-weatherapp-kv-link-${{ parameters.environment }}" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret-${{ parameters.environment }}" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
                
+               - task: PowerShell@2
+                 inputs:
+                   filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updating_libVariables.ps1'
+                   arguments: '-organizationName $(organizationName) -projectName $(projectName) -libVariableName "WeatherApp-${{ parameters.environment }}" -libVariableParameterName "appRegistrationSpObjectId" -patToken $(PAT-powershell) -valuetoUpdate $appRegSpObjectId'
                - task: AzureResourceManagerTemplateDeployment@3
                  displayName: App Services
                  inputs:
