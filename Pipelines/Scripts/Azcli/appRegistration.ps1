@@ -28,6 +28,8 @@ else {
 Write-Host "App service and service principle created successfully"
 [string]$clientSecretValue=az ad app credential reset --id $objectId --append --display-name $appRegistrationClientSecretName --end-date '2024-12-31' --query password --output tsv
 
+Write-Host "##vso[task.setvariable variable=appRegSpObjectId;]$appRegServicePrincipleObjectId"
+
 az keyvault set-policy --name $keyVaultName --object-id $appRegServicePrincipleObjectId --secret-permissions get, list
 
 az keyvault secret set --vault-name $keyVaultName --name "AppRegistrationClientSecret" --value $clientSecretValue
