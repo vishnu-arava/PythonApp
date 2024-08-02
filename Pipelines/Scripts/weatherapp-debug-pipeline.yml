@@ -196,6 +196,14 @@ stages:
                    arguments: '-appRegistrationName "dk-weatherapp-kv-link-${{ parameters.environment }}" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret-${{ parameters.environment }}" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
                
                - task: PowerShell@2
+                 inputs:
+                   targetType: 'inline'
+                   script: |
+                     # Write your PowerShell commands here.
+                     
+                     Write-Host "Object id is :"$(appRegSpObjectId)
+                     
+               - task: PowerShell@2
                  displayName: Updating App Registration Service Principal Object Id into Library variable group
                  inputs:
                    filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updating_libVariables.ps1'
