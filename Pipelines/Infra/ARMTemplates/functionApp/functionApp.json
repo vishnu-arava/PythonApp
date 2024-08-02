@@ -36,43 +36,43 @@
     },
     "resources": [
         {
-            "name": "[concat(parameters('storageaccountName'), parameters('env'))]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2023-04-01",
+            "name": "[concat(parameters('storageaccountName'), parameters('env'))]",
             "location": "[parameters('location')]",
-            "kind": "StorageV2",
             "sku": {
                 "name": "[parameters('skuNameStg')]",
                 "tier": "[parameters('skuTierStg')]"
             },
-            "properties": {
-                "minimumTlsVersion": "[parameters('minimumTlsVersionStg')]"
-            },
+            "kind": "StorageV2",
             "tags": {
                 "displayName": "[concat(parameters('storageaccountName'), parameters('env'))]"
+            },
+            "properties": {
+                "minimumTlsVersion": "[parameters('minimumTlsVersionStg')]"
             }
         },
         {
-            "name": "[concat(parameters('functionappName'), '-ai-', parameters('env'))]",
             "type": "Microsoft.Insights/components",
             "apiVersion": "2020-02-02",
+            "name": "[concat(parameters('functionappName'), '-ai-', parameters('env'))]",
             "location": "[parameters('location')]",
             "kind": "web",
+            "tags": {
+                "displayName": "[concat(parameters('functionappName'), '-ai-', parameters('env'))]"
+            },
             "properties": {
                 "application_Type": "web",
                 "Flow_Type": "Bluefield",
                 "ImmediatePurgeDataOn30Days": true,
                 "RetentionInDays": 30,
                 "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('workspaceName'), '-', parameters('env')))]"
-            },
-            "tags": {
-                "displayName": "[concat(parameters('functionappName'), '-ai-', parameters('env'))]"
             }
         },
         {
-            "name": "[concat(parameters('functionappName'), '-asp-', parameters('env'))]",
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('functionappName'), '-asp-', parameters('env'))]",
             "location": "[parameters('location')]",
             "sku": {
                 "name": "[parameters('skuNameServerfarms')]",
@@ -82,18 +82,18 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/components', concat(parameters('functionappName'), '-ai-', parameters('env')))]"
             ],
+            "tags": {
+                "displayName": "[concat(parameters('functionappName'), '-asp-', parameters('env'))]"
+            },
             "properties": {
                 "name": "[concat(parameters('functionappName'), '-asp-', parameters('env'))]",
                 "reserved": true
-            },
-            "tags": {
-                "displayName": "[concat(parameters('functionappName'), '-asp-', parameters('env'))]"
             }
         },
         {
-            "name": "[concat(parameters('functionappName'), '-', parameters('env'))]",
             "type": "Microsoft.Web/sites",
             "apiVersion": "2023-01-01",
+            "name": "[concat(parameters('functionappName'), '-', parameters('env'))]",
             "location": "[parameters('location')]",
             "kind": "functionapp",
             "dependsOn": [
