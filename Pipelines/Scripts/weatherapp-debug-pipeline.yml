@@ -332,3 +332,23 @@ stages:
                       # Write your PowerShell commands here.
                       
                       Write-Host "https://$(keyvaultName)-${{ parameters.environment }}.vault.azure.net/"
+  
+  - stage: "Test"
+    displayName: "Deploy : PostDeployment-${{ parameters.environment }}"
+
+    jobs:
+      - deployment: "DeployApp"
+        displayName: "Deploy App"
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+             steps:
+             
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Write your PowerShell commands here.
+                      
+                      Write-Host "https://$(keyvaultName)-${{ parameters.environment }}.vault.azure.net/"
