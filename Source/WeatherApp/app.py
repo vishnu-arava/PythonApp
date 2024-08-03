@@ -25,6 +25,16 @@ def install_packages():
         print(f"An error occurred while installing packages: {e}")
         raise
 
+def update_env_file(pairs):
+    dotenv_path = find_dotenv()
+    if dotenv_path:
+        load_dotenv(dotenv_path)
+        for key, value in pairs:
+            set_key(dotenv_path, key, value)
+            print(f"Updated {key} to {value} in {dotenv_path}")
+    else:
+        print(".env file not found")
+
 if __name__ == '__main__':
     if (os.name=='posix'):
         install_packages()
@@ -46,6 +56,14 @@ if __name__ == '__main__':
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade pip'], shell=True)
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade setuptools'], shell=True)
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+    import argparse
+    from dotenv import load_dotenv, set_key, find_dotenv
+    parser = argparse.ArgumentParser(description='Update .env file with command-line arguments.')
+    parser.add_argument('--pairs', nargs='+', required=False, help='Key-value pairs to update in the .env file (e.g., KEY1=VALUE1 KEY2=VALUE2)')
+    args = parser.parse_args()
+    if args.pairs:
+        pairs = [pair.split('=') for pair in args.pairs]
+        update_env_file(pairs)
     from flask_auth import app
     app.run(host='0.0.0.0',port=8000,debug=True,use_reloader=False)
     # app.run(port=8000)
