@@ -9,7 +9,7 @@ parameters:
   - name: environment
     displayName: Environment Select
     type: string
-    default: dev
+    default: qa
     values:
       - dev
       - qa
@@ -18,7 +18,7 @@ parameters:
   - name: resourcegroup
     displayName: Resource group
     type: string
-    default: RG-DEV
+    default: RG-QA
     values:
       - RG-DEV
       - RG-QA
