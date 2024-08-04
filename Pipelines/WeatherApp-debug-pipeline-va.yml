@@ -71,7 +71,7 @@ stages:
     jobs:
       - deployment: "BuildDevInfra"
         displayName: "Build Dev Infra"
-        environment: Dev
+        environment: dev
         strategy:
           runOnce:
             deploy:
@@ -101,7 +101,7 @@ stages:
     jobs:
       - deployment: "DevAppDeploy"
         displayName: "Dev App: WeatherApp"
-        environment: Dev
+        environment: dev
         strategy:
           runOnce:
             deploy:
@@ -128,7 +128,7 @@ stages:
     jobs:
       - deployment: "DevApiAppDeploy"
         displayName: "Dev Api App: WorldClimateApi"
-        environment: Dev
+        environment: dev
         strategy:
           runOnce:
             deploy:
