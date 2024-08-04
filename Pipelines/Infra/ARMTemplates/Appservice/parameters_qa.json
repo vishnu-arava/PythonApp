@@ -10,14 +10,7 @@
         },
 
         "AppInsightNames": {
-            "value": [
-                {
-                    "appinsight": "weather-insight-web"
-                },
-                {
-                    "appinsight": "weather-insight-api"
-                }
-            ]
+            "value": "vishnu-appinsight"
         },
 
         "appServicePlanNames": {

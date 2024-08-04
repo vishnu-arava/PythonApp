@@ -11,10 +11,8 @@
             "defaultValue": "vishnu-weather-workspace"
         },
         "AppInsightNames": {
-            "type": "array",
-            "defaultValue": [{
-                    "appinsight": "vishnu-insight-1"
-                }]
+            "type": "string",
+            "defaultValue": "vishnu-appinsight"
         },
         "appServicePlanNames": {
             "type": "array",
@@ -57,7 +55,7 @@
         {
             "type": "Microsoft.Insights/components",
             "apiVersion": "2020-02-02",
-            "name": "[concat(parameters('AppInsightNames')[copyIndex()].appinsight, '-', parameters('env'))]",
+            "name": "[concat(parameters('AppInsightNames'), '-', parameters('env'))]",
             "location": "[parameters('location')]",
             "kind": "web",
             "dependsOn": [
@@ -69,10 +67,6 @@
                 "ImmediatePurgeDataOn30Days": true,
                 "RetentionInDays": 30,
                 "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('workspaceName'), '-', parameters('env')))]"
-            },
-            "copy": {
-                "name": "insight",
-                "count": "[length(parameters('AppInsightNames'))]"
             }
         },
         {
@@ -81,7 +75,7 @@
             "name": "[concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, '-', parameters('env'))]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', concat(parameters('AppInsightNames')[copyIndex()].appinsight, '-', parameters('env')))]"
+                "[resourceId('Microsoft.Insights/components', concat(parameters('AppInsightNames'), '-', parameters('env')))]"
             ],
             "tags": {
                 "displayName": "[concat(parameters('appServicePlanNames')[copyIndex()].appserviceplan, '-', parameters('env'))]"
@@ -116,7 +110,7 @@
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",  
-                            "value": "[reference(concat('Microsoft.Insights/components/', concat(parameters('AppInsightNames')[copyIndex()].appinsight, '-', parameters('env')))).InstrumentationKey]"
+                            "value": "[reference(concat('Microsoft.Insights/components/', concat(parameters('AppInsightNames'), '-', parameters('env')))).InstrumentationKey]"
                         },
                         {  
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",  
