@@ -110,11 +110,12 @@
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",  
-                            "value": "[reference(concat('Microsoft.Insights/components/', concat(parameters('AppInsightNames'), '-', parameters('env')))).InstrumentationKey]"
+                            "value": "[reference(concat('Microsoft.Insights/components/', concat(parameters('AppInsightNames'), '-', parameters('env'))), '2015-05-01').InstrumentationKey]"
+
                         },
                         {  
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",  
-                            "value": "[reference(concat('Microsoft.Insights/components/', concat(parameters('AppInsightNames')[copyIndex()].appinsight, '-', parameters('env'))), '2015-05-01').ConnectionString]"
+                            "value": "[reference(concat('Microsoft.Insights/components/', concat(parameters('AppInsightNames'), '-', parameters('env'))), '2015-05-01').ConnectionString]"
                         },
                         {
                             "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
