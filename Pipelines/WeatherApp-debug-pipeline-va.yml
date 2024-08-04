@@ -2,8 +2,8 @@ trigger:
 - none
 
 pool:
-  name: vishnupool
-  vmImage: vishnuagent
+  name: RohitPool
+  vmImage: RohitAgent
 
 parameters:
     - name: environment
@@ -25,11 +25,11 @@ parameters:
         - UAT
         - PROD
 
-    - name: vishnupool
+    - name: RohitPool
       type: string
-      default: vishnuagent
+      default: RohitAgent
       values:
-        - vishnuagent
+        - RohitAgent
 
 variables:
   - group: MyVarGroup
