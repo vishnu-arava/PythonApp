@@ -53,6 +53,15 @@ stages:
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WorldClimateApi.zip'
               replaceExistingArchive: true
+          
+          - task: ArchiveFiles@2
+            displayName: Archive Source/FunctionApp/servicebusQueueTrigger
+            inputs:
+              rootFolderOrFile: 'Source/FunctionApps/servicebusQueueTrigger'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/FunctionApps/SBQueueTrigger.zip'
+              replaceExistingArchive: true
           - task: CopyFiles@2
             displayName: Copy ARM Templates to drop
             inputs:
