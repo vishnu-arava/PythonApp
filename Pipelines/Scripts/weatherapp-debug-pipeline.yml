@@ -327,12 +327,14 @@ stages:
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)'
                 - task: AzureFunctionApp@2
+                  displayName: Service Bus Queue Function Deploy
                   inputs:
                     connectedServiceNameARM: '$(serviceConnection)'
                     appType: 'functionAppLinux'
                     appName: 'dk-weatherapp-dev'
                     package: '$(System.ArtifactsDirectory)/**/SBQueueTrigger.zip'
                     runtimeStack: 'PYTHON|3.11'
+                    appSettings: '-WEBSITE_RUN_FROM_PACKAGE 1'
                     deploymentMethod: 'zipDeploy'
 
   - stage: "PostDeploymnet"
