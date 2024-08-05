@@ -1,8 +1,9 @@
 from flask import render_template, redirect, url_for, flash, session,jsonify
 import requests
-from flask_auth import mysql, bcrypt, app 
+from flask_auth import mysql, bcrypt, app, servicebus_client, queue_name, servicebus_namespace 
 from flask_auth import GEODBApiKey as GEODB_API_KEY, OpenWeatherApiKey as api_key_OW
 from flask_auth.forms import RegistrationForm, LoginForm
+from azure.servicebus import ServiceBusMessage
 import urllib.request
 from flask import (request)
 import json
@@ -16,6 +17,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
+import threading
 
 # Create a logger for the app
 app_logger = logging.getLogger('app_logger')
@@ -121,6 +123,23 @@ def get_matching_cities(query):
     matching_cities = [city for city in cities if query.lower() in city.lower()]
 
     return matching_cities
+def global_user(username):
+    global usernameloggedin
+    usernameloggedin = username
+    return(0)
+
+def servicebus_send_message(data):
+
+    try:
+        message_body=data
+        message=ServiceBusMessage(message_body)
+
+        with servicebus_client.get_queue_sender(queue_name) as sender:
+            sender.send_messages(message)
+        app.logger.info(f"Message sent to servicebus:{servicebus_namespace} with queue:{queue_name}")
+    except Exception as e:
+        app.logger.error(f"Message not sent to servicebus:{servicebus_namespace} with queue:{queue_name}")
+
 
 @app.route('/')
 def home():
@@ -135,8 +154,14 @@ def register():
         username = form.username.data
         email = form.email.data
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already taken. Please choose a different one.', 'danger')
+            app.logger.warning(f'Attempt to register with an existing username: {username}')
+            return render_template('register.html', form=form)
 
-        user = User(username=form.username.data, email=form.email.data, password=password)
+        user = User(username=form.username.data, email=email, password=password)
         mysql.session.add(user)
         mysql.session.commit()
 
@@ -154,7 +179,7 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-
+        global_user(username)
         user = User.query.filter_by(username=form.username.data).first()
      
         if user and bcrypt.check_password_hash(user.password, password):
@@ -177,7 +202,7 @@ def dashboard():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    app.logger.info(f'the user has logged out')
+    app.logger.info('the user has logged out')
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
@@ -241,6 +266,16 @@ def weather():
             'windirection':'',
             'weather_code':''
         }])
+    queuemessage={
+        "username": usernameloggedin,
+        "feature":"weather search",
+        "cityName":city,
+        "data":weekly_weather_list
+    },
+    json_message=json.dumps(queuemessage, indent=4)
+    print(json_message)
+    thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+    thread.start()
     return render_template('weather_search.html', maindata=weekly_weather_list)
 
 @app.route('/weather', methods=['GET'])
@@ -270,6 +305,18 @@ def weather_data():
                 'weather_code': str(weather_description_code[str(dict['weathercode'][i])])
             }
             app.logger.info(f'Returning data: {result}')
+            queuemessage={
+                "username": usernameloggedin,
+                "feature":"weather search",
+                "cityName":city,
+                "day":day,
+                "data":result
+            },
+            print(queuemessage)
+            json_message=json.dumps(queuemessage, indent=4)
+            print(json_message[0])
+            thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+            thread.start()
             return jsonify(result)
     return jsonify({'error': 'Weather data for the requested day not found'}), 404
 
@@ -303,15 +350,46 @@ def predict():
        if request.form.values():
            int_features=[int(x) for x in request.form.values() if x.strip()]
            final=[np.array(int_features)]
-           if not int_features or (len(int_features)<2):
+           if not int_features or (len(int_features)<=2):
                return render_template('weather_predict.html', pred='Enter Valid Details')
            prediction=model.predict_proba(final)
            positive_probability = prediction[0][1] * 100
            output = '{:.2f}%'.format(positive_probability)
+           print(int_features)
            if output>str(70):
-               return render_template('weather_predict.html',pred='Your Forest is in Danger.\nProbability of fire occuring is {}'.format(output))
+               queuemessage={
+                   "username":usernameloggedin,
+                   "feature":"weather predict",
+                   "data":{
+                       "Temperature":int_features[0],
+                       "Oxygen":int_features[1],
+                       "Humidity":int_features[2]
+                   },
+                   "prediction":f"You are in danger zone.Probability of fire occurance is {output}"
+               }
+               print(queuemessage)
+               json_message=json.dumps(queuemessage, indent=4)
+               print(json_message)
+               thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+               thread.start()
+               return render_template('weather_predict.html',pred='You are in danger zone.\nProbability of fire occuring is {}'.format(output))
            else:
-               return render_template('weather_predict.html',pred='Your Forest is safe.\n Probability of fire occuring is {}'.format(output))
+               queuemessage={
+                   "username":usernameloggedin,
+                   "feature":"weather predict",
+                   "data":{
+                       "Temperature":int_features[0],
+                       "Oxygen":int_features[1],
+                       "Humidity":int_features[2]
+                   },
+                   "prediction":"You are in Safe zone."
+               }
+               print(queuemessage)
+               json_message=json.dumps(queuemessage, indent=4)
+               print(json_message)
+               thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+               thread.start()
+               return render_template('weather_predict.html',pred='You are in safe zone.')
            
 @app.route('/totalWeatherReport',methods=['POST','GET'])
 def totalWeatherReport():
@@ -321,7 +399,7 @@ def totalWeatherReport():
         if countryname == '':
             countryname = 'india'
         print(countryname)
-        worldclimateapiurl = "http://127.0.0.1:5001/country"
+        worldclimateapiurl = "https://worldclimateapi-dev.azurewebsites.net/country"
         params = {
             'countryname':countryname,
             'apikey':'48a90ac42caa09f90dcaeee4096b9e53'
@@ -336,6 +414,16 @@ def totalWeatherReport():
         print(type(totalstates))
         print("states data is :",totalStatesData)
         print(type(totalStatesData))
-        return render_template('weatherReport.html')
-    except:
+        queuemessage={
+            "username":usernameloggedin,
+            "feature":"weather Report",
+            "countryname":countryname,
+            "data":totalStatesData,
+        }
+        json_message=json.dumps(queuemessage, indent=4)
+        print(json_message)
+        thread = threading.Thread(target=servicebus_send_message, args=(json_message,))
+        thread.start()
+        return render_template('weatherReport.html',statesdata=totalStatesData)
+    except Exception as e:
         return render_template('weatherReport.html')

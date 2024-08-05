@@ -13,19 +13,19 @@
             "value":[
                 {
                     "secretName":"DataBaseName",
-                    "secretValue":"dk-weatherapp-sql-db-qa"
+                    "secretValue":"default"
                 },
                 {
                     "secretName":"DataBasePassword",
-                    "secretValue":"Password@12345"
+                    "secretValue":"default"
                 },
                 {
                     "secretName":"DataBaseServerLink",
-                    "secretValue":"dk-weatherapp-sql-server-qa.database.windows.net"
+                    "secretValue":"default"
                 },
                 {
                     "secretName":"DataBaseUserName",
-                    "secretValue":"dk-weatherapp-sql-db-qa"
+                    "secretValue":"default"
                 },
                 {
                     "secretName":"GEODBApiKey",
@@ -34,6 +34,22 @@
                 {
                     "secretName":"OpenWeatherApiKey",
                     "secretValue":"48a90ac42caa09f90dcaeee4096b9e53"
+                },
+                {
+                    "secretName":"PAT-Powershell",
+                    "secretValue":"default"
+                },
+                {
+                    "secretName":"AppRegistrationClientId",
+                    "secretValue":"default" 
+                },
+                {
+                    "secretName":"AppRegistrationClientSecret",
+                    "secretValue":"default"
+                },
+                {
+                    "secretName":"AppRegistrationTenantId",
+                    "secretValue":"default"
                 }
             ]
         },
@@ -42,6 +58,12 @@
         },
         "location":{
             "value":"centralus"
+        },
+        "spTenantId":{
+            "value":"a576b579-5332-4070-ac30-3f4d5a911ac0"
+        },
+        "spObjectid":{
+            "value":"30d46a24-1ce3-4246-b83d-b05e9717b67b"	
         }
     }
 }

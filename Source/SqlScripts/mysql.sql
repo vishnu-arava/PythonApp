@@ -1,9 +1,6 @@
-CREATE DATABASE flask;
-USE flask;
-ALTER USER satyam WITH ENCRYPTED password 'Password@12345';
-CREATE TABLE user (
-    name VARCHAR(100),
-    age INT
+create table users(
+	id INT IDENTITY(1,1) PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL
 );
-show tables;
-select * from user;

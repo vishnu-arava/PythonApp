@@ -1,39 +1,31 @@
 {
     "parameters":{
-        "vmStorageAccount":
-        {
-            "value":"dkweatherappvmStg"
-        },
-        "skuStorageAccountName":
-        {
-            "value":"Standard_LRS"
-        },
         "vmPublicIPName":{
-            "value":"dk-weatherapp-publicIpName"
+            "value":"dk-sonarqube-publicIpName"
         },
         "vmName":{
-            "value":"dk-weatherapp-ubuntu-vm"
+            "value":"dk-sonarqube-ubuntu-vm"
         },
         "vmNetworkSecurityGroupsName":{
-            "value":"dk-weatherapp-vmNetworkSecurityGroup"
+            "value":"dk-sonarqube-vmNetworkSecurityGroup"
         },
         "vmVNetName":{
-            "value":"dk-weatherapp-vmVNet"
+            "value":"dk-sonarqube-vmVNet"
         },
         "vmSubnetName":{
-            "value":"dk-weatherapp-vmVNetSubnet"
+            "value":"dk-sonarqube-vmVNetSubnet"
         },
         "vmNetworkInterface":{
-            "value":"dk-weatherapp-vmNetworkInterface"
+            "value":"dk-sonarqube-vmNetworkInterface"
         },
         "vmUserName":{
-            "value":"dk-weatherapp-ubuntu-vm"
+            "value":"dk-sonarqube-ubuntu-vm"
         },
         "vmPassword":{
             "value":"Password@12345"
         },
         "vmSize":{
-            "value":"Standard_A2_v2"
+            "value":"Standard_B2s_v2"
         },
         "env":{
             "value":"prod"

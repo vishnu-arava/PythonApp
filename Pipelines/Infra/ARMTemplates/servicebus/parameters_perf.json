@@ -1,0 +1,41 @@
+{
+    "parameters":{
+        "location":{
+            "value":"northcentralus"	
+        },
+        "servicebusName":{
+            "value":"weatherappsb"   
+        },
+        "servicePrincipalId":{
+            "value":"08600c03-44d9-4c0e-a4e9-28eb79a17119"
+        },
+        "queueName":{
+            "value":"weatherappqueue"
+        },
+        "maxDeliveryCount":{
+            "value":10
+        },
+        "topicNames":{
+            "value":[
+                {
+                    "name":"weathersearch"
+                },
+                {
+                    "name":"fireforest"
+                },
+                {
+                    "name":"weatherreport"
+                }
+            ]
+        },
+        "subscriptionName":{
+            "value":"weatherappSubscription"
+        },
+        "env":{
+            "value":"perf"
+        },
+        "skuName": {
+            "value":"Standard"
+        }
+    }
+}
