@@ -16,6 +16,7 @@ def install_packages():
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'setuptools'])
         subprocess.check_call([pip_executable,'install','azure.identity'])
         subprocess.check_call([pip_executable,'install','azure.keyvault.secrets'])
+        subprocess.check_call([pip_executable,'install','azure.servicebus'])
         subprocess.check_call([pip_executable,'install','pyodbc'])
         subprocess.check_call([pip_executable,'install','email_validator'])
         subprocess.check_call([sys.executable, '-m','pip','install','-r','requirements.txt'])
@@ -23,6 +24,16 @@ def install_packages():
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while installing packages: {e}")
         raise
+
+def update_env_file(pairs):
+    dotenv_path = find_dotenv()
+    if dotenv_path:
+        load_dotenv(dotenv_path)
+        for key, value in pairs:
+            set_key(dotenv_path, key, value)
+            print(f"Updated {key} to {value} in {dotenv_path}")
+    else:
+        print(".env file not found")
 
 if __name__ == '__main__':
     if (os.name=='posix'):
@@ -36,6 +47,7 @@ if __name__ == '__main__':
         subprocess.check_call(['pip', 'install', 'mysqlclient'])
         subprocess.check_call(['pip', 'install', 'azure.identity'])
         subprocess.check_call(['pip', 'install', 'azure.keyvault.secrets'])
+        subprocess.check_call(['pip', 'install', 'azure.servicebus'])
         subprocess.check_call(['pip', 'install', 'python-dotenv'])
         subprocess.check_call(['pip', 'install', 'flask_sqlalchemy'])
         subprocess.check_call(['pip', 'install', 'pyodbc'])
@@ -44,6 +56,14 @@ if __name__ == '__main__':
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade pip'], shell=True)
         subprocess.check_call(['powershell', f'{sys.executable} -m pip install --upgrade setuptools'], shell=True)
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+    import argparse
+    from dotenv import load_dotenv, set_key, find_dotenv
+    parser = argparse.ArgumentParser(description='Update .env file with command-line arguments.')
+    parser.add_argument('--pairs', nargs='+', required=False, help='Key-value pairs to update in the .env file (e.g., KEY1=VALUE1 KEY2=VALUE2)')
+    args = parser.parse_args()
+    if args.pairs:
+        pairs = [pair.split('=') for pair in args.pairs]
+        update_env_file(pairs)
     from flask_auth import app
     app.run(host='0.0.0.0',port=8000,debug=True,use_reloader=False)
     # app.run(port=8000)

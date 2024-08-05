@@ -27,6 +27,7 @@ parameters:
       - RG-VA
 variables:
   - group: WeatherApp-${{ parameters.environment }}
+  - group: WeatherApp-${{ parameters.environment }}-kv
   - name: dblink
     value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
@@ -171,7 +172,7 @@ stages:
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/keyVault.json'
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/parameters_${{ parameters.environment }}.json'
                    overrideParameters: >
-                     -keyvaultname "dk-weatherapp-core"
+                     -keyvaultname $(keyvaultName)
                      -tenantId $(tenantId) 
                      -objectId $(objectidadmin)
                      -spTenantId $(tenantId)
@@ -194,7 +195,12 @@ stages:
                    scriptLocation: 'scriptPath'
                    scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
                    arguments: '-appRegistrationName "dk-weatherapp-kv-link-${{ parameters.environment }}" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret-${{ parameters.environment }}" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
-               
+                     
+               - task: PowerShell@2
+                 displayName: Updating App Registration Service Principal Object Id into Library variable group
+                 inputs:
+                   filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updating_libVariables.ps1'
+                   arguments: '-organizationName $(organizationName) -projectName $(projectName) -libVariableName "WeatherApp-${{ parameters.environment }}" -libVariableParameterName "appRegistrationSpObjectId" -patToken $(PAT-powershell) -valuetoUpdate $(appRegSpObjectId)'
                - task: AzureResourceManagerTemplateDeployment@3
                  displayName: App Services
                  inputs:
@@ -208,6 +214,35 @@ stages:
                    csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/appService.json'
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/parameters_${{ parameters.environment }}.json'
                    overrideParameters: -skuName "P0V3" -skuTier "Premium"
+                   deploymentMode: 'Incremental'
+                   
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Service Bus
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
+                   location: 'Central US'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/servicebus/servicebus.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/servicebus/parameters_${{ parameters.environment }}.json'
+                   overrideParameters: -servicePrincipalId $(appRegistrationSpObjectId) 
+                   deploymentMode: 'Incremental'
+                  
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Function App
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
+                   location: 'South India'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/functionApp.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/parameters_${{ parameters.environment }}.json'
                    deploymentMode: 'Incremental'
   - stage: "AppDeploy"
     displayName: "Deploy : App-${{ parameters.environment }}"
@@ -235,7 +270,7 @@ stages:
                    appType: 'webAppLinux'
                    WebAppName: $(weatherappAppServiceName)-${{ parameters.environment }}
                    packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
-                   StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
+                   StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py --pairs KEY_VAULT_URI=https://$(keyvaultName)-${{ parameters.environment }}.vault.azure.net/ TENANT_ID=$(AppRegistrationTenantId) CLIENT_ID=$(AppRegistrationClientId) CLIENT_SECRET=$(AppRegistrationClientSecret)'
                
 
   - stage: "ApiDeploy"
