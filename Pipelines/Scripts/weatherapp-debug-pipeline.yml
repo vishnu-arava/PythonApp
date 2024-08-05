@@ -328,12 +328,12 @@ stages:
                     downloadPath: '$(System.ArtifactsDirectory)'
                 - task: AzureFunctionApp@2
                   inputs:
-                    connectedServiceNameARM: $(serviceConnection)
+                    connectedServiceNameARM: '$(serviceConnection)'
                     appType: 'functionAppLinux'
                     appName: 'dk-weatherapp-dev'
                     package: '$(System.ArtifactsDirectory)/**/SBQueueTrigger.zip'
                     runtimeStack: 'PYTHON|3.11'
-                    deploymentMethod: 'auto'
+                    deploymentMethod: 'zipDeploy'
 
   - stage: "PostDeploymnet"
     displayName: "Deploy : PostDeployment-${{ parameters.environment }}"
