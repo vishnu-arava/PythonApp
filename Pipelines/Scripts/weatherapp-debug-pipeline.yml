@@ -308,6 +308,32 @@ stages:
                     WebAppName: $(weatherappWorldCLimateApiAppServiceName)-${{ parameters.environment }}
                     packageForLinux: '$(System.ArtifactsDirectory)/**/WorldClimateApi.zip'
                     StartupCommand: 'pip install flask;pip install requests;python3 app.py'
+                    
+  - stage: "FunctionDeploy"
+    displayName: "Deploy : FunctionApp-${{ parameters.environment }}"
+    dependsOn: InfraDeployment
+    jobs:
+      - deployment: "DeployFunction"
+        displayName: "Deploy Function"
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+             steps:
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)'
+                - task: AzureFunctionApp@2
+                  inputs:
+                    connectedServiceNameARM: $(serviceConnection)
+                    appType: 'functionAppLinux'
+                    appName: 'dk-weatherapp-dev'
+                    package: '$(System.ArtifactsDirectory)/**/SBQueueTrigger.zip'
+                    runtimeStack: 'PYTHON|3.11'
+                    deploymentMethod: 'auto'
 
   - stage: "PostDeploymnet"
     displayName: "Deploy : PostDeployment-${{ parameters.environment }}"
