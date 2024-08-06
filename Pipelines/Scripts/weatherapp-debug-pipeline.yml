@@ -407,4 +407,5 @@ stages:
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/functionApp.json'
                     csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/parameters_${{ parameters.environment }}.json'
+                    overrideParameters: -workspaceName workspace-test
                     deploymentMode: 'Incremental'
