@@ -34,7 +34,6 @@ stages:
     jobs:
       - job: "BuildWeatherapp"
         displayName: 'Build Weatherapp'
-        pool: Satyam
         steps: 
           - task: ArchiveFiles@2
             inputs:
