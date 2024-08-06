@@ -363,7 +363,7 @@ stages:
                     downloadPath: '$(System.ArtifactsDirectory)'
   
   - stage: "TestDeploy"
-    displayName: "Deploy : Infra-${{ parameters.environment }}"
+    displayName: "Test : Infra-${{ parameters.environment }}"
     dependsOn: build
     jobs:
       - deployment: "DeployInfra"
