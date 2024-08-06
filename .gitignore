@@ -1,7 +1,6 @@
 instance/*.db
 **/__pycache__/*
 **/instance/*.db
-**/requirements.txt
 **/*venv
 **/antenv
 **/.idea

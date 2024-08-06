@@ -3,7 +3,11 @@ import logging
 
 app = func.FunctionApp()
 
-@app.servicebus_queue_trigger(arg_name="azservicebus", queue_name="weatherappqueue",connection="weatherappsbdev_SERVICEBUS") 
-def servicebus_queue_trigger(azservicebus: func.ServiceBusMessage):
-    logging.info('Python ServiceBus Queue trigger processed a message: %s',azservicebus.get_body().decode('utf-8'))
-    print('Python ServiceBus Queue trigger processed a message: %s',azservicebus.get_body().decode('utf-8'))
+@app.function_name('FirstHTTPFunction')
+@app.route(route="myroute", auth_level=func.AuthLevel.ANONYMOUS)
+def test_function(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
+    return func.HttpResponse(
+        "Function App is working",
+        status_code=200
+    )
