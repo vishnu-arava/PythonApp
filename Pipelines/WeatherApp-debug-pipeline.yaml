@@ -17,13 +17,13 @@ parameters:
 
     - name: resourcegroup
       type: string
-      default: DEV
+      default: RG-DEV
       values:
-        - VA
-        - DEV
-        - QA
-        - UAT
-        - PROD
+        - RG-VA
+        - RG-DEV
+        - RG-QA
+        - RG-UAT
+        - RG-PROD
 
     - name: RohitPool
       type: string
@@ -32,7 +32,7 @@ parameters:
         - RohitAgent
 
 variables:
-  - group: MyVarGroup
+  - group: VmVarGrp-${{parameters.environment}}
   
 stages:
   - stage: "Build"
@@ -71,7 +71,7 @@ stages:
     jobs:
       - deployment: "BuildDevInfra"
         displayName: "Build Dev Infra"
-        environment: Dev
+        environment: dev
         strategy:
           runOnce:
             deploy:
@@ -89,15 +89,19 @@ stages:
                       # Write your PowerShell commands here
                       Get-ChildItem -Recurse $(System.ArtifactsDirectory)
                 - task: AzureResourceManagerTemplateDeployment@3
+                  condition: and(
+                   eq('${{ parameters.environment }}','dev'),
+                   eq('${{ parameters.resourcegroup }}','RG-DEV')
                   inputs:
                     deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: 'ADO-WeatherApp-SC-NonProd'
-                    subscriptionId: '52cbd7e2-9bb2-4c82-832c-edb62f355590'
+                    azureResourceManagerConnection: '$(ServiceConNP)'
+                    subscriptionId: '$(subscriptionId)'
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'RG-DEV'
+                    resourceGroupName: '${{ parameters.resourcegroup }}'
                     location: 'East US'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_dev.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_${{parameters.environment}}.json'
+                    overrideParameters: '-vmPublicIPName $(PublicIPNameVM) -vmName $(vmName) -vmUserName $(UserNameVM) -vmPassword $(PasswordVM)'
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'deploymentOutputs'
