@@ -1,0 +1,38 @@
+{
+    "parameters":{
+        "location":{
+            "value":"northcentralus"	
+        },
+        "env":{
+            "value":"vc"
+        },
+        "workspaceName": {
+            "value": "weatheapp-workspace"
+        },
+        "workspaceSkuName": {
+            "value": "pergb2018"
+        },
+        "appServiceName": {
+            "value":[
+                {
+                    "appName":"weatherapp"
+                },
+                {
+                    "appName":"worldclimateapi"
+                }
+            ]
+        },
+        "appServiceMinTlsVersion": {
+            "value": "1.2"
+        },
+        "appServiceLinuxFxVVersion": {
+            "value": "PYTHON|3.10"
+        },
+        "skuName": {
+            "value": "F1"
+        },
+        "skuTier": {
+            "value": "Free"
+        }
+    }
+}
