@@ -33,6 +33,9 @@
         },
         "skuTier": {
             "value": "Free"
+        },
+        "appInsitesName":{
+            "value":"weatherapp"
         }
     }
 }
