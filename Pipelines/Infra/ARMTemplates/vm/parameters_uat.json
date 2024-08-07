@@ -1,7 +1,7 @@
 {
     "parameters": {
         "env": {
-            "value": "UAT"
+            "value": "uat"
         },
         "publicIPName": {
             "value": "myipaddress"
