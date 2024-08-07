@@ -22,7 +22,7 @@
             "value":"dk-sonar-ubuntu-vm"
         },
         "vmPassword":{
-            "value":"Password@12345"
+            "value":"securedPassword"
         },
         "vmSize":{
             "value":"Standard_B2s_v2"
