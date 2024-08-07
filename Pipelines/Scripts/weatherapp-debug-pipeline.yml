@@ -153,9 +153,6 @@ stages:
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/parameters_${{ parameters.environment }}.json'
                    overrideParameters: >
                      -keyvaultname $(keyvaultName)
-                     -tenantId $(tenantId) 
-                     -objectId $(objectidadmin)
-                     -spTenantId $(tenantId)
                      -env ${{ parameters.environment }}
                    deploymentMode: 'Incremental'
                    deploymentOutputs: 'deploymentOutputs'
