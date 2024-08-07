@@ -135,7 +135,7 @@
                         },
                         {
                             "name": "weatherappsbdev_SERVICEBUS",
-                            "value": "Endpoint=sb://weatherappsb-dev.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=bbWyqzoJO33nQJIqH2OFcxc921JVmcMBJ+ASbG6U6lc="
+                            "value": "Endpoint=sb://weatherappsb-dev.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=vdhzrS2QUmjzl8uVmmsB9OTP5VNCxK53P+ASbJMidbY="
                         }
                     ]
                 }
