@@ -98,34 +98,6 @@ stages:
                    artifactName: 'drop'
                    downloadPath: '$(System.ArtifactsDirectory)'
                - task: AzureResourceManagerTemplateDeployment@3
-                 displayName: Sonarqube vm
-                 condition: eq('${{ parameters.environment }}','qa')
-                 inputs:
-                   deploymentScope: 'Resource Group'
-                   azureResourceManagerConnection: $(serviceConnection)
-                   subscriptionId: $(subscriptionId)
-                   action: 'Create Or Update Resource Group'
-                   resourceGroupName: ${{ parameters.resourcegroup }}
-                   location: 'East US 2'
-                   templateLocation: 'Linked artifact'
-                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/vm/vm.json'
-                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/vm/parameters_${{ parameters.environment }}.json'
-                   overrideParameters: '-vmPublicIPName "dk-sonarqube-publicIpName" -vmName "dk-sonarqube-ubuntu-vm" -vmNetworkSecurityGroupsName "dk-sonarqube-vmNetworkSecurityGroup" -vmVNetName "dk-sonarqube-vmVNet" -vmSubnetName "dk-sonarqube-vmVNetSubnet" -vmNetworkInterface "dk-sonarqube-vmNetworkInterface" -vmUserName "dk-sonarqube-ubuntu-vm" -vmPassword $(SonarqubeVmPassword) -vmSize "Standard_B2s_v2" -env "nonprod" -location "centralus"'
-                   deploymentMode: 'Incremental'
-                   deploymentOutputs: 'deploymentOutputs'
-               - task: PowerShell@2
-                 displayName: Get Sonarqube Details
-                 condition: eq('${{ parameters.environment }}','qa')
-                 inputs:
-                   targetType: 'inline'
-                   script: |
-                     $vmname= '$(deploymentOutputs.vmName.value)'
-                     $vmusername= '$(deploymentOutputs.vmUserName.value)'
-                     Write-Host "##vso[task.setvariable variable=vmname;]$vmname"
-                     Write-Host "##vso[task.setvariable variable=vmusername;]$vmusername"
-                     Write-Host "Hostname: $vmname"
-                     Write-Host "Username: $vmusername"
-               - task: AzureResourceManagerTemplateDeployment@3
                  displayName: SQL 
                  inputs:
                    deploymentScope: 'Resource Group'
