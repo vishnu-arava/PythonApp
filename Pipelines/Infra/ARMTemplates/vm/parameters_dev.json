@@ -1,40 +1,37 @@
 {
-    "parameters": {
-        "env": {
-            "value": "DEV"
-        },
-        "publicIPName": {
-            "value": "myipaddress"
-        },
-        "publicIPAllocationMethod": {
-            "value": "Dynamic"
-        },
-        "nsgName": {
-            "value": "vishnuVMnsg"
+    "parameters":{
+        "vmPublicIPName":{
+            "value":"dk-sonarqube-publicIpName"
         },
         "vmName":{
-            "value": "vishnuVM"
+            "value":"dk-sonarqube-ubuntu-vm"
         },
-        "vmSize": {
-            "value": "Standard_B1s"
+        "vmNetworkSecurityGroupsName":{
+            "value":"dk-sonarqube-vmNetworkSecurityGroup"
         },
-        "vNet": {
-            "value": "vishnuVMvnet"
+        "vmVNetName":{
+            "value":"dk-sonarqube-vmVNet"
         },
-        "vSubnet": {
-            "value": "vishnuVMsubnet"
+        "vmSubnetName":{
+            "value":"dk-sonarqube-vmVNetSubnet"
         },
-        "networkInterface": {
-            "value": "vishnuVMnic"
+        "vmNetworkInterface":{
+            "value":"dk-sonarqube-vmNetworkInterface"
         },
-        "adminUsername": {
-            "value": "vishnu"
+        "vmUserName":{
+            "value":"dk-sonarqube-ubuntu-vm"
         },
-        "adminPassword": {
-            "value": "Vishnusahi58206@*"
+        "vmPassword":{
+            "value":"Password@12345"
         },
-        "vmLocation": {
-            "value": "eastus2"
+        "vmSize":{
+            "value":"Standard_B2s_v2"
+        },
+        "env":{
+            "value":"nonprod"
+        },
+        "location":{
+            "value":"centralus"
         }
     }
-}   
+}
