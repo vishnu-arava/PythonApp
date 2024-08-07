@@ -2,27 +2,28 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-
         "env": {
             "type": "string",
             "defaultValue": "default"
         },
-
         "serviceBusName": {
             "type": "string",
             "defaultValue": "default"
         },
-
+        "serviceBusQueues": {
+            "type": "array",
+            "defaultValue": [{
+                "serviceBusQueue": "myServiceBusQue"
+            }]
+        },
         "location": {
             "type": "string",
             "defaultValue": "default"
         },
-
         "skuName": {
             "type": "string",
             "defaultValue": "default"
         },
-
         "skuTier": {
             "type": "string",
             "defaultValue": "default"
@@ -31,17 +32,43 @@
     "functions": [],
     "variables": {},
     "resources": [
-      {
-        "name": "[concat(parameters('serviceBusName'), '-', parameters('env'))]",
-        "type": "Microsoft.ServiceBus/namespaces",
-        "apiVersion": "2021-11-01",
-        "location": "[concat(parameters('location'))]",
-        "sku": {
-            "name": "[concat(parameters('skuName'))]",
-            "tier": "[concat(parameters('skuTier'))]"
+        {
+            "name": "[concat(parameters('serviceBusName'), '-', parameters('env'))]",
+            "type": "Microsoft.ServiceBus/namespaces",
+            "apiVersion": "2021-11-01",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "tier": "[parameters('skuTier')]"
+            },
+            "properties": {}
         },
-        "properties": {}
-      }
+        {
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('serviceBusName'), '-', parameters('env'), '/', parameters('serviceBusQueues')[copyIndex()].serviceBusQueue, '-', parameters('env'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', concat(parameters('serviceBusName'), '-', parameters('env')))]"
+            ],
+            "properties": {
+                "lockDuration": "PT5M",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "maxDeliveryCount": 10,
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpess": false
+            },
+            "copy": {
+                "name": "queue",
+                "count": "[length(parameters('serviceBusQueues'))]"
+            }
+        }
+        
     ],
     "outputs": {}
 }

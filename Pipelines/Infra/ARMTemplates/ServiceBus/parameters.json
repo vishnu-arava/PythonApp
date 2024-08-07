@@ -9,6 +9,17 @@
             "value": "vishnuServiceBus"
         },
 
+        "serviceBusQueues": {
+            "value": [
+                {
+                    "serviceBusQueue": "myServiceBusQueue1",
+                },
+                {
+                    "serviceBusQueue": "myServiceBusQueue2"
+                }
+            ]
+        },
+
         "location": {
             "value": "eastus2"
         },
