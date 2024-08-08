@@ -2,105 +2,330 @@ trigger:
 - none
 
 pool:
-  name: RohitPool
-  vmImage: RohitAgent
+  name: default
+  vmImage: chaitanya
 
 parameters:
-    - name: environment
-      type: string
-      default: dev
-      values:
-        - dev
-        - qa
-        - uat
-        - prod
-
-    - name: resourcegroup
-      type: string
-      default: RG-DEV
-      values:
-        - RG-VA
-        - RG-DEV
-        - RG-QA
-        - RG-UAT
-        - RG-PROD
-
-    - name: RohitPool
-      type: string
-      default: RohitAgent
-      values:
-        - RohitAgent
-
+  - name: environment
+    displayName: Environment Select
+    type: string
+    default: dev
+    values:
+      - dev
+      - qa
+      - perf
+      # - vc
+  - name: resourcegroup
+    displayName: Resource group
+    type: string
+    default: RG-DEV
+    values:
+      - RG-DEV
+      - RG-QA
+      - RG-PERF
+      # - RG-VC
 variables:
-  - group: VmVarGrp-${{parameters.environment}}
-  
+  - group: WeatherApp-${{ parameters.environment }}
+  - group: WeatherApp-${{ parameters.environment }}-kv
+  - name: dblink
+    value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
-  - stage: "Build"
-    displayName: "Building WeatherApp"
+  - stage: build
+    displayName: Build
     jobs:
-      - job: "BuildWeathetherApp"
-        displayName: "Build WeathetherApp"
+      - job: "BuildArtifact"
+        displayName: "Build Artifact"
         steps:
           - task: ArchiveFiles@2
+            displayName: Archive Source/WeatherApp
             inputs:
               rootFolderOrFile: 'Source/WeatherApp'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WeatherApp.zip'
+              replaceExistingArchive: true
           - task: ArchiveFiles@2
+            displayName: Archive Source/WorldClimateApi
             inputs:
               rootFolderOrFile: 'Source/WorldClimateApi'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WorldClimateApi.zip'
+              replaceExistingArchive: true
+          
+          - task: ArchiveFiles@2
+            displayName: Archive Source/FunctionApp/servicebusQueueTrigger
+            inputs:
+              rootFolderOrFile: 'Source/FunctionApps/servicebusQueueTrigger'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/FunctionApps/SBQueueTrigger.zip'
+              replaceExistingArchive: true
           - task: CopyFiles@2
+            displayName: Copy ARM Templates to drop
             inputs:
               SourceFolder: 'Pipelines/Infra/ARMTemplates'
               Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)/ARMInfra'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/ARMtemplates'
+          - task: CopyFiles@2
+            displayName: Copy Pwershell Scripts to drop
+            inputs:
+              SourceFolder: 'Pipelines/Scripts'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/PowershellScripts'
           - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact: drop"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: 'drop'
               publishLocation: 'Container'
-
-
-  - stage: "DevInfra"
-    displayName: "Dev Infra"
-    dependsOn: Build
+  - stage: "InfraDeployment"
+    displayName: "Deploy : Infra-${{ parameters.environment }}"
+    dependsOn: build
     jobs:
-      - deployment: "BuildDevInfra"
-        displayName: "Build Dev Infra"
-        environment: dev
+      - deployment: "DeployInfra"
+        displayName: "Deploy Infra"
+        environment: ${{ parameters.environment }}
         strategy:
           runOnce:
             deploy:
-              steps:
+             steps:
+               - task: DownloadBuildArtifacts@1
+                 inputs:
+                   buildType: 'current'
+                   downloadType: 'single'
+                   artifactName: 'drop'
+                   downloadPath: '$(System.ArtifactsDirectory)'
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: SQL 
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: ${{ parameters.resourcegroup }}
+                   location: 'Central US'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/azureSql/azureSqlDb.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/azureSql/parameters_${{ parameters.environment }}.json'
+                   overrideParameters: '-serverName $(sql-serverName) -dbName $(sql-dbName) -userName $(sql-dbUserName) -password $(sql-dbPassword) -tlsVersion "1.2" -env ${{ parameters.environment }} -location "centralus"'
+                   deploymentMode: 'Incremental'
+                   deploymentOutputs: 'deploymentOutputs'
+               - task: PowerShell@2
+                 displayName: Get Sql Details
+                 inputs:
+                   targetType: 'inline'
+                   script: |
+                     $envsqldblink= '$(deploymentOutputs.sqldblink.value)'
+                     $envsqldbname= '$(deploymentOutputs.sqldbname.value)'
+                     $envsqldbusername= '$(deploymentOutputs.sqldbusername.value)'
+                     Write-Host "##vso[task.setvariable variable=envsqldblink;]$envsqldblink"
+                     Write-Host "##vso[task.setvariable variable=envsqldbname;]$envsqldbname"
+                     Write-Host "##vso[task.setvariable variable=envsqldbusername;]$envsqldbusername"
+                     Write-Host "Sql db link : $envsqldblink"
+                     Write-Host "Sql db name : $envsqldbname"
+                     Write-Host "Sql db username : $envsqldbusername"
+               - task: AzureCLI@2
+                 displayName: TenantId,Objectid and subscription Id 
+                 inputs:
+                   azureSubscription: $(serviceConnection)
+                   scriptType: 'ps'
+                   scriptLocation: 'inlineScript'
+                   inlineScript: |
+                     Write-Output "The tenant ID is: ${env:tenantId}"
+                     Write-Host "##vso[task.setvariable variable=tenantId;]${env:tenantId}"
+                     $objectidadmin=az ad user list --query "[?contains(displayName, 'Venkata Chaitanya')].id" --output tsv
+                     Write-Host "##vso[task.setvariable variable=objectidadmin;]$objectidadmin"
+                     $subscriptionId = az account show --query id -o tsv
+                     Write-Host "##vso[task.setvariable variable=subscriptionId;]$subscriptionId"
+                   addSpnToEnvironment: true
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Key Vaults
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: '$(serviceConnection)'
+                   subscriptionId: '$(subscriptionId)'
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
+                   location: 'Central US'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/keyVault.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/parameters_${{ parameters.environment }}.json'
+                   overrideParameters: >
+                     -keyvaultname $(keyvaultName)
+                     -env ${{ parameters.environment }}
+                   deploymentMode: 'Incremental'
+                   deploymentOutputs: 'deploymentOutputs'
+               - task: PowerShell@2
+                 displayName: Get Key Vaults Details
+                 inputs:
+                   targetType: 'inline'
+                   script: |
+                     $envkeyvaultname= '$(deploymentOutputs.keyVaultName.value)'
+                     Write-Host "##vso[task.setvariable variable=envkeyvaultname;]$envkeyvaultname"
+                     Write-Host "KeyVault name is: $envkeyvaultname"
+               - task: AzureCLI@2
+                 displayName: App Registration
+                 inputs:
+                   azureSubscription: $(serviceConnection)
+                   scriptType: 'ps'
+                   scriptLocation: 'scriptPath'
+                   scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
+                   arguments: '-appRegistrationName "dk-weatherapp-kv-link-${{ parameters.environment }}" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret-${{ parameters.environment }}" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
+                     
+               - task: PowerShell@2
+                 displayName: Updating App Registration Service Principal Object Id into Library variable group
+                 inputs:
+                   filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updating_libVariables.ps1'
+                   arguments: '-organizationName $(organizationName) -projectName $(projectName) -libVariableName "WeatherApp-${{ parameters.environment }}" -libVariableParameterName "appRegistrationSpObjectId" -patToken $(PAT-powershell) -valuetoUpdate $(appRegSpObjectId)'
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: App Services
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
+                   location: 'North Central US'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/appService.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/parameters_${{ parameters.environment }}.json'
+                   overrideParameters: -skuName "P0V3" -skuTier "Premium"
+                   deploymentMode: 'Incremental'
+                   
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Service Bus
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
+                   location: 'Central US'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/servicebus/servicebus.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/servicebus/parameters_${{ parameters.environment }}.json'
+                   overrideParameters: -servicePrincipalId $(appRegistrationSpObjectId) 
+                   deploymentMode: 'Incremental'
+                  
+               - task: AzureResourceManagerTemplateDeployment@3
+                 displayName: Function App
+                 inputs:
+                   deploymentScope: 'Resource Group'
+                   azureResourceManagerConnection: $(serviceConnection)
+                   subscriptionId: $(subscriptionId)
+                   action: 'Create Or Update Resource Group'
+                   resourceGroupName: '${{ parameters.resourcegroup }}'
+                   location: 'South India'
+                   templateLocation: 'Linked artifact'
+                   csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/functionApp.json'
+                   csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/parameters_${{ parameters.environment }}.json'
+                   deploymentMode: 'Incremental'
+  - stage: "AppDeploy"
+    displayName: "Deploy : App-${{ parameters.environment }}"
+    dependsOn: InfraDeployment
+    jobs:
+      - deployment: "DeployApp"
+        displayName: "Deploy App"
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+             steps:
+               - task: DownloadBuildArtifacts@1
+                 inputs:
+                   buildType: 'current'
+                   downloadType: 'single'
+                   artifactName: 'drop'
+                   downloadPath: '$(System.ArtifactsDirectory)'
+                   
+               - task: AzureRmWebAppDeployment@4
+                 displayName: $(weatherappAppServiceName)-${{ parameters.environment }} Web Server Deployment
+                 inputs:
+                   ConnectionType: 'AzureRM'
+                   azureSubscription: $(serviceConnection)
+                   appType: 'webAppLinux'
+                   WebAppName: $(weatherappAppServiceName)-${{ parameters.environment }}
+                   packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
+                   StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py --pairs KEY_VAULT_URI=https://$(keyvaultName)-${{ parameters.environment }}.vault.azure.net/ TENANT_ID=$(AppRegistrationTenantId) CLIENT_ID=$(AppRegistrationClientId) CLIENT_SECRET=$(AppRegistrationClientSecret) SERVICE_BUS_NAME=$(servicebusName)-${{ parameters.environment }} SERVICE_BUS_QUEUE_NAME=$(servicebusQueueName) WEATHERCLIMATE_API_URL=https://worldclimateapi-${{ parameters.environment }}.azurewebsites.net/country'
+               
+
+  - stage: "ApiDeploy"
+    displayName: "Deploy : Api-${{ parameters.environment }}"
+    dependsOn: InfraDeployment
+    jobs:
+      - deployment: "DeployApp"
+        displayName: "Deploy App"
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+             steps:
                 - task: DownloadBuildArtifacts@1
                   inputs:
                     buildType: 'current'
                     downloadType: 'single'
                     artifactName: 'drop'
-                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
-                - task: PowerShell@2
+                    downloadPath: '$(System.ArtifactsDirectory)'
+                - task: AzureRmWebAppDeployment@4
+                  displayName: $(weatherappWorldCLimateApiAppServiceName)-${{ parameters.environment }} Web Server Deployment
                   inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your PowerShell commands here
-                      Get-ChildItem -Recurse $(System.ArtifactsDirectory)
-                - task: AzureResourceManagerTemplateDeployment@3
-                  condition:
-                   eq('${{ parameters.environment }}','dev')
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: $(serviceConnection)
+                    appType: 'webAppLinux'
+                    WebAppName: $(weatherappWorldCLimateApiAppServiceName)-${{ parameters.environment }}
+                    packageForLinux: '$(System.ArtifactsDirectory)/**/WorldClimateApi.zip'
+                    StartupCommand: 'pip install flask;pip install requests;python3 app.py'
+                    
+  - stage: "FunctionDeploy"
+    displayName: "Deploy : FunctionApp-${{ parameters.environment }}"
+    dependsOn: InfraDeployment
+    jobs:
+      - deployment: "DeployFunction"
+        displayName: "Deploy Function"
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+             steps:
+                - task: DownloadBuildArtifacts@1
                   inputs:
-                    deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: '$(ServiceConNP)'
-                    subscriptionId: '$(subscriptionId)'
-                    action: 'Create Or Update Resource Group'
-                    resourceGroupName: '${{ parameters.resourcegroup }}'
-                    location: 'East US'
-                    templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_${{parameters.environment}}.json'
-                    overrideParameters: '-vmPublicIPName $(PublicIPNameVM) -vmName $(vmName) -vmUserName $(UserNameVM) -vmPassword $(PasswordVM)'
-                    deploymentMode: 'Incremental'
-                    deploymentOutputs: 'deploymentOutputs'
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)'
+                - task: AzureFunctionApp@2
+                  displayName: Service Bus Queue Function Deploy
+                  inputs:
+                    connectedServiceNameARM: '$(serviceConnection)'
+                    appType: 'functionAppLinux'
+                    appName: 'dk-weatherapp-dev'
+                    package: '$(System.ArtifactsDirectory)/**/SBQueueTrigger.zip'
+                    runtimeStack: 'PYTHON|3.11'
+                    appSettings: '-WEBSITE_RUN_FROM_PACKAGE 1 -FUNCTIONS_EXTENSION_VERSION ~4'
+                    deploymentMethod: 'zipDeploy'
+
+  - stage: "PostDeploymnet"
+    displayName: "Deploy : PostDeployment-${{ parameters.environment }}"
+    dependsOn:
+      - ApiDeploy
+      - AppDeploy
+    condition: |
+      and(
+        succeeded('ApiDeploy'),
+        succeeded('AppDeploy')
+      )
+    jobs:
+      - deployment: "DeployApp"
+        displayName: "Deploy App"
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+             steps:
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)'
