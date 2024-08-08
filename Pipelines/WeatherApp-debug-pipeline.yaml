@@ -1,0 +1,106 @@
+trigger:
+- none
+
+pool:
+  name: RohitPool
+  vmImage: RohitAgent
+
+parameters:
+    - name: environment
+      type: string
+      default: dev
+      values:
+        - dev
+        - qa
+        - uat
+        - prod
+
+    - name: resourcegroup
+      type: string
+      default: RG-DEV
+      values:
+        - RG-VA
+        - RG-DEV
+        - RG-QA
+        - RG-UAT
+        - RG-PROD
+
+    - name: RohitPool
+      type: string
+      default: RohitAgent
+      values:
+        - RohitAgent
+
+variables:
+  - group: VmVarGrp-${{parameters.environment}}
+  
+stages:
+  - stage: "Build"
+    displayName: "Building WeatherApp"
+    jobs:
+      - job: "BuildWeathetherApp"
+        displayName: "Build WeathetherApp"
+        steps:
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: 'Source/WeatherApp'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WeatherApp.zip'
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: 'Source/WorldClimateApi'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/Apps/WorldClimateApi.zip'
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: 'Pipelines/Infra/ARMTemplates'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/ARMInfra'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+
+
+  - stage: "DevInfra"
+    displayName: "Dev Infra"
+    dependsOn: Build
+    jobs:
+      - deployment: "BuildDevInfra"
+        displayName: "Build Dev Infra"
+        environment: dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)/downloads'
+                - task: PowerShell@2
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      # Write your PowerShell commands here
+                      Get-ChildItem -Recurse $(System.ArtifactsDirectory)
+                - task: AzureResourceManagerTemplateDeployment@3
+                  condition:
+                   eq('${{ parameters.environment }}','dev')
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: '$(ServiceConNP)'
+                    subscriptionId: '$(subscriptionId)'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: '${{ parameters.resourcegroup }}'
+                    location: 'East US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/vm.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/vm/parameters_${{parameters.environment}}.json'
+                    overrideParameters: '-vmPublicIPName $(PublicIPNameVM) -vmName $(vmName) -vmUserName $(UserNameVM) -vmPassword $(PasswordVM)'
+                    deploymentMode: 'Incremental'
+                    deploymentOutputs: 'deploymentOutputs'
