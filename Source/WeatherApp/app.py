@@ -64,6 +64,7 @@ if __name__ == '__main__':
     if args.pairs:
         pairs = [pair.split('=') for pair in args.pairs]
         update_env_file(pairs)
+        print(".env file is updated")
     from flask_auth import app
     app.run(host='0.0.0.0',port=8000,debug=True,use_reloader=False)
     # app.run(port=8000)

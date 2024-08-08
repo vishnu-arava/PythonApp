@@ -64,9 +64,11 @@ print(f"Got GEODBApiKey from key vault:{GEODBApiKey}")
 
 app.config['SECRET_KEY'] = str(os.getenv("SECRET_KEY"))
 
+worldclimateapiUrl=os.getenv("WEATHERCLIMATE_API_URL")
+
 #service bus connection
-servicebus_namespace = 'dkweatherappsb-dev'
-queue_name = 'weatherappqueue'
+servicebus_namespace = os.getenv("SERVICE_BUS_NAME")
+queue_name = os.getenv("SERVICE_BUS_QUEUE_NAME")
 servicebus_client = ServiceBusClient(
     fully_qualified_namespace=servicebus_namespace + '.servicebus.windows.net',
     credential=credential

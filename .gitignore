@@ -1,7 +1,6 @@
 instance/*.db
 **/__pycache__/*
 **/instance/*.db
-**/requirements.txt
 **/*venv
 **/antenv
 **/.idea
@@ -10,3 +9,5 @@ model.pkl
 **/Logs
 **/*antenv
 **/hourlylogs
+**/.vscode
+**/parameters_vc
