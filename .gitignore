@@ -10,3 +10,4 @@ model.pkl
 **/*antenv
 **/hourlylogs
 **/.vscode
+**/parameters_vc
