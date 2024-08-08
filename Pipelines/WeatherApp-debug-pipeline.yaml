@@ -89,9 +89,8 @@ stages:
                       # Write your PowerShell commands here
                       Get-ChildItem -Recurse $(System.ArtifactsDirectory)
                 - task: AzureResourceManagerTemplateDeployment@3
-                  condition: and(
-                   eq('${{ parameters.environment }}','dev'),
-                   eq('${{ parameters.resourcegroup }}','RG-DEV')
+                  condition:
+                   eq('${{ parameters.environment }}','dev')
                   inputs:
                     deploymentScope: 'Resource Group'
                     azureResourceManagerConnection: '$(ServiceConNP)'
