@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, session,jsonify
 import requests
-from flask_auth import mysql, bcrypt, app, servicebus_client, queue_name, servicebus_namespace 
+from flask_auth import mysql, bcrypt, app, servicebus_client, queue_name, servicebus_namespace, worldclimateapiUrl
 from flask_auth import GEODBApiKey as GEODB_API_KEY, OpenWeatherApiKey as api_key_OW
 from flask_auth.forms import RegistrationForm, LoginForm
 from azure.servicebus import ServiceBusMessage
@@ -399,7 +399,7 @@ def totalWeatherReport():
         if countryname == '':
             countryname = 'india'
         print(countryname)
-        worldclimateapiurl = "https://worldclimateapi-dev.azurewebsites.net/country"
+        worldclimateapiurl = str(worldclimateapiUrl)
         params = {
             'countryname':countryname,
             'apikey':'48a90ac42caa09f90dcaeee4096b9e53'
