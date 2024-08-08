@@ -2,8 +2,8 @@ trigger:
 - none
 
 pool:
-  name: default
-  vmImage: chaitanya
+  name: RohitPool
+  vmImage: RohitAgent
 
 parameters:
   - name: environment
