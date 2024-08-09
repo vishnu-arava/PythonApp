@@ -2,8 +2,26 @@ trigger:
 - none
 
 pool:
-  name: RohitPool
-  vmImage: RohitAgent
+  - name: poolNames
+    displayName: Pool Name
+    type: string
+    default: Default
+    values:
+     - Default
+     - RohitPool
+     - Satyam
+     - vishnupool
+  - name: agentImage
+    displayName: Agent Machines
+    type: string
+    default: RohitAgent
+    values:
+      - chaitanya
+      - RohitAgent
+      - LAPTOP-RS36BMKA
+      - vishnuagent
+
+    
 
 parameters:
   - name: environment
@@ -14,6 +32,8 @@ parameters:
       - dev
       - qa
       - perf
+      - uat
+      - prod
       # - vc
   - name: resourcegroup
     displayName: Resource group
@@ -23,6 +43,8 @@ parameters:
       - RG-DEV
       - RG-QA
       - RG-PERF
+      - RG-UAT
+      - RG-PROD
       # - RG-VC
 variables:
   - group: WeatherApp-${{ parameters.environment }}
@@ -125,6 +147,7 @@ stages:
                      Write-Host "Sql db link : $envsqldblink"
                      Write-Host "Sql db name : $envsqldbname"
                      Write-Host "Sql db username : $envsqldbusername"
+
                - task: AzureCLI@2
                  displayName: TenantId,Objectid and subscription Id 
                  inputs:
@@ -139,6 +162,7 @@ stages:
                      $subscriptionId = az account show --query id -o tsv
                      Write-Host "##vso[task.setvariable variable=subscriptionId;]$subscriptionId"
                    addSpnToEnvironment: true
+
                - task: AzureResourceManagerTemplateDeployment@3
                  displayName: Key Vaults
                  inputs:
@@ -156,6 +180,7 @@ stages:
                      -env ${{ parameters.environment }}
                    deploymentMode: 'Incremental'
                    deploymentOutputs: 'deploymentOutputs'
+
                - task: PowerShell@2
                  displayName: Get Key Vaults Details
                  inputs:
@@ -164,20 +189,22 @@ stages:
                      $envkeyvaultname= '$(deploymentOutputs.keyVaultName.value)'
                      Write-Host "##vso[task.setvariable variable=envkeyvaultname;]$envkeyvaultname"
                      Write-Host "KeyVault name is: $envkeyvaultname"
+
                - task: AzureCLI@2
-                 displayName: App Registration
+                 displayName: App Registration KeyVaultUpdation
                  inputs:
                    azureSubscription: $(serviceConnection)
                    scriptType: 'ps'
                    scriptLocation: 'scriptPath'
-                   scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
+                   scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistrationKeyVaultUpdation.ps1'
                    arguments: '-appRegistrationName "dk-weatherapp-kv-link-${{ parameters.environment }}" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret-${{ parameters.environment }}" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
-                     
+                   
                - task: PowerShell@2
                  displayName: Updating App Registration Service Principal Object Id into Library variable group
                  inputs:
                    filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updating_libVariables.ps1'
                    arguments: '-organizationName $(organizationName) -projectName $(projectName) -libVariableName "WeatherApp-${{ parameters.environment }}" -libVariableParameterName "appRegistrationSpObjectId" -patToken $(PAT-powershell) -valuetoUpdate $(appRegSpObjectId)'
+
                - task: AzureResourceManagerTemplateDeployment@3
                  displayName: App Services
                  inputs:
