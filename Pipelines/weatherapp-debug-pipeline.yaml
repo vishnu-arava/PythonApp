@@ -101,6 +101,9 @@ stages:
               ArtifactName: 'drop'
               publishLocation: 'Container'
   - stage: "InfraDeployment"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : Infra-${{ parameters.environment }}"
     dependsOn: build
     jobs:
@@ -243,6 +246,9 @@ stages:
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/parameters_${{ parameters.environment }}.json'
                    deploymentMode: 'Incremental'
   - stage: "AppDeploy"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : App-${{ parameters.environment }}"
     dependsOn: InfraDeployment
     jobs:
@@ -272,6 +278,9 @@ stages:
                
 
   - stage: "ApiDeploy"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : Api-${{ parameters.environment }}"
     dependsOn: InfraDeployment
     jobs:
@@ -299,6 +308,9 @@ stages:
                     StartupCommand: 'pip install flask;pip install requests;python3 app.py'
                     
   - stage: "FunctionDeploy"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : FunctionApp-${{ parameters.environment }}"
     dependsOn: InfraDeployment
     jobs:
@@ -327,6 +339,9 @@ stages:
                     deploymentMethod: 'zipDeploy'
 
   - stage: "PostDeploymnet"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : PostDeployment-${{ parameters.environment }}"
     dependsOn:
       - ApiDeploy
