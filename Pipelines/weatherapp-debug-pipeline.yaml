@@ -49,6 +49,9 @@ variables:
     value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
   - stage: build
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: Build
     jobs:
       - job: "BuildArtifact"
