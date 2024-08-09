@@ -27,6 +27,8 @@ variables:
     value: dk-weatherapp-web
   - name: appserviceNameApi
     value: dk-weatherapp-api
+  - name: PAT
+    value: default
 
 stages:
   - stage: "Build"
@@ -67,7 +69,7 @@ stages:
           
           # - task: AzureCLI@2
           #   inputs:
-          #     azureSubscription: 'NewFreeTrial2024'
+          #     azureSubscription: 'ADO-WeatherApp-SC-NonProd'
           #     scriptType: 'ps'
           #     scriptLocation: 'scriptPath'
           #     scriptPath: 'Pipelines/Scripts/Azcli/updatepipelinevars.ps1'
@@ -94,7 +96,29 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: 'drop'
               publishLocation: 'Container'
-  
+          
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: 'source/WorldClimateApi'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: 'worldclimateapi.zip'
+              replaceExistingArchive: true
+          
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo "commit all changes "
+                git config user.name "Satyam"
+                git config user.email "satyam.dasari51@gmail.com"
+                git fetch
+                git checkout -b "$(Build.SourceBranchName)"
+                git add --all
+                git commit -m "Solution Backup"
+                echo "push code to new repo "
+                git push https://$(PAT)@dev.azure.com/venkatachaitanya095/PythonProjects/_git/PythonFlaskMarketWeatherApp $(Build.SourceBranchName)
+
   - stage: "DevInfra"
     displayName: "DEV Deploy: Infra"
     dependsOn: Build
@@ -159,7 +183,7 @@ stages:
                   displayName: "Deploy WeatherApp Web"
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'NewFreeTrial2024'
+                    azureSubscription: 'ADO-WeatherApp-SC-NonProd'
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceNameWeb }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
@@ -188,7 +212,7 @@ stages:
                   displayName: "Deploy WeatherApp API"
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'NewFreeTrial2024'
+                    azureSubscription: 'ADO-WeatherApp-SC-NonProd'
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceNameApi }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
@@ -250,7 +274,7 @@ stages:
                   displayName: "Deploy WeatherApp Web"
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'NewFreeTrial2024'
+                    azureSubscription: 'ADO-WeatherApp-SC-NonProd'
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceNameWeb }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/weatherapp.zip'
@@ -260,7 +284,7 @@ stages:
                   displayName: "Deploy WeatherApp API"
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'NewFreeTrial2024'
+                    azureSubscription: 'ADO-WeatherApp-SC-NonProd'
                     appType: 'webAppLinux'
                     WebAppName: '${{ variables.appserviceNameApi }}-${{ parameters.env }}'
                     packageForLinux: '$(System.ArtifactsDirectory)/**/worldclimateapi.zip'
