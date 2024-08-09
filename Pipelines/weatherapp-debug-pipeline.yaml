@@ -27,21 +27,21 @@ parameters:
   - name: environment
     displayName: Environment Select
     type: string
-    default: vc
+    default: dev
     values:
       - dev
       - qa
       - perf
-      - vc
+      # - vc
   - name: resourcegroup
     displayName: Resource group
     type: string
-    default: RG-VC
+    default: RG-DEV
     values:
       - RG-DEV
       - RG-QA
       - RG-PERF
-      - RG-VC
+      # - RG-VC
 variables:
   - group: WeatherApp-${{ parameters.environment }}
   - group: WeatherApp-${{ parameters.environment }}-kv
