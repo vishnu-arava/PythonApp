@@ -102,7 +102,7 @@ stages:
               rootFolderOrFile: 'source/WorldClimateApi'
               includeRootFolder: false
               archiveType: 'zip'
-              archiveFile: 'worldclimateapi.zip'
+              archiveFile: 'Pipelines/artifacts/(Get-Date).ToString("yyyy-MM-dd-mm")/worldclimateapi.zip'
               replaceExistingArchive: true
           
           - task: PowerShell@2
@@ -113,11 +113,11 @@ stages:
                 git config user.name "Satyam"
                 git config user.email "satyam.dasari51@gmail.com"
                 git fetch
-                git checkout -b "$(Build.SourceBranchName)"
+                git checkout -b "Satyam/$(Build.SourceBranchName)"
                 git add --all
                 git commit -m "Solution Backup"
                 echo "push code to new repo "
-                git push https://$(PAT)@dev.azure.com/venkatachaitanya095/PythonProjects/_git/PythonFlaskMarketWeatherApp $(Build.SourceBranchName)
+                git push https://$(PAT)@dev.azure.com/venkatachaitanya095/PythonProjects/_git/PythonFlaskMarketWeatherApp Satyam/$(Build.SourceBranchName)
 
   - stage: "DevInfra"
     displayName: "DEV Deploy: Infra"
