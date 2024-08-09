@@ -1,28 +1,6 @@
 trigger:
 - none
 
-pool:
-  - name: poolNames
-    displayName: Pool Name
-    type: string
-    default: Default
-    values:
-     - Default
-     - RohitPool
-     - Satyam
-     - vishnupool
-  - name: agentImage
-    displayName: Agent Machines
-    type: string
-    default: RohitAgent
-    values:
-      - chaitanya
-      - RohitAgent
-      - LAPTOP-RS36BMKA
-      - vishnuagent
-
-    
-
 parameters:
   - name: poolname
     displayName: Pool Name
