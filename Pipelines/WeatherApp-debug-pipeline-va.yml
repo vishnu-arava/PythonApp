@@ -66,7 +66,7 @@ stages:
 
 
   - stage: "DevInfra"
-    displayName: "Dev Infra"
+    displayName: "Deploy: Infra-${{ parameters.environment }}"
     dependsOn: Build
     jobs:
       - deployment: "BuildDevInfra"
@@ -105,8 +105,7 @@ stages:
 
                 - task: AzureResourceManagerTemplateDeployment@3
                   condition: and(
-                   eq('${{ parameters.environment }}','dev'),
-                   eq('${{ parameters.resourcegroup }}','RG-DEV')
+                   eq('${{ parameters.environment }}','dev')
                   inputs:
                     deploymentScope: 'Resource Group'
                     azureResourceManagerConnection: '$(ServiceConNP)'
@@ -238,7 +237,7 @@ stages:
                 #     inlineScript: 'Write-Host "PublicIP is : $(varpublicIP)"'
 
   - stage: "DevAppDeploy"
-    displayName: "Dev App Deploy"
+    displayName: "Deploy: App-${{ parameters.environment }}"
     dependsOn: DevInfra
     jobs:
       - deployment: "DevAppDeploy"
@@ -265,7 +264,7 @@ stages:
                     StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py'
                 
   - stage: "DevApiAppDeploy"
-    displayName: "Dev Api App Deploy"
+    displayName: "Deploy: APIApp-${{ parameters.environment }}"
     dependsOn: DevInfra
     jobs:
       - deployment: "DevApiAppDeploy"
