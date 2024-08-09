@@ -24,6 +24,24 @@ pool:
     
 
 parameters:
+  - name: poolname
+    displayName: Pool Name
+    type: string
+    default: Default
+    values:
+      - Default
+      - RohitPool
+      - Satyam
+      - vishnupool
+  - name: agentImage
+    displayName: Agent Image
+    type: string
+    default: chaitanya
+    values:
+      - chaitanya
+      - RohitAgent
+      - LAPTOP-RS36BMKA
+      - vishnuagent
   - name: environment
     displayName: Environment Select
     type: string
@@ -53,6 +71,9 @@ variables:
     value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
   - stage: build
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: Build
     jobs:
       - job: "BuildArtifact"
@@ -102,6 +123,9 @@ stages:
               ArtifactName: 'drop'
               publishLocation: 'Container'
   - stage: "InfraDeployment"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : Infra-${{ parameters.environment }}"
     dependsOn: build
     jobs:
@@ -249,6 +273,9 @@ stages:
                    csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/parameters_${{ parameters.environment }}.json'
                    deploymentMode: 'Incremental'
   - stage: "AppDeploy"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : App-${{ parameters.environment }}"
     dependsOn: InfraDeployment
     jobs:
@@ -278,6 +305,9 @@ stages:
                
 
   - stage: "ApiDeploy"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : Api-${{ parameters.environment }}"
     dependsOn: InfraDeployment
     jobs:
@@ -305,6 +335,9 @@ stages:
                     StartupCommand: 'pip install flask;pip install requests;python3 app.py'
                     
   - stage: "FunctionDeploy"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : FunctionApp-${{ parameters.environment }}"
     dependsOn: InfraDeployment
     jobs:
@@ -326,13 +359,16 @@ stages:
                   inputs:
                     connectedServiceNameARM: '$(serviceConnection)'
                     appType: 'functionAppLinux'
-                    appName: 'dk-weatherapp-dev'
+                    appName: 'dk-weatherapp-${{ parameters.environment }}'
                     package: '$(System.ArtifactsDirectory)/**/SBQueueTrigger.zip'
                     runtimeStack: 'PYTHON|3.11'
                     appSettings: '-WEBSITE_RUN_FROM_PACKAGE 1 -FUNCTIONS_EXTENSION_VERSION ~4'
                     deploymentMethod: 'zipDeploy'
 
   - stage: "PostDeploymnet"
+    pool: 
+     name: ${{ parameters.poolname }}
+     vmImage: ${{ parameters.agentImage }}
     displayName: "Deploy : PostDeployment-${{ parameters.environment }}"
     dependsOn:
       - ApiDeploy
