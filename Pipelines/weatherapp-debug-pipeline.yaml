@@ -15,6 +15,15 @@ parameters:
       - RohitPool
       - Satyam
       - vishnupool
+  - name: agentImage
+    displayName: Agent Image
+    type: string
+    default: chaitanya
+    values:
+      - chaitanya
+      - RohitAgent
+      - LAPTOP-RS36BMKA
+      - vishnuagent
   - name: environment
     displayName: Environment Select
     type: string
