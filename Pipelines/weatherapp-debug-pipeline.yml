@@ -7,8 +7,8 @@ trigger:
 - none
 
 pool:
-  name: az-selfhosted
-  vmImage: ubuntu-latest
+  name: Satyam
+  vmImage: LAPTOP-RS36BMKA
 
 parameters:
   - name: env
