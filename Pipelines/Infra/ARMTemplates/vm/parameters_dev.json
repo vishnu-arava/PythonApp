@@ -19,7 +19,7 @@
             "value":"dk-sonar-vmNetworkInterface"
         },
         "vmUserName":{
-            "value":"dk-sonar-ubuntu-vm"
+            "value":"sonarqubeuser"
         },
         "vmPassword":{
             "value":"securedPassword"
