@@ -332,7 +332,7 @@ stages:
                   inputs:
                     connectedServiceNameARM: '$(serviceConnection)'
                     appType: 'functionAppLinux'
-                    appName: 'dk-weatherapp-dev'
+                    appName: 'dk-weatherapp-{{ parameters.environment }}'
                     package: '$(System.ArtifactsDirectory)/**/SBQueueTrigger.zip'
                     runtimeStack: 'PYTHON|3.11'
                     appSettings: '-WEBSITE_RUN_FROM_PACKAGE 1 -FUNCTIONS_EXTENSION_VERSION ~4'
