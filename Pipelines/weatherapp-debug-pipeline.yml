@@ -89,7 +89,7 @@ stages:
                 # Write your PowerShell commands here.
                 
                 echo ${env:APIVERSION}
-
+       
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifacts"
             inputs:
@@ -102,7 +102,7 @@ stages:
               rootFolderOrFile: 'source/WorldClimateApi'
               includeRootFolder: false
               archiveType: 'zip'
-              archiveFile: Pipelines/artifacts/$(Get-Date).ToString("yyyy-MM-dd-mm")/worldclimateapi.zip
+              archiveFile: Pipelines/artifacts/$(Get-Date)/worldclimateapi.zip
               replaceExistingArchive: true
           
           - task: PowerShell@2
