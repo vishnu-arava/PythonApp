@@ -30,6 +30,7 @@ parameters:
       - perf
       - uat
       - prod
+      - va
       # - vc
   - name: resourcegroup
     displayName: Resource group
@@ -41,6 +42,7 @@ parameters:
       - RG-PERF
       - RG-UAT
       - RG-PROD
+      - RG-VA
       # - RG-VC
 variables:
   - group: WeatherApp-${{ parameters.environment }}
