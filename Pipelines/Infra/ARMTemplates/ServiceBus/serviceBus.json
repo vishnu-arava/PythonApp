@@ -27,10 +27,20 @@
         "skuTier": {
             "type": "string",
             "defaultValue": "default"
+        },
+        "serviceBusTopicName": {
+            "type": "array",
+            "defaultValue": [
+                {
+                    "name": "weatherapp"
+                }
+            ]
+        },
+        "subscriptionName": {
+            "type": "string",
+            "defaultValue": "default"
         }
     },
-    "functions": [],
-    "variables": {},
     "resources": [
         {
             "name": "[concat(parameters('serviceBusName'), '-', parameters('env'))]",
@@ -64,11 +74,45 @@
                 "enableExpess": false
             },
             "copy": {
-                "name": "queue",
+                "name": "queueCopy",
                 "count": "[length(parameters('serviceBusQueues'))]"
             }
+        },
+        {
+            "apiVersion": "2021-11-01",
+            "type": "Microsoft.ServiceBus/namespaces/topics",
+            "name": "[concat(concat(parameters('serviceBusName'), '-', parameters('env')), '/', parameters('serviceBusTopicName')[copyIndex()].name)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', concat(parameters('serviceBusName'), '-', parameters('env')))]"
+            ],
+            "properties": {
+                "defaultMessageTimeToLive": "P14D",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false
+            },
+            "copy": {
+                "name": "topicCopy",
+                "count": "[length(parameters('serviceBusTopicName'))]"
+            }
+        },
+        {
+            "apiVersion": "2021-11-01",
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "name": "[concat(concat(parameters('serviceBusName'), '-', parameters('env')), '/', parameters('serviceBusTopicName')[copyIndex()].name, '/', parameters('subscriptionName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', concat(parameters('serviceBusName'), '-', parameters('env')), parameters('serviceBusTopicName')[copyIndex()].name)]"
+            ],
+            "properties": {
+                "lockDuration": "PT5M",
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": true,
+                "maxDeliveryCount": 10
+            },
+            "copy": {
+                "name": "subscriptionCopy",
+                "count": "[length(parameters('serviceBusTopicName'))]"
+            }
         }
-        
     ],
     "outputs": {}
 }

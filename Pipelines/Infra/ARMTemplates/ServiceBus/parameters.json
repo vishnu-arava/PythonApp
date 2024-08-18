@@ -12,12 +12,30 @@
         "serviceBusQueues": {
             "value": [
                 {
-                    "serviceBusQueue": "myServiceBusQueue1",
+                    "serviceBusQueue": "myServiceBusQueue1"
                 },
                 {
                     "serviceBusQueue": "myServiceBusQueue2"
                 }
             ]
+        },
+
+        "serviceBusTopicName": {
+            "value": [
+                {
+                    "name": "weatherserach"
+                },
+                {
+                    "name": "fireforest"
+                },
+                {
+                    "name": "weatherreport"
+                }
+            ]
+        },
+
+        "subscriptionName": {
+            "value": "weathersubscription"
         },
 
         "location": {
@@ -32,4 +50,4 @@
             "value": "Standard"
         }
     }
-}
+  }
