@@ -82,15 +82,16 @@ stages:
                     downloadType: 'single'
                     artifactName: 'drop'
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
-                
+              
+                              
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: 'vishnuSubscriptionServiceConnection'
-                    subscriptionId: '2dc383a6-eed6-4aa2-a955-b4fffa7da912'
+                    azureResourceManagerConnection: 'ADO-WeatherApp-SC-NonProd'
+                    subscriptionId: '52cbd7e2-9bb2-4c82-832c-edb62f355590'
                     action: 'Create Or Update Resource Group'
                     resourceGroupName: 'RG-VA'
-                    location: 'South Central US'
+                    location: 'East US'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
                     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/parameters_dev.json'
