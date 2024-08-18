@@ -84,6 +84,18 @@ stages:
                     downloadPath: '$(System.ArtifactsDirectory)/downloads'
               
                               
+                # - task: AzureResourceManagerTemplateDeployment@3
+                #   inputs:
+                #     deploymentScope: 'Resource Group'
+                #     azureResourceManagerConnection: 'ADO-WeatherApp-SC-NonProd'
+                #     subscriptionId: '52cbd7e2-9bb2-4c82-832c-edb62f355590'
+                #     action: 'Create Or Update Resource Group'
+                #     resourceGroupName: 'RG-VA'
+                #     location: 'East US'
+                #     templateLocation: 'Linked artifact'
+                #     csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
+                #     csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/parameters_dev.json'
+                #     deploymentMode: 'Incremental'
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
@@ -93,9 +105,10 @@ stages:
                     resourceGroupName: 'RG-VA'
                     location: 'East US'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/appservice.json'
-                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/Appservice/parameters_dev.json'
+                    csmFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/ServiceBus/serviceBus.json'
+                    csmParametersFile: '$(System.ArtifactsDirectory)/downloads/drop/ARMInfra/ServiceBus/parameters.json'
                     deploymentMode: 'Incremental'
+
   - stage: "DevAppDeploy"
     displayName: "Dev App Deploy"
     dependsOn: DevInfra
