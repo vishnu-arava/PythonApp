@@ -32,7 +32,7 @@ parameters:
       - dev
       - qa
       - perf
-      # - vc
+      - vc
   - name: resourcegroup
     displayName: Resource group
     type: string
@@ -41,7 +41,7 @@ parameters:
       - RG-DEV
       - RG-QA
       - RG-PERF
-      # - RG-VC
+      - RG-VC
 variables:
   - group: WeatherApp-${{ parameters.environment }}
   - group: WeatherApp-${{ parameters.environment }}-kv
