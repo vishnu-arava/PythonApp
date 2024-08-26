@@ -381,11 +381,11 @@ stages:
   dependsOn:
   - ApiDeploy
   - AppDeploy
-  condition: |
-    and(
-      succeeded('ApiDeploy'),
-      succeeded('AppDeploy')
-    )
+  # condition: |
+  #   and(
+  #     succeeded('ApiDeploy'),
+  #     succeeded('AppDeploy')
+  #   )
   jobs:
   - deployment: "DeployApp"
     displayName: "Deploy App"
