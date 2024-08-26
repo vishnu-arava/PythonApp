@@ -414,6 +414,6 @@ stages:
               csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/keyVault.json'
               csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/parameters_${{ parameters.environment }}.json'
               overrideParameters: >
-                -keyvaultname $(keyvaultName)  -env ${{ parameters.environment }} -secrets '[{"secretName":"DataBasePassword","secretValue":"new_password_value"},{"secretName":"GEODBApiKey","secretValue":"new_geodb_api_key"}]'
+                -keyvaultname $(keyvaultName)  -env ${{ parameters.environment }} -secrets '[{\"secretName\":\"DataBasePassword\",\"secretValue\":\"new_password_value\"},{\"secretName\":\"GEODBApiKey\",\"secretValue\":\"new_geodb_api_key\"}]'
               deploymentMode: 'Incremental'
               deploymentOutputs: 'deploymentOutputs'
