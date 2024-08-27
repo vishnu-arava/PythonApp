@@ -165,7 +165,7 @@
         },
         "osProfile": {
             "computerName": "[concat(parameters('vmName'),'-',parameters('env'))]",
-            "adminUsername": "[concat(parameters('vmUserName'),'-',parameters('env'))]",
+            "adminUsername": "[parameters('vmUserName')]",
             "adminPassword": "[parameters('vmPassword')]"
         },
         "storageProfile": {
