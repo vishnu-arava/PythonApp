@@ -22,7 +22,7 @@
             "value":"dk-weather-app"
         },
         "workspaceName":{
-            "value":"dk-funcapp-workspace"
+            "value":"dk-weather-app-workspace"
         },
         "skuNameServerfarms":{
             "value":"S1"
