@@ -274,6 +274,7 @@ stages:
               templateLocation: 'Linked artifact'
               csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/vm/vm.json'
               csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/vm/parameters_dev.json'
+              overrideParameters: '-vmPassword $(sonarqubeVmPassword)'
               deploymentMode: 'Incremental'
 
 - stage: "AppDeploy"

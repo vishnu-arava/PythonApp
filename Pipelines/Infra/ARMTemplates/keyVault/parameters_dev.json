@@ -4,10 +4,10 @@
             "value": "kv-dk-weatherap"
         },
         "tenantId":{
-            "value": "a576b579-5332-4070-ac30-3f4d5a911ac0"
+            "value": "4fea6451-b14b-40d5-a00f-d938f749ea13"
         },
         "objectId":{
-            "value": "c83fca92-09af-411d-bb27-74229b3d819c"
+            "value": "1eed917a-d644-4d51-9c7d-e3cb8a08ddd8"
         },
         "secrets":{
             "value":[
@@ -60,10 +60,10 @@
             "value":"centralus"
         },
         "spTenantId":{
-            "value":"a576b579-5332-4070-ac30-3f4d5a911ac0"
+            "value":"4fea6451-b14b-40d5-a00f-d938f749ea13"
         },
         "spObjectid":{
-            "value":"30d46a24-1ce3-4246-b83d-b05e9717b67b"	
+            "value":"f0d81de4-1a1f-40be-ada5-f5acb4b95c50"	
         }
     }
 }
