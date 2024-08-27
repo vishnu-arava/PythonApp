@@ -313,7 +313,6 @@ stages:
               StartupCommand: 'apt-get install python3-pip -y;apt-get install zip -y;apt-get install python3-venv -y;python3 -m venv antenv;source antenv/bin/activate;apt-get install pkg-config -y --ignore-missing;apt-get install dos2unix;apt-get install default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find . -type f -name odbc17.sh);dos2unix "$FILEPATH";bash $FILEPATH;python3 app.py --pairs KEY_VAULT_URI=https://$(keyvaultName)-${{ parameters.environment }}.vault.azure.net/ TENANT_ID=$(AppRegistrationTenantId) CLIENT_ID=$(AppRegistrationClientId) CLIENT_SECRET=$(AppRegistrationClientSecret) SERVICE_BUS_NAME=$(servicebusName)-${{ parameters.environment }} SERVICE_BUS_QUEUE_NAME=$(servicebusQueueName) WEATHERCLIMATE_API_URL=https://worldclimateapi-${{ parameters.environment }}.azurewebsites.net/country'
 
 - stage: "ApiDeploy"
-
   pool:
     name: ${{ parameters.poolname }}
     vmImage: ${{ parameters.agentImage }}
