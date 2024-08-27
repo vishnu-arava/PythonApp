@@ -1,10 +1,6 @@
 trigger:
 - none
 
-pool:
-  name: RohitPool
-  vmImage: RohitAgent
-
 parameters:
 - name: poolname
   displayName: Pool Name
@@ -189,12 +185,12 @@ stages:
                 Write-Host "##vso[task.setvariable variable=envkeyvaultname;]$envkeyvaultname"
                 Write-Host "KeyVault name is: $envkeyvaultname"
           - task: AzureCLI@2
-            displayName: App Registration
+            displayName: App Registration KeyVaultUpdation
             inputs:
               azureSubscription: $(serviceConnection)
               scriptType: 'ps'
               scriptLocation: 'scriptPath'
-              scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistration.ps1'
+              scriptPath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Azcli/appRegistrationKeyVaultUpdation.ps1'
               arguments: '-appRegistrationName "dk-weatherapp-kv-link-${{ parameters.environment }}" -appRegistrationClientSecretName "dk-weatherapp-kv-link-clientsecret-${{ parameters.environment }}" -keyVaultName $(envkeyvaultname) -resourceGroupName ${{ parameters.resourcegroup }} -tenantId $(tenantId) -subscriptionId $(subscriptionId) -dbName $(sql-dbName)-${{ parameters.environment }} -dbPassword $(sql-dbPassword) -dbServerLink $(dblink) -dbUserName $(sql-dbUserName) -patPowershell $(PAT-powershell)'
 
           - task: PowerShell@2

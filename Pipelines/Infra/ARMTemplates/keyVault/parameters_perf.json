@@ -1,7 +1,7 @@
 {
     "parameters":{
         "keyvaultname":{
-            "value": "dk-weatherapp-kv"
+            "value": "kv-dk-weatherap"
         },
         "tenantId":{
             "value": "a576b579-5332-4070-ac30-3f4d5a911ac0"
