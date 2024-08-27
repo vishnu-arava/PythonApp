@@ -28,7 +28,7 @@ parameters:
   - dev
   - qa
   - perf
-  # - vc
+  - vc
 - name: resourcegroup
   displayName: Resource group
   type: string
@@ -37,7 +37,7 @@ parameters:
   - RG-DEV
   - RG-QA
   - RG-PERF
-  # - RG-VC
+  - RG-VC
 variables:
 - group: WeatherApp-${{ parameters.environment }}
 - group: WeatherApp-${{ parameters.environment }}-kv
@@ -172,8 +172,7 @@ stages:
               csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/keyVault.json'
               csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/keyVault/parameters_${{ parameters.environment }}.json'
               overrideParameters: >
-                -keyvaultname $(keyvaultName)  
-                -env ${{ parameters.environment }}
+                -keyvaultname $(keyvaultName) -env ${{ parameters.environment }} -tenantId $(tenantId) -spObjectid $(serviceConnectionObjectId) -userobjectId $(userObjectId)
               deploymentMode: 'Incremental'
               deploymentOutputs: 'deploymentOutputs'
           - task: PowerShell@2

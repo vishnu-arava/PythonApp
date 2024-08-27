@@ -7,7 +7,7 @@
             "value":"uat"
         },
         "workspaceName": {
-            "value": "weatheapp-workspace"
+            "value": "dk-weather-app-workspace"
         },
         "workspaceSkuName": {
             "value": "pergb2018"
@@ -15,10 +15,10 @@
         "appServiceName": {
             "value":[
                 {
-                    "appName":"weatherapp"
+                    "appName":"dk-weather-app-web"
                 },
                 {
-                    "appName":"worldclimateapi"
+                    "appName":"dk-weatherclimate-api"
                 }
             ]
         },
@@ -35,7 +35,7 @@
             "value": "Free"
         },
         "appInsitesName":{
-            "value":"weatherapp"
+            "value":"dk-weather-app-ai"
         }
     }
 }
