@@ -4,13 +4,13 @@
     "parameters": {
         "keyvaultname": {
             "type": "string",
-            "defaultValue": "dk-weatherapp-kv"
+            "defaultValue": "kv-dk-weatherap"
         },
         "tenantId": {
             "type": "string",
             "defaultValue": "026b8468-803d-4300-8831-bef5b66f82cf"
         },
-        "objectId": {
+        "userobjectId": {
             "type": "string",
             "defaultValue": "c83fca92-09af-411d-bb27-74229b3d819c"
         },
@@ -30,10 +30,6 @@
         "location":{
             "type": "string",
             "defaultValue":"eastus2"
-        },
-        "spTenantId": {
-            "type": "string",
-            "defaultValue": ""
         },
         "spObjectid":{
             "type": "string",
@@ -59,7 +55,7 @@
                 "accessPolicies": [
                     {
                         "tenantId": "[parameters('tenantId')]",
-                        "objectId": "[parameters('objectId')]",
+                        "objectId": "[parameters('userobjectId')]",
                         "permissions": {
                             "keys": [
                                 "Get"
@@ -72,7 +68,7 @@
                         }
                     },
                     {
-                        "tenantId": "[parameters('spTenantId')]",
+                        "tenantId": "[parameters('tenantId')]",
                         "objectId": "[parameters('spObjectid')]",
                         "permissions": {
                             "keys": [

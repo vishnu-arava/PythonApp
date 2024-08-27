@@ -1,6 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import json
 import requests
+from os import environ
+import os
+from dotenv import load_dotenv
 app = Flask(__name__)
 
 def get_states(country_name):
@@ -48,6 +51,12 @@ def cityStates():
     }
     response_data = json.dumps(data)
     return jsonify(response_data)
+
+@app.route('/env',methods=['POST','GET'])
+def envVariables():
+    load_dotenv()
+    envVar=os.getenv("testenv")
+    return render_template('env.html',envVal=envVar)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)

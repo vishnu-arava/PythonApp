@@ -1,2 +1,3 @@
 instance/*.db
 custom_package/__pycache__/*
+**/requirements.txt

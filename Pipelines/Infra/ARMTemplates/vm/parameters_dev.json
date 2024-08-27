@@ -1,28 +1,28 @@
 {
     "parameters":{
         "vmPublicIPName":{
-            "value":"dk-sonarqube-publicIpName"
+            "value":"dk-sonarq-publicIpName"
         },
         "vmName":{
-            "value":"dk-sonarqube-ubuntu-vm"
+            "value":"dk-sonarq-ubuntu-vm"
         },
         "vmNetworkSecurityGroupsName":{
-            "value":"dk-sonarqube-vmNetworkSecurityGroup"
+            "value":"dk-sonarq-vmNetworkSecurityGroup"
         },
         "vmVNetName":{
-            "value":"dk-sonarqube-vmVNet"
+            "value":"dk-sonarq-vmVNet"
         },
         "vmSubnetName":{
-            "value":"dk-sonarqube-vmVNetSubnet"
+            "value":"dk-sonarq-vmVNetSubnet"
         },
         "vmNetworkInterface":{
-            "value":"dk-sonarqube-vmNetworkInterface"
+            "value":"dk-sonarq-vmNetworkInterface"
         },
         "vmUserName":{
-            "value":"dk-sonarqube-ubuntu-vm"
+            "value":"sonarqubeuser"
         },
         "vmPassword":{
-            "value":"Password@12345"
+            "value":"securedPassword"
         },
         "vmSize":{
             "value":"Standard_B2s_v2"

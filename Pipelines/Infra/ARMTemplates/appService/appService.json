@@ -41,6 +41,10 @@
         "skuTier": {
             "type": "string",
             "defaultValue": "Free"
+        },
+        "appInsitesName":{
+            "type": "string",
+            "defaultValue":"weatherapp"
         }
     },
     "functions": [],
@@ -61,13 +65,13 @@
             }
         },
         {
-            "name": "[concat(parameters('appServiceName')[copyIndex()].appName,'-ai-',parameters('env'))]",
+            "name": "[concat(parameters('appInsitesName'),'-ai-',parameters('env'))]",
             "type": "Microsoft.Insights/components",
             "apiVersion": "2020-02-02",
             "location": "[parameters('location')]",
             "kind": "web",
             "tags": {
-                "displayName": "[concat(parameters('appServiceName')[copyIndex()].appName,'-ai-',parameters('env'))]"
+                "displayName": "[concat(parameters('appInsitesName'),'-ai-',parameters('env'))]"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('workspaceName'),'-',parameters('env')))]"
@@ -78,10 +82,6 @@
                 "ImmediatePurgeDataOn30Days": true,
                 "RetentionInDays":30,
                 "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('workspaceName'),'-',parameters('env')))]"	
-            },
-            "copy": {
-                "name": "copyName",
-                "count": "[length(parameters('appServiceName'))]"
             }
         },
         {
@@ -95,7 +95,7 @@
                 "tier": "[parameters('skuTier')]"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Insights/components',concat(parameters('appServiceName')[copyIndex()].appName,'-ai-',parameters('env')))]"
+                "[resourceId('Microsoft.Insights/components',concat(parameters('appInsitesName'),'-ai-',parameters('env')))]"
             ],
             "tags": {
                 "displayName": "[concat(parameters('appServiceName')[copyIndex()].appName,'-asp-',parameters('env'))]"
@@ -131,11 +131,11 @@
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(concat('microsoft.insights/components/',parameters('appServiceName')[copyIndex()].appName,'-ai-',parameters('env'))).InstrumentationKey]"
+                            "value": "[reference(concat('microsoft.insights/components/',parameters('appInsitesName'),'-ai-',parameters('env'))).InstrumentationKey]"
                         },
                         {
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/',parameters('appServiceName')[copyIndex()].appName,'-ai-',parameters('env')),'2015-05-01').ConnectionString]"
+                            "value": "[reference(concat('microsoft.insights/components/',parameters('appInsitesName'),'-ai-',parameters('env')),'2015-05-01').ConnectionString]"
                         },
                         {
                             "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",

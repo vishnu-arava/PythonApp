@@ -1,12 +1,12 @@
 {
     "parameters":{
         "keyvaultname":{
-            "value": "dk-weatherapp-kv"
+            "value": "kv-dk-weatherap"
         },
         "tenantId":{
             "value": "026b8468-803d-4300-8831-bef5b66f82cf"
         },
-        "objectId":{
+        "userobjectId":{
             "value": "c83fca92-09af-411d-bb27-74229b3d819c"
         },
         "secrets":{
@@ -58,9 +58,6 @@
         },
         "location":{
             "value":"centralus"
-        },
-        "spTenantId":{
-            "value":"a576b579-5332-4070-ac30-3f4d5a911ac0"
         },
         "spObjectid":{
             "value":"30d46a24-1ce3-4246-b83d-b05e9717b67b"	
