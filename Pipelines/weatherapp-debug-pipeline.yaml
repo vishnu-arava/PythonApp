@@ -40,8 +40,8 @@ parameters:
   - RG-VC
 variables:
 - group: WeatherApp-${{ parameters.environment }}
-- group: WeatherApp-${{ parameters.environment }}-kv
 - name: dblink
+  # - group: WeatherApp-${{ parameters.environment }}-kv
   value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
 - stage: build
