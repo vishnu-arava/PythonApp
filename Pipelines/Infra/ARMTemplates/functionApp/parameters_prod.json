@@ -29,6 +29,9 @@
         },
         "skuTierServerfarms":{
             "value":"Standard"
+        },
+        "sbConnectionString":{
+            "value":"default"
         }
     }
 }

@@ -197,20 +197,6 @@ stages:
             inputs:
               filePath: '$(System.ArtifactsDirectory)/drop/PowershellScripts/Powershell/updating_libVariables.ps1'
               arguments: '-organizationName $(organizationName) -projectName $(projectName) -libVariableName "WeatherApp-${{ parameters.environment }}" -libVariableParameterName "appRegistrationSpObjectId" -patToken $(PAT-powershell) -valuetoUpdate $(appRegSpObjectId)'
-          - task: AzureResourceManagerTemplateDeployment@3
-            displayName: App Services
-            inputs:
-              deploymentScope: 'Resource Group'
-              azureResourceManagerConnection: $(serviceConnection)
-              subscriptionId: $(subscriptionId)
-              action: 'Create Or Update Resource Group'
-              resourceGroupName: '${{ parameters.resourcegroup }}'
-              location: 'North Central US'
-              templateLocation: 'Linked artifact'
-              csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/appService.json'
-              csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/parameters_${{ parameters.environment }}.json'
-              overrideParameters: -skuName "P0V3" -skuTier "Premium"
-              deploymentMode: 'Incremental'
 
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: Service Bus
@@ -228,6 +214,32 @@ stages:
               deploymentMode: 'Incremental'
 
           - task: AzureResourceManagerTemplateDeployment@3
+            displayName: App Services
+            inputs:
+              deploymentScope: 'Resource Group'
+              azureResourceManagerConnection: $(serviceConnection)
+              subscriptionId: $(subscriptionId)
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: '${{ parameters.resourcegroup }}'
+              location: 'North Central US'
+              templateLocation: 'Linked artifact'
+              csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/appService.json'
+              csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/appService/parameters_${{ parameters.environment }}.json'
+              overrideParameters: -skuName "P0V3" -skuTier "Premium"
+              deploymentMode: 'Incremental'
+
+          - task: AzureCLI@2
+            displayName: Get Connection string for the servicebus
+            inputs:
+              azureSubscription: $(serviceConnection)
+              scriptType: 'ps'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                $sbConnectionString=az servicebus namespace authorization-rule keys list --resource-group ${{ parameters.resourcegroup }} --namespace-name $(servicebusName)-${{ parameters.environment }} --name RootManageSharedAccessKey --query primaryConnectionString --output tsv
+                Write-Host "##vso[task.setvariable variable=sbConnectionStringVal;]$sbConnectionString"
+                Write-Host "KeyVault name is: $sbConnectionStringVal"
+
+          - task: AzureResourceManagerTemplateDeployment@3
             displayName: Function App
             inputs:
               deploymentScope: 'Resource Group'
@@ -239,6 +251,7 @@ stages:
               templateLocation: 'Linked artifact'
               csmFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/functionApp.json'
               csmParametersFile: '$(System.ArtifactsDirectory)/drop/ARMtemplates/functionApp/parameters_${{ parameters.environment }}.json'
+              overrideParameters: -sbConnectionString $(sbConnectionStringVal)
               deploymentMode: 'Incremental'
 
 - stage: "Sonarque"

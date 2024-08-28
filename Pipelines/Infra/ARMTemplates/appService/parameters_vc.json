@@ -1,0 +1,41 @@
+{
+    "parameters":{
+        "location":{
+            "value":"northcentralus"	
+        },
+        "env":{
+            "value":"vc"
+        },
+        "workspaceName": {
+            "value": "dk-weather-app-workspace"
+        },
+        "workspaceSkuName": {
+            "value": "pergb2018"
+        },
+        "appServiceName": {
+            "value":[
+                {
+                    "appName":"dk-weather-app-web"
+                },
+                {
+                    "appName":"dk-weatherclimate-api"
+                }
+            ]
+        },
+        "appServiceMinTlsVersion": {
+            "value": "1.2"
+        },
+        "appServiceLinuxFxVVersion": {
+            "value": "PYTHON|3.10"
+        },
+        "skuName": {
+            "value": "F1"
+        },
+        "skuTier": {
+            "value": "Free"
+        },
+        "appInsitesName":{
+            "value":"dk-weather-app-ai"
+        }
+    }
+}
