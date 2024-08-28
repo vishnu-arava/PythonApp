@@ -40,8 +40,8 @@ parameters:
   - RG-VC
 variables:
 - group: WeatherApp-${{ parameters.environment }}
+- group: WeatherApp-${{ parameters.environment }}-kv
 - name: dblink
-  # - group: WeatherApp-${{ parameters.environment }}-kv
   value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
 - stage: build
@@ -237,7 +237,7 @@ stages:
               inlineScript: |
                 $sbConnectionString=az servicebus namespace authorization-rule keys list --resource-group ${{ parameters.resourcegroup }} --namespace-name $(servicebusName)-${{ parameters.environment }} --name RootManageSharedAccessKey --query primaryConnectionString --output tsv
                 Write-Host "##vso[task.setvariable variable=sbConnectionStringVal;]$sbConnectionString"
-                Write-Host "KeyVault name is: $sbConnectionStringVal"
+                Write-Host "Service Bus Connection string is: $sbConnectionStringVal"
 
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: Function App

@@ -7,7 +7,7 @@ from azure.servicebus import ServiceBusClient, ServiceBusMessage
 app = func.FunctionApp()
 
 def send_message_to_topic(messagebody, topic_name):
-    connection_str = os.getenv("weatherappsbvc_SERVICEBUS")
+    connection_str = os.getenv("weatherappsb_CONNECTIONSTRING")
     servicebus_client = ServiceBusClient.from_connection_string(conn_str=connection_str, logging_enable=True)
     sender = servicebus_client.get_topic_sender(topic_name=topic_name)
     message = ServiceBusMessage(messagebody)
@@ -17,7 +17,7 @@ def send_message_to_topic(messagebody, topic_name):
     servicebus_client.close()
 
 @app.function_name("Servicebus_queue_trigger")
-@app.service_bus_queue_trigger(arg_name="azservicebus", queue_name="weatherappqueue", connection="weatherappsbvc_SERVICEBUS")
+@app.service_bus_queue_trigger(arg_name="azservicebus", queue_name="weatherappqueue", connection="weatherappsb_CONNECTIONSTRING")
 def servicebus_trigger(azservicebus: func.ServiceBusMessage):
     # logging.info('Python ServiceBus Queue trigger processed a message: %s', azservicebus.get_body().decode('utf-8'))
     messagebody = json.loads(azservicebus.get_body().decode('utf-8'))

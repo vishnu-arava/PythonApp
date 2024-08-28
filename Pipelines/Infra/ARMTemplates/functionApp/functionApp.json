@@ -137,7 +137,7 @@
                             "value": "python"
                         },
                         {
-                            "name": "weatherappsbdev_SERVICEBUS",
+                            "name": "weatherappsb_CONNECTIONSTRING",
                             "value": "[parameters('sbConnectionString')]"
                         }
                     ]
