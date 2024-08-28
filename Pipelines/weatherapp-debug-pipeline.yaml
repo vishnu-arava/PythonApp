@@ -78,6 +78,16 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/FunctionApps/SBQueueTrigger.zip'
         replaceExistingArchive: true
+    
+    - task: ArchiveFiles@2
+      displayName: Archive Source/FunctionApp/sbqtrigger
+      inputs:
+        rootFolderOrFile: 'Source/FunctionApps/sbqtrigger'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/FunctionApps/sbqtrigger.zip'
+        replaceExistingArchive: true
+
     - task: CopyFiles@2
       displayName: Copy ARM Templates to drop
       inputs:
@@ -364,7 +374,7 @@ stages:
               connectedServiceNameARM: '$(serviceConnection)'
               appType: 'functionAppLinux'
               appName: 'dk-weatherapp-${{ parameters.environment }}'
-              package: '$(System.ArtifactsDirectory)/**/SBQueueTrigger.zip'
+              package: '$(System.ArtifactsDirectory)/**/sbqtrigger.zip'
               runtimeStack: 'PYTHON|3.11'
               appSettings: '-WEBSITE_RUN_FROM_PACKAGE 1 -FUNCTIONS_EXTENSION_VERSION ~4'
               deploymentMethod: 'zipDeploy'
