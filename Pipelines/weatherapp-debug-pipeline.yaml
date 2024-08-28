@@ -380,7 +380,7 @@ stages:
               package: '$(System.ArtifactsDirectory)/**/SBQueueTrigger.zip'
               runtimeStack: 'PYTHON|3.11'
               appSettings: '-WEBSITE_RUN_FROM_PACKAGE 1 -FUNCTIONS_EXTENSION_VERSION ~4'
-              deploymentMethod: 'auto'
+              deploymentMethod: 'zipDeploy'
 
 - stage: "PostDeploymnet"
   pool:
