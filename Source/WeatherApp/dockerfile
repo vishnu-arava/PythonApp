@@ -1,0 +1,19 @@
+FROM ubuntu:22.04
+ 
+ 
+WORKDIR /opt/weatherapp/
+ 
+RUN apt update && apt install python3 python3-pip zip dos2unix -y
+RUN apt-get install python3-venv -y
+RUN python3 -m venv antenv
+RUN /bin/bash -c "source antenv/bin/activate && pip install flask==3.0.*"
+RUN apt-get install pkg-config -y --ignore-missing
+RUN apt-get install default-libmysqlclient-dev -y --ignore-missing
+ 
+COPY . .
+ 
+RUN FILEPATH=$(find . -type f -name odbc17.sh) && dos2unix "$FILEPATH" && chmod +x "$FILEPATH"
+RUN bash $FILEPATH
+RUN apt-get install unixodbc unixodbc-dev libodbc1 -y
+
+CMD [ "/opt/weatherapp/antenv/bin/python3","app.py" ]
