@@ -22,7 +22,7 @@
             "value":"sonarqubeuser"
         },
         "vmPassword":{
-            "value":"securedPassword"
+            "value":"Password@1245"
         },
         "vmSize":{
             "value":"Standard_B2s_v2"

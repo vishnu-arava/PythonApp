@@ -1,0 +1,141 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "workspaceName": {
+            "type": "string",
+            "defaultValue": "dk-weather-app-workspace"
+        },
+        "env": {
+            "type": "string",
+            "defaultValue": "qa"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "northcentralus"
+        },
+        "workspaceSkuName": {
+            "type": "string",
+            "defaultValue": "pergb2018"
+        },
+        "appServiceName": {
+            "type": "string",
+            "defaultValue":"dk-weather-app-web"
+        },
+        "appServiceMinTlsVersion": {
+            "type": "string",
+            "defaultValue": "1.2"
+        },
+        "skuName": {
+            "type": "string",
+            "defaultValue": "F1"
+        },
+        "skuTier": {
+            "type": "string",
+            "defaultValue": "Free"
+        },
+        "appInsitesName":{
+            "type": "string",
+            "defaultValue":"dk-weather-app-ai"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+      {
+        "name": "[concat(parameters('workspaceName'),'-',parameters('env'))]",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2021-06-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "[parameters('workspaceSkuName')]"
+                },
+                "features": {
+                    "searchVersion": 1
+                }
+            }
+      },
+      {
+            "name": "[concat(parameters('appInsitesName'),'-ai-',parameters('env'))]",
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2020-02-02",
+            "location": "[parameters('location')]",
+            "kind": "web",
+            "tags": {
+                "displayName": "[concat(parameters('appInsitesName'),'-ai-',parameters('env'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('workspaceName'),'-',parameters('env')))]"
+            ],
+            "properties": {
+                "application_Type": "web",
+                "Flow_Type": "Bluefield",
+                "ImmediatePurgeDataOn30Days": true,
+                "RetentionInDays":30,
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('workspaceName'),'-',parameters('env')))]"	
+            }
+        },
+        {
+            "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-09-01",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "capacity": 1,
+                "tier": "[parameters('skuTier')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components',concat(parameters('appInsitesName'),'-ai-',parameters('env')))]"
+            ],
+            "tags": {
+                "displayName": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]"
+            },
+            "properties": {
+                "name": "[concat(parameters('appServiceName'),'-asp-',parameters('env'))]",
+                "reserved": true
+            }
+        },
+        {
+            "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-09-01",
+            "kind": "app,linux,container",
+            "location": "[parameters('location')]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/',parameters('appServiceName') ,'-asp-',parameters('env'))]": "Resource",
+                "displayName": "[concat(parameters('appServiceName'),'-',parameters('env'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]"
+            ],
+            "properties": {
+                "name": "[concat(parameters('appServiceName'),'-',parameters('env'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]",
+                "siteConfig": {
+                    "minTlsVersion": "[parameters('appServiceMinTlsVersion')]",
+                    "linuxFxVersion": "DOCKER|index.docker.io/venkatachaitanya98/weatherapp:v1.0",
+                    "alwaysOn": false,
+                    "appSettings": [
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/',parameters('appInsitesName'),'-ai-',parameters('env'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(concat('microsoft.insights/components/',parameters('appInsitesName'),'-ai-',parameters('env')),'2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                            "value": "true"
+                        }
+                    ],
+                    "httpLoggingEnabled": false,
+                    "detailedErrorLoggingEnabled": false
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
