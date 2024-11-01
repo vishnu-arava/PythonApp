@@ -9,4 +9,5 @@ RUN /bin/bash -c " source antenv/bin/activate && pip install requests && pip ins
 
 COPY . .
 
-CMD [ "/opt/worldclimateapi/antenv/bin/python3","app.py" ]
+ENTRYPOINT [ "/opt/worldclimateapi/antenv/bin/python3" ]
+CMD [ "app.py" ]
