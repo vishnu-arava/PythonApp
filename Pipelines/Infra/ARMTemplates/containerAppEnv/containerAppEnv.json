@@ -6,30 +6,11 @@
         "type": "string",
         "defaultValue": "myContainerAppEnv"
     },
-    "containerAppName": {
-      "type": "string",
-      "defaultValue": "mycontainerapp"
-    },
     "location": {
       "type": "string",
       "defaultValue": "southindia"
     },
-    "containerName": {
-      "type": "string",
-      "defaultValue": "mycontainer"
-    },
-    "containerImage": {
-      "type": "string",
-      "defaultValue": "venkatachaitanya98/weatherapp:v1.0"
-    },
-    "cpu": {
-      "type": "string",
-      "defaultValue": "0.5"
-    },
-    "memory": {
-      "type": "string",
-      "defaultValue": "1.0Gi"
-    },
+
     "logAnalyticsWorkspaceName": {
       "type": "string",
       "defaultValue": "myLogAnalyticsWorkspace"
@@ -73,36 +54,6 @@
                         "name": "Consumption"
                     }]
             }
-        },
-        {
-            "type": "Microsoft.App/containerApps",
-            "apiVersion": "2024-03-01",
-            "name": "[parameters('containerAppName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.App/managedEnvironments', parameters('containerAppEnvName'))]"
-            ],
-            "properties": {
-                "environmentId": "/subscriptions/0c030aef-5c6f-474f-88da-993fb2ac99f5/resourceGroups/RG-VC/providers/Microsoft.App/managedEnvironments/myContainerAppEnv",
-                "configuration": {
-                "ingress": {
-                    "external": true,
-                    "targetPort": 8000
-                  }
-                },
-                "template": {
-                "containers": [
-                    {
-                    "name": "[parameters('containerName')]",
-                    "image": "[parameters('containerImage')]",
-                    "resources": {
-                        "cpu": "[parameters('cpu')]",
-                        "memory": "[parameters('memory')]"
-                      }
-                    }
-                  ]
-                }
-              }
         }
     ],
     "outputs": {}
