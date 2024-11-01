@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "containerAppName": {
+        "type": "string",
+        "defaultValue": "mycontainerapi"
+        },
+        "location": {
+        "type": "string",
+        "defaultValue": "southindia"
+        },
+        "containerName": {
+        "type": "string",
+        "defaultValue": "mycontainerapi"
+        },
+        "containerImage": {
+        "type": "string",
+        "defaultValue": "venkatachaitanya98/worldclimateapi:v1.2"
+        },
+        "cpu": {
+        "type": "string",
+        "defaultValue": "0.5"
+        },
+        "memory": {
+        "type": "string",
+        "defaultValue": "1.0Gi"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.App/containerApps",
+            "apiVersion": "2024-03-01",
+            "name": "[parameters('containerAppName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "environmentId": "/subscriptions/0c030aef-5c6f-474f-88da-993fb2ac99f5/resourceGroups/RG-VC/providers/Microsoft.App/managedEnvironments/myContainerAppEnv",
+                "configuration": {
+                "ingress": {
+                    "external": true,
+                    "targetPort": 8000
+                  }
+                },
+                "template": {
+                "containers": [
+                    {
+                    "name": "[parameters('containerName')]",
+                    "image": "[parameters('containerImage')]",
+                    "resources": {
+                        "cpu": "[parameters('cpu')]",
+                        "memory": "[parameters('memory')]"
+                      }
+                    }
+                  ]
+                }
+              }
+        }
+    ],
+    "outputs": {}
+}

@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+    "containerAppEnvName": {
+        "type": "string",
+        "defaultValue": "myContainerAppEnv"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "southindia"
+    },
+
+    "logAnalyticsWorkspaceName": {
+      "type": "string",
+      "defaultValue": "myLogAnalyticsWorkspace"
+    }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2021-06-01",
+            "location": "[parameters('location')]",
+            "name": "[parameters('logAnalyticsWorkspaceName')]",
+            "properties": {
+            "sku": {
+            "name": "PerGB2018"
+            },
+            "retentionInDays": 30
+            }
+        },
+        {
+            "type": "Microsoft.App/managedEnvironments",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('containerAppEnvName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+            ],
+            "properties": {
+                "appLogsConfiguration": {
+                "destination": "log-analytics",
+                "logAnalyticsConfiguration": {
+                    "customerId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))).customerId]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName')), '2021-06-01').primarySharedKey]"
+                    }
+                },
+                "zoneRedundant": false,
+                "workloadProfiles": [
+                    {
+                        "workloadProfileType": "Consumption",
+                        "name": "Consumption"
+                    }]
+            }
+        }
+    ],
+    "outputs": {}
+}
