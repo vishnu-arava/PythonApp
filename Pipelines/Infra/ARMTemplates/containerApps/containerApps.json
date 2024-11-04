@@ -3,28 +3,48 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "containerAppName": {
-        "type": "string",
-        "defaultValue": "mycontainerapi"
+            "type": "string",
+            "defaultValue": "mycontainerapi"
         },
         "location": {
-        "type": "string",
-        "defaultValue": "southindia"
+            "type": "string",
+            "defaultValue": "southindia"
         },
         "containerName": {
-        "type": "string",
-        "defaultValue": "mycontainerapi"
+            "type": "string",
+            "defaultValue": "mycontainerapi"
         },
         "containerImage": {
-        "type": "string",
-        "defaultValue": "venkatachaitanya98/worldclimateapi:v1.2"
+            "type": "string",
+            "defaultValue": "venkatachaitanya98/worldclimateapi:v1.2"
         },
         "cpu": {
-        "type": "string",
-        "defaultValue": "0.5"
+            "type": "string",
+            "defaultValue": "0.5"
         },
         "memory": {
-        "type": "string",
-        "defaultValue": "1.0Gi"
+            "type": "string",
+            "defaultValue": "1.0Gi"
+        },
+        "targetPort": {
+              "type": "int",
+              "defaultValue":8000
+        },
+        "subscriptionid": {
+              "type": "string",
+              "defaultValue": "1e6f4790-3272-493d-9a11-2bb97f6fe3b2"
+        },
+        "resourcegroupOfEnv": {
+              "type": "string",
+              "defaultValue": "RG-DEV"
+        },
+        "containerAppEnv": {
+              "type": "string",
+              "defaultValue": "defaultContainerAppEnv"
+        },
+        "env":{
+            "type":"string",
+            "defaultValue":"sandbox"
         }
     },
     "functions": [],
@@ -33,20 +53,20 @@
         {
             "type": "Microsoft.App/containerApps",
             "apiVersion": "2024-03-01",
-            "name": "[parameters('containerAppName')]",
+            "name": "[concat(parameters('containerAppName'),'-',parameters('env'))]",
             "location": "[parameters('location')]",
             "properties": {
-                "environmentId": "/subscriptions/0c030aef-5c6f-474f-88da-993fb2ac99f5/resourceGroups/RG-VC/providers/Microsoft.App/managedEnvironments/myContainerAppEnv",
+                "environmentId":"[concat('/subscriptions/',parameters('subscriptionid'),'/resourceGroups/',parameters('resourcegroupOfEnv'),'/providers/Microsoft.App/managedEnvironments/',concat(parameters('containerAppEnv'),'-',parameters('env')))]",
                 "configuration": {
                 "ingress": {
                     "external": true,
-                    "targetPort": 8000
+                    "targetPort": "[parameters('targetPort')]"
                   }
                 },
                 "template": {
                 "containers": [
                     {
-                    "name": "[parameters('containerName')]",
+                    "name": "[concat(parameters('containerName'),'-',parameters('env'))]",
                     "image": "[parameters('containerImage')]",
                     "resources": {
                         "cpu": "[parameters('cpu')]",

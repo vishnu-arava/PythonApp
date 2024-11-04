@@ -1,0 +1,37 @@
+{
+    "parameters":{
+        "containerAppName": {
+            "Value": "mycontainerapi"
+        },
+        "location": {
+            "Value": "southindia"
+        },
+        "containerName": {
+            "Value": "mycontainerapi"
+        },
+        "containerImage": {
+            "Value": "venkatachaitanya98/worldclimateapi:v1.2"
+        },
+        "cpu": {
+            "Value": "0.5"
+        },
+        "memory": {
+            "Value": "1.0Gi"
+        },
+        "targetPort": {
+            "Value":8000
+        },
+        "subscriptionid": {
+            "Value": "0c030aef-5c6f-474f-88da-993fb2ac99f5"
+        },
+        "resourcegroupOfEnv": {
+            "Value": "RG-DEV"
+        },
+        "containerAppEnv": {
+            "Value": "defaultContainerAppEnv"
+        },
+        "env":{
+            "Value":"prod"
+        }
+    }
+}

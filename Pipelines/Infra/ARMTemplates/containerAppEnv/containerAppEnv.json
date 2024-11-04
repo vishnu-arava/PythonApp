@@ -10,10 +10,13 @@
       "type": "string",
       "defaultValue": "southindia"
     },
-
     "logAnalyticsWorkspaceName": {
       "type": "string",
       "defaultValue": "myLogAnalyticsWorkspace"
+    },
+    "env":{
+        "type": "string",
+        "defaultValue":"sandbox"
     }
     },
     "functions": [],
@@ -23,7 +26,7 @@
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2021-06-01",
             "location": "[parameters('location')]",
-            "name": "[parameters('logAnalyticsWorkspaceName')]",
+            "name": "[concat(parameters('logAnalyticsWorkspaceName'),'-',parameters('env'))]",
             "properties": {
             "sku": {
             "name": "PerGB2018"
@@ -34,17 +37,17 @@
         {
             "type": "Microsoft.App/managedEnvironments",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('containerAppEnvName')]",
+            "name": "[concat(parameters('containerAppEnvName'),'-',parameters('env'))]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('logAnalyticsWorkspaceName'),'-',parameters('env')))]"
             ],
             "properties": {
                 "appLogsConfiguration": {
                 "destination": "log-analytics",
                 "logAnalyticsConfiguration": {
-                    "customerId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))).customerId]",
-                    "sharedKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName')), '2021-06-01').primarySharedKey]"
+                    "customerId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('logAnalyticsWorkspaceName'),'-',parameters('env')))).customerId]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', concat(parameters('logAnalyticsWorkspaceName'),'-',parameters('env'))), '2021-06-01').primarySharedKey]"
                     }
                 },
                 "zoneRedundant": false,
