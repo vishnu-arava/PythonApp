@@ -37,6 +37,10 @@
         "appInsitesName":{
             "type": "string",
             "defaultValue":"dk-weather-app-ai"
+        },
+        "imageRepoWithTag": {
+            "type": "string",
+            "defaultValue": "venkatachaitanya98/dk-weatherapp:latest"
         }
     },
     "functions": [],
@@ -115,7 +119,7 @@
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appServiceName'),'-asp-',parameters('env')))]",
                 "siteConfig": {
                     "minTlsVersion": "[parameters('appServiceMinTlsVersion')]",
-                    "linuxFxVersion": "DOCKER|index.docker.io/venkatachaitanya98/weatherapp:v1.0",
+                    "linuxFxVersion": "[concat('DOCKER|index.docker.io/',parameters('imageRepoWithTag'))]",
                     "alwaysOn": false,
                     "appSettings": [
                         {
@@ -129,10 +133,6 @@
                         {
                             "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
                             "value": "true"
-                        },
-                        {
-                            "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "1"
                         },
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",

@@ -29,6 +29,9 @@
         },
         "appInsitesName":{
             "value":"dk-weather-app-ai"
+        },
+        "imageRepoWithTag": {
+            "value": "venkatachaitanya98/dk-weatherapp:latest"
         }
     }
 }
