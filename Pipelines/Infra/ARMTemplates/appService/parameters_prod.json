@@ -15,10 +15,10 @@
         "appServiceName": {
             "value":[
                 {
-                    "appName":"dk-weather-app-web"
+                    "appName":"dk-weather24-app-web"
                 },
                 {
-                    "appName":"dk-weatherclimate-api"
+                    "appName":"dk-weatherclimate24-api"
                 }
             ]
         },
