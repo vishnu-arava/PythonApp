@@ -48,7 +48,7 @@ parameters:
   - Container Apps
 variables:
 - group: WeatherApp-${{ parameters.environment }}
-# - group: WeatherApp-${{ parameters.environment }}-kv
+- group: WeatherApp-${{ parameters.environment }}-kv
 - name: dblink
   value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
