@@ -48,7 +48,7 @@ parameters:
   - Container Apps
 variables:
 - group: WeatherApp-${{ parameters.environment }}
-- group: WeatherApp-${{ parameters.environment }}-kv
+# - group: WeatherApp-${{ parameters.environment }}-kv
 - name: dblink
   value: $(sql-serverName)-${{ parameters.environment }}.database.windows.net
 stages:
@@ -90,7 +90,7 @@ stages:
 
   - job: "BuildArtifactJob2"
     displayName: "App Service Build"
-    condition: eq(parameters.containerization, 'App Service')
+    condition: eq('${{ parameters.containerization }}', 'App Service')
     steps:
     - task: ArchiveFiles@2
       displayName: Archive Source/WeatherApp
@@ -117,8 +117,8 @@ stages:
 
   - job: "BuildArtifactJob3"
     displayName: "Containerizing the Source Code"
-    condition: or(eq(parameters.containerization, 'App Service(Containers)'),
-      eq(parameters.containerization, 'Container Apps'))
+    condition: or(eq('${{ parameters.containerization }}', 'App Service(Containers)'),
+      eq('${{ parameters.containerization }}', 'Container Apps'))
     steps:
     - task: Docker@2
       displayName: "Build docker image : Weatherapp"
@@ -278,7 +278,7 @@ stages:
                 $(PAT-powershell) -valuetoUpdate $(appRegSpObjectId)'
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: App Services
-            condition: eq(parameters.containerization, 'App Service')
+            condition: eq('${{ parameters.containerization }}', 'App Service')
             inputs:
               deploymentScope: 'Resource Group'
               azureResourceManagerConnection: $(serviceConnection)
@@ -295,7 +295,7 @@ stages:
 
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: App Services(Contaners) for WeatherApp
-            condition: eq(parameters.containerization, 'App Service(Containers)')
+            condition: eq('${{ parameters.containerization }}', 'App Service(Containers)')
             inputs:
               deploymentScope: 'Resource Group'
               azureResourceManagerConnection: $(serviceConnection)
@@ -315,7 +315,7 @@ stages:
 
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: App Services(Contaners) for WorldclimateApi
-            condition: eq(parameters.containerization, 'App Service(Containers)')
+            condition: eq('${{ parameters.containerization }}', 'App Service(Containers)')
             inputs:
               deploymentScope: 'Resource Group'
               azureResourceManagerConnection: $(serviceConnection)
@@ -333,7 +333,7 @@ stages:
                 "dk-weatherapp-api-web" -appInsitesName "dk-weatherapp-api-ai"'
               deploymentMode: 'Incremental'
 
-          - ${{ if eq(parameters.containerization, 'Container Apps') }}:
+          - ${{ if eq('${{ parameters.containerization }}', 'Container Apps') }}:
             - task: AzureResourceManagerTemplateDeployment@3
               displayName: Contaner App Environment Deploymnet
               inputs:
