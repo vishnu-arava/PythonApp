@@ -493,7 +493,7 @@ stages:
                 --ignore-missing;apt-get install dos2unix;apt-get install
                 default-libmysqlclient-dev -y --ignore-missing;FILEPATH=$(find .
                 -type f -name odbc17.sh);dos2unix "$FILEPATH";bash
-                $FILEPATH;pip install --upgrade azure-core azure-identity;python3 app.py --pairs
+                $FILEPATH;/opt/weatherapp/antenv/bin/pip install --upgrade azure-core azure-identity;python3 app.py --pairs
                 KEY_VAULT_URI=https://$(keyvaultName)-${{ parameters.environment
                 }}.vault.azure.net/ TENANT_ID=$(AppRegistrationTenantId)
                 CLIENT_ID=$(AppRegistrationClientId)
